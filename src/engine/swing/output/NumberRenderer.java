@@ -1,8 +1,8 @@
-package tetris.engine.display.swing;
+package engine.swing.output;
 
 import java.awt.Color;
 
-import tetris.engine.display.Renderer;
+import engine.Renderer;
 import tetris.parts.Digit;
 import tetris.parts.Number;
 import tetris.parts.Part;

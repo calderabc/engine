@@ -1,4 +1,4 @@
-package tetris.engine.display.swing;
+package engine.swing.output;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import engine.swing.ImageType;
 import tetris.parts.Block;
 import tetris.parts.Part;
 

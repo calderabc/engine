@@ -1,4 +1,4 @@
-package tetris.engine.input;
+package engine.swing.in;
 
 
 import javax.swing.InputMap;

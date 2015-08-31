@@ -1,4 +1,7 @@
-package tetris.engine.display.swing;
+package engine.swing.output;
+
+import engine.Renderer;
+import engine.swing.ImageType;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -8,7 +11,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import tetris.engine.display.Renderer;
 
 @SuppressWarnings("serial")
 public abstract class ImageRenderer extends Renderer {

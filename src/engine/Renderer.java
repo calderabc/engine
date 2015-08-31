@@ -1,4 +1,4 @@
-package tetris.engine.display;
+package engine;
 
 import java.awt.Graphics;
 

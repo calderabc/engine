@@ -1,7 +1,7 @@
 package tetris.parts;
 
-import tetris.engine.ScoreCalculator;
 
+import engine.ScoreCalculator;
 
 public class Score extends Number {
 	private ScoreCalculator calculator;

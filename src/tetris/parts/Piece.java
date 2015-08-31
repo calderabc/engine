@@ -1,13 +1,11 @@
 package tetris.parts;
 
-import java.util.ArrayList;
 import java.util.Vector;
 import java.util.Collection;
 
+import engine.PieceAction;
 import tetris.Debug;
-import tetris.coordinates.Coordinates;
 import tetris.coordinates.Movable;
-import tetris.engine.PieceAction;
 
 /**
  * This Piece class represents a Tetris piece.  It is composed of Blocks.  It has

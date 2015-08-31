@@ -2,19 +2,18 @@ package tetris.parts;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.AbstractCollection;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import engine.NoRendererException;
+import engine.Renderable;
+import engine.Renderer;
 import tetris.Flag;
 import tetris.FlagException;
-import tetris.coordinates.Coordinates;
-import tetris.engine.display.NoRendererException;
-import tetris.engine.display.Renderable;
-import tetris.engine.display.Renderer;
+
 
 @SuppressWarnings("serial")
 public abstract class Part<T extends Part<?>> implements Renderable {
@@ -102,7 +101,10 @@ public abstract class Part<T extends Part<?>> implements Renderable {
 				if (partClassName == null) {
 					throw new NoRendererException();
 				}
-				
+
+				System.out.println(partClassName);
+				System.out.println(Game.profile.getOption(Flag.DISPLAY).getHandle() );
+
 				Constructor<?> con = 
 					Class.forName(Game.profile.getOption(Flag.DISPLAY).getHandle() 
 								  + "." 

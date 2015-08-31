@@ -1,4 +1,4 @@
-package tetris.engine;
+package engine;
 
 public enum RotationDirection {
 	CLOCKWISE,

@@ -1,9 +1,11 @@
 package tetris; 
 
 public enum Option {
-	SWING (Flag.DISPLAY, "tetris.engine.display.swing"),
-	JAVA3D (Flag.DISPLAY, "tetris.engine.display.java3d"),
-	OPENGL (Flag.DISPLAY, "tetris.engine.display.opengl"),
+	// TODO: Make it so the package names aren't hardcoded like this.
+	// It's something that can't be refactored by an IDE if I rename the package names.
+	SWING (Flag.DISPLAY, "engine.swing.output"),
+	JAVA3D (Flag.DISPLAY, "engine.java3d"),
+	OPENGL (Flag.DISPLAY, "engine.opengl"),
 	
 	LAND_BLOCKS (Flag.LAND),
 	LAND_PIECES (Flag.LAND),

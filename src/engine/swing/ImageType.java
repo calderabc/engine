@@ -1,4 +1,4 @@
-package tetris.engine.display.swing;
+package engine.swing;
 
 public enum ImageType {
 	BLOCK (0, 0,  4,  4, 13),

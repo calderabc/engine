@@ -2,26 +2,20 @@ package tetris.parts;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.lang.reflect.Method;
-import java.util.Collection;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
-import tetris.Flag;
+import engine.PieceAction;
+import engine.ScoreCalculator;
+import engine.swing.output.ScreenRenderer;
 import tetris.Profile;
-import tetris.engine.PieceAction;
-import tetris.engine.RotationDirection;
-import tetris.engine.display.swing.ScreenRenderer;
-import tetris.engine.ScoreCalculator;
 
 public class Game extends Part<Part<?>> implements Runnable {
 	

@@ -1,4 +1,4 @@
-package tetris.engine.display.swing;
+package engine.swing.output;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;

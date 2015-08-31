@@ -1,4 +1,4 @@
-package tetris.engine.display;
+package engine;
 
 public interface Renderable {
 	public void init();

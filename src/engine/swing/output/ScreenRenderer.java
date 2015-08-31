@@ -1,4 +1,4 @@
-package tetris.engine.display.swing;
+package engine.swing.output;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -8,7 +8,7 @@ import java.awt.event.ComponentListener;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
-import tetris.engine.display.Renderer;
+import engine.Renderer;
 import tetris.parts.Board;
 import tetris.parts.Part;
 import tetris.parts.Screen;
