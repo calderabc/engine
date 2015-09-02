@@ -48,11 +48,4 @@ public abstract class Renderer extends JPanel implements Renderable {
 		//this.getTopLevelAncestor().repaint();
 		
 	}
-	
-	@Override 
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		
-	}
-	
 }
