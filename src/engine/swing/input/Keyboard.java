@@ -1,4 +1,4 @@
-package engine.swing.in;
+package engine.swing.input;
 
 
 import javax.swing.InputMap;
