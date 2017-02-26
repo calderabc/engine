@@ -1,21 +1,9 @@
 package tetris.parts;
 
 
-import java.awt.Component;
-import java.util.TreeSet;
-
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Vector;
 import java.util.Collection;
-
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-
-import tetris.Option;
-import tetris.coordinates.Position;
 
 /**
  * A Board represents the game element that Blocks collect on after Pieces 
@@ -24,7 +12,6 @@ import tetris.coordinates.Position;
  * @author Aaron Calder
  *
  */
-@SuppressWarnings("serial")
 public final class Board extends Part<MovablePart<?>> {
 	private class TestBlock {
 		public Block element;

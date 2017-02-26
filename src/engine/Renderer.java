@@ -1,7 +1,5 @@
 package engine;
 
-import java.awt.Graphics;
-
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 

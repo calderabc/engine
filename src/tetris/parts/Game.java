@@ -35,12 +35,10 @@ public class Game extends Part<Part<?>> implements Runnable {
 	private ScheduledExecutorService scheduler = 
 		Executors.newScheduledThreadPool(2);
 	
-	
 	public Game() {
 		super(false);
 		profile = new Profile(Profile.option1);
 	}
-	
 	
 	public void initInputMap(InputMap map) {
 		map.put(KeyStroke.getKeyStroke("UP"), "warp down");
@@ -53,7 +51,6 @@ public class Game extends Part<Part<?>> implements Runnable {
 		map.put(KeyStroke.getKeyStroke("ESCAPE"), "quit");
 		map.put(KeyStroke.getKeyStroke(KeyEvent.VK_CONTROL, KeyEvent.CTRL_DOWN_MASK), "rotate counterclockwise");
 		map.put(KeyStroke.getKeyStroke("released CONTROL"), "stop rotate counterclockwise");
-		
 		map.put(KeyStroke.getKeyStroke(KeyEvent.VK_ALT, KeyEvent.ALT_DOWN_MASK), "rotate clockwise");
 		map.put(KeyStroke.getKeyStroke("released ALT"), "stop rotate clockwise");
 	}
@@ -79,7 +76,6 @@ public class Game extends Part<Part<?>> implements Runnable {
 		aMap.put("stop move down", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				PieceAction.DOWN.setReleaseTime();
-				
 				stopMovingDown();
 			}
 		});
@@ -95,7 +91,6 @@ public class Game extends Part<Part<?>> implements Runnable {
 		aMap.put("stop move left", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				PieceAction.LEFT.setReleaseTime();
-				
 				stopMovingLeft();
 			}
 		});
@@ -127,7 +122,6 @@ public class Game extends Part<Part<?>> implements Runnable {
 		aMap.put("stop rotate clockwise", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				PieceAction.CLOCKWISE.setReleaseTime();
-				
 				stopRotatingClockwise();
 			}
 		});
@@ -143,7 +137,6 @@ public class Game extends Part<Part<?>> implements Runnable {
 		aMap.put("stop rotate counterclockwise", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				PieceAction.COUNTERCLOCKWISE.setReleaseTime();
-				
 				stopRotatingCounterClockwise();
 			}
 		});
@@ -157,19 +150,13 @@ public class Game extends Part<Part<?>> implements Runnable {
 	}
 	
 	
-	
 	public void run() {
-		
-		
-		
 		PieceAction.FALL.setSpeed(2 / 1.0e9);
-		
 		
 		score = new Score(ScoreCalculator.NINTENDO, 10, 0);
 		
 		level = new Level(1);
 		rowsCleared = new RowsCleared();
-		
 		
 		board = new Board();
 		screen = new Screen();
@@ -221,7 +208,6 @@ public class Game extends Part<Part<?>> implements Runnable {
 					break;
 					}
 				}
-				
 			
 			//	System.out.println("EventDispatchThread: " + javax.swing.SwingUtilities.isEventDispatchThread());
 				synchronized(piece) {
@@ -251,7 +237,6 @@ public class Game extends Part<Part<?>> implements Runnable {
 				}
 			}
 		}
-		
 				
 	}
 	
@@ -267,7 +252,6 @@ public class Game extends Part<Part<?>> implements Runnable {
 				return true;
 			}
 		}
-			
 		return false;
 	}
 	
@@ -301,8 +285,6 @@ public class Game extends Part<Part<?>> implements Runnable {
 				}
 				System.out.println("ttttttttttttttttttttttttttttttt");
 				
-				
-				
 				return true;
 			}
 		} 
@@ -322,7 +304,6 @@ public class Game extends Part<Part<?>> implements Runnable {
 		}
 	}
 	
-	
 	private void startFalling() {
 		if (!PieceAction.FALL.isMoving) {
 			PieceAction.FALL.future = 
@@ -330,7 +311,6 @@ public class Game extends Part<Part<?>> implements Runnable {
 											  PieceAction.FALL.getDelay(), 
 											  PieceAction.FALL.getDelay(), 
 											  TimeUnit.NANOSECONDS);
-			
 			PieceAction.FALL.isMoving = true;
 		}
 	}
@@ -371,7 +351,6 @@ public class Game extends Part<Part<?>> implements Runnable {
 													  0, 
 													  PieceAction.DOWN.getDelay(), 
 													  TimeUnit.NANOSECONDS);
-					
 					PieceAction.DOWN.isMoving = true;
 				}
 			}
@@ -381,7 +360,6 @@ public class Game extends Part<Part<?>> implements Runnable {
 	private void stopMovingDown() {
 		synchronized(PieceAction.DOWN) {
 			PieceAction.DOWN.isPressed = false;
-			
 			startFalling();
 		}
 	}
@@ -391,12 +369,10 @@ public class Game extends Part<Part<?>> implements Runnable {
 			if (!PieceAction.LEFT.isPressed) {
 				PieceAction.LEFT.isPressed = true;
 				
-				
 				if (PieceAction.RIGHT.isPressed) {
 					PieceAction.RIGHT.future.cancel(false);
 					PieceAction.RIGHT.isMoving = false;
 				}
-				
 				
 				if (PieceAction.LEFT.isMoving) {
 					PieceAction.LEFT.future.cancel(true);
@@ -428,12 +404,10 @@ public class Game extends Part<Part<?>> implements Runnable {
 			if (!PieceAction.RIGHT.isPressed) {
 				PieceAction.RIGHT.isPressed = true;
 				
-				
 				if (PieceAction.LEFT.isPressed) {
 					PieceAction.LEFT.future.cancel(false);
 					PieceAction.LEFT.isMoving = false;
 				}
-				
 				
 				if (PieceAction.RIGHT.isMoving) {
 					PieceAction.RIGHT.future.cancel(true);
@@ -464,12 +438,10 @@ public class Game extends Part<Part<?>> implements Runnable {
 			if (!PieceAction.CLOCKWISE.isPressed) {
 				PieceAction.CLOCKWISE.isPressed = true;
 				
-				
 				if (PieceAction.COUNTERCLOCKWISE.isPressed) {
 					PieceAction.COUNTERCLOCKWISE.future.cancel(false);
 					PieceAction.COUNTERCLOCKWISE.isMoving = false;
 				}
-				
 				
 				if (PieceAction.CLOCKWISE.isMoving) {
 					PieceAction.CLOCKWISE.future.cancel(true);
@@ -479,7 +451,6 @@ public class Game extends Part<Part<?>> implements Runnable {
 												  0, 
 												  PieceAction.CLOCKWISE.getDelay(), 
 												  TimeUnit.NANOSECONDS);
-				
 				PieceAction.CLOCKWISE.isMoving = true;
 			}			
 		}
@@ -500,12 +471,10 @@ public class Game extends Part<Part<?>> implements Runnable {
 			if (!PieceAction.COUNTERCLOCKWISE.isPressed) {
 				PieceAction.COUNTERCLOCKWISE.isPressed = true;
 				
-				
 				if (PieceAction.CLOCKWISE.isPressed) {
 					PieceAction.CLOCKWISE.future.cancel(false);
 					PieceAction.CLOCKWISE.isMoving = false;
 				}
-				
 				
 				if (PieceAction.COUNTERCLOCKWISE.isMoving) {
 					PieceAction.COUNTERCLOCKWISE.future.cancel(true);
@@ -515,7 +484,6 @@ public class Game extends Part<Part<?>> implements Runnable {
 												  0, 
 												  PieceAction.COUNTERCLOCKWISE.getDelay(), 
 												  TimeUnit.NANOSECONDS);
-				
 				PieceAction.COUNTERCLOCKWISE.isMoving = true;
 			}			
 		}
@@ -530,6 +498,7 @@ public class Game extends Part<Part<?>> implements Runnable {
 			}
 		}
 	}
+
 	private final Runnable makePieceFall = new Runnable() {
 		public void run() {
 			if (!tryToMovePiece(0, 1)) {
@@ -541,7 +510,6 @@ public class Game extends Part<Part<?>> implements Runnable {
 			}
 		}
 	};
-	
 	
 	private final Runnable movePieceDown = new Runnable() {
 		public void run() {
@@ -558,7 +526,6 @@ public class Game extends Part<Part<?>> implements Runnable {
 		}
 	};
 	
-	
 	private final Runnable movePieceRight = new Runnable() {
 		public void run() {
 			synchronized (PieceAction.RIGHT) {
@@ -571,7 +538,6 @@ public class Game extends Part<Part<?>> implements Runnable {
 			}
 		}
 	};
-	
 	
 	private final Runnable movePieceLeft = new Runnable() {
 		public void run() {
@@ -586,7 +552,6 @@ public class Game extends Part<Part<?>> implements Runnable {
 		}
 	};
 	
-	
 	private final Runnable rotatePieceClockwise = new Runnable() {
 		public void run() {
 			synchronized (PieceAction.CLOCKWISE) {
@@ -599,7 +564,6 @@ public class Game extends Part<Part<?>> implements Runnable {
 			}
 		}
 	};
-	
 	
 	private final Runnable rotatePieceCounterClockwise = new Runnable() {
 		public void run() {
