@@ -6,7 +6,6 @@ import tetris.coordinates.HasDimension;
 
 public class Block extends MovablePart<Part<?>> implements HasDimension, Debug {	
 	private final int type;
-	
 
 	public Block(Coordinates newCoords, int newType) {
 		super(newCoords);
@@ -33,7 +32,6 @@ public class Block extends MovablePart<Part<?>> implements HasDimension, Debug {
 		type = other.getType();
 		
 	}
-	
 	
 	@Override
 	public boolean equals(Object obj) {
@@ -71,7 +69,6 @@ public class Block extends MovablePart<Part<?>> implements HasDimension, Debug {
 		return getX() == other.getX() 
 			&& getY() == other.getY();
 	}
-	
 	
 	// Overridden to fulfill hashCode's general contract since equals was also overridden.
 	@Override
@@ -113,6 +110,6 @@ public class Block extends MovablePart<Part<?>> implements HasDimension, Debug {
 
 	@Override
 	public void printInfo() {
-		System.out.println("Block - X:" + getX() + " Y:" + getY() + " Type:" + getType());
+		/*System.out.println("Block - X:" + getX() + " Y:" + getY() + " Type:" + getType());*/
 	}
 }

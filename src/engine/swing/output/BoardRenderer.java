@@ -48,7 +48,7 @@ public class BoardRenderer extends Renderer {
 	
 	@Override
 	public void update() {
-		System.out.println("IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
+		/* System.out.println("IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");*/
 		height = this.getParent().getHeight() - 2 * padding;
 		
 		

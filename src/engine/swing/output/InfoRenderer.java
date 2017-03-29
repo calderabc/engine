@@ -45,9 +45,11 @@ public class InfoRenderer extends Renderer {
 		//this.setMinimumSize(new Dimension(width + InfoRenderer.padding, height));
 		//this.setSize(width + InfoRenderer.padding, height);
 		this.setBounds(BoardRenderer.width + 2 * BoardRenderer.padding, 0, width + InfoRenderer.padding, height);
+		/*
 		System.out.println("***********************************************************");
 		System.out.println(BoardRenderer.width);
 		System.out.println("***********************************************************");
+		*/
 	}
 
 }

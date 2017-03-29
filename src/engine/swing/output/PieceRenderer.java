@@ -22,7 +22,7 @@ public class PieceRenderer extends ImageRenderer {
 	
 	
 	public PieceRenderer(Part<?> newPiece) {
-		System.out.println("PieceRenderer");
+/* 		System.out.println("PieceRenderer"); */
 		piece = (Piece) newPiece;
 		
 		this.setOpaque(false);

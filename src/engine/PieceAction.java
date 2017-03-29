@@ -4,16 +4,17 @@ import java.util.concurrent.ScheduledFuture;
 
 public enum PieceAction {
 	WARP ("warp down", 0),
-	FALL ("fall", 2 / 1.0e9),
-	DOWN ("move down", 20 / 1.0e9),
-	LEFT ("move left", 6 / 1.0e9),
-	RIGHT ("move right", 6 / 1.0e9),
-	CLOCKWISE ("rotate clockwise", 6 / 1.0e9),
-	COUNTERCLOCKWISE ("rotate counterclockwise", 6 / 1.0e9);
+	FALL ("fall", 2),
+	DOWN ("move down", 20),
+	LEFT ("move left", 6),
+	RIGHT ("move right", 6),
+	CLOCKWISE ("rotate clockwise", 6),
+	COUNTERCLOCKWISE ("rotate counterclockwise", 6);
 	
-	
-	
-	private double speed;
+	// Delay between actions (moving/rotating the piece) in milliseconds.(?) 
+	// TODO: Figure the apparent discord between milliseconds and 1.0e9 (nanosecond)
+	// Why does setting the delay to "1.0e9 / newFrequency" work if things are 
+	// done in terms of milliseconds (1.0e3 per second)?
 	private long delay = 0; 
 	private long releaseTime = System.currentTimeMillis();
 	private long pressTime = System.currentTimeMillis();
@@ -24,10 +25,9 @@ public enum PieceAction {
 	public boolean isPressed = false;
 	
 	
-	private PieceAction(String newName, double newSpeed) {
+	private PieceAction(String newName, double newFrequency) {
 		name = newName;
-		speed = newSpeed;
-		setDelayFromSpeed(newSpeed);
+		delay = Math.round(1.0e9 / newFrequency);
 	}
 	
 	public static void resetAll() {
@@ -40,40 +40,7 @@ public enum PieceAction {
 		}
 		
 	}
-	
-	
-	public Double getSpeed() {
-		return speed;
-	}
-	
-	public Double setSpeed(double newSpeed) {
-		if (this == PieceAction.RIGHT) {
-			PieceAction.LEFT.speed = newSpeed;
-			PieceAction.LEFT.setDelayFromSpeed(newSpeed); 
-		}
-		else if (this == PieceAction.LEFT) { 
-			PieceAction.RIGHT.speed = newSpeed;
-			PieceAction.RIGHT.setDelayFromSpeed(newSpeed); 
-		} 
-		else if (this == PieceAction.CLOCKWISE) { 
-			PieceAction.COUNTERCLOCKWISE.speed = newSpeed;
-			PieceAction.COUNTERCLOCKWISE.setDelayFromSpeed(newSpeed); 
-		}
-		else if (this == PieceAction.COUNTERCLOCKWISE) { 
-			PieceAction.CLOCKWISE.speed = newSpeed;
-			PieceAction.CLOCKWISE.setDelayFromSpeed(newSpeed); 
-		}
-		
-		speed = newSpeed;
-		setDelayFromSpeed(newSpeed);
-		
-		return speed;
-	}
-	
-	private void setDelayFromSpeed(double newSpeed) {
-		delay = Math.round(1 / newSpeed);
-	}
-	
+
 	public long getDelay() {
 		return delay;
 	}
@@ -84,9 +51,7 @@ public enum PieceAction {
 		return releaseTime;
 	}
 	
-	
 	public boolean isLegitKeyPress() {
 		return (System.currentTimeMillis() - releaseTime) > 30;
 	}
-	
 }

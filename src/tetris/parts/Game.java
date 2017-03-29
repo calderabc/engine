@@ -151,13 +151,11 @@ public class Game extends Part<Part<?>> implements Runnable {
 	
 	
 	public void run() {
-		PieceAction.FALL.setSpeed(2 / 1.0e9);
+		//PieceAction.FALL.setSpeed(2 / 1.0e9);
 		
 		score = new Score(ScoreCalculator.NINTENDO, 10, 0);
-		
 		level = new Level(1);
 		rowsCleared = new RowsCleared();
-		
 		board = new Board();
 		screen = new Screen();
 		
@@ -187,11 +185,13 @@ public class Game extends Part<Part<?>> implements Runnable {
 		//System.exit(0);
 		
 		while (true) {		
+			/*
 			PieceAction.RIGHT.setSpeed(
 				PieceAction.LEFT.setSpeed(
 					PieceAction.DOWN.setSpeed(PieceAction.FALL.getSpeed() * 4)
 				)
 			);
+			*/
 			
 			piece = board.startNewPiece();
 			board.update();

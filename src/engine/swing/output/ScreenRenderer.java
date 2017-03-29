@@ -75,7 +75,7 @@ public class ScreenRenderer extends Renderer implements ComponentListener{
 		
 		ScreenRenderer.colorFilter = colorMasks[colorFilterIndex];
 		
-		System.out.println(Integer.toHexString(ScreenRenderer.colorFilter));
+/*		System.out.println(Integer.toHexString(ScreenRenderer.colorFilter)); */
 		
 	}
 	

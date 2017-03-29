@@ -210,10 +210,10 @@ public class BlockRenderer extends ImageRenderer {
 				}
 			}
 
-			System.out.println(Integer.toHexString(baseImages[i].getRGB(1, 1)));
+			/* System.out.println(Integer.toHexString(baseImages[i].getRGB(1, 1))); */
 
 			try {
-				System.out.println(i);
+				/* System.out.println(i); */
 				ImageIO.write(baseImages[i], "png", new File("image" + i + ".png"));
 			} catch (IOException e) {
 				e.printStackTrace();
