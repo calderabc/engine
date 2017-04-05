@@ -6,7 +6,10 @@ package engine;
  * @author Aaron Calder
  *
  */
-public class Coordinates implements Cloneable, Comparable<Object>{
+// TODO: Not sure if I need to make this class implement Comparable.  Do more research. 
+/* public class Coordinates implements Comparable<Object>{ */
+
+public class Coordinates {
 	
 	public int x;
 	public int y;
@@ -49,6 +52,7 @@ public class Coordinates implements Cloneable, Comparable<Object>{
 	 *  a.equals(b) is true if the x, y, and z coordinates in 'a' equal 
 	 *  the the corresponding x, y and z, coordinates in 'b'.
 	 */
+	/*
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Coordinates)) 
@@ -62,9 +66,11 @@ public class Coordinates implements Cloneable, Comparable<Object>{
 		
 		return true;
 	}
+	*/
 	
 	
 	// Overridden to fulfill hashCode's general contract since equals was also overridden.
+	/*
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -78,9 +84,11 @@ public class Coordinates implements Cloneable, Comparable<Object>{
 		
 		return result;
 	}
+	*/
 
 	
 	// TODO: I need to better define what it means to be less than or greater than for a coordinate.
+	/*
 	@Override
 	public int compareTo(Object o) throws ClassCastException {
 		if (!(o instanceof Coordinates))
@@ -100,4 +108,5 @@ public class Coordinates implements Cloneable, Comparable<Object>{
 		
 		return result; 
 	}
+	*/
 }
