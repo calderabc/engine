@@ -4,10 +4,9 @@ import java.util.ListIterator;
 import java.util.Vector;
 
 import engine.Part;
-import engine.StaticPart;
 
 
-public class Number extends StaticPart<Part<?>> {
+public class Number extends Part<Part<?>> {
 	private long value;
 	private int size;
 	private final long max;

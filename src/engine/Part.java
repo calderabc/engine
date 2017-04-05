@@ -15,7 +15,7 @@ import tetris.FlagException;
 
 
 @SuppressWarnings("serial")
-public abstract class Part<T extends Part<?>> implements Renderable {
+public abstract class Part<T extends Part<?>> implements Renderable, Positionable {
 	
 		
 	private static final Map<String, String> PART_TO_RENDERER_MAP = 
@@ -48,15 +48,35 @@ public abstract class Part<T extends Part<?>> implements Renderable {
 		this.visible = visible;
 	}
 
-	public Part(){
+	private Position pos;
+
+	protected Part(){
+		// If pos hasn't been set it will still be null.
+		// TODO: I should require subclasses to initialize the 'pos' value.
+		// TODO: Or I should set 'pos' to a default value if subclass does not set.
+
 		children = new Vector<T>();
-		
 	}
-	
+
 	public Part(boolean isVisible) {
 		this();
 		visible = isVisible;
 	}
+
+	public Part(int newX, int newY) {
+		this();
+		pos = new Position(newX, newY);
+	}
+	
+	public Part(Coordinates newPosition) {
+		this();
+		pos = new Position(newPosition); 
+	}
+	
+	public Part(Part<T> other) {
+		this();
+		pos = new Position(other.getPosition());
+	}	
 	
 	/*
 	 * TODO: Figure out if there is a way to do this.  The problem is I don't know of
@@ -140,6 +160,7 @@ public abstract class Part<T extends Part<?>> implements Renderable {
 	}
 	
 	public final Part<T> addChild(T newChild) {
+		System.out.println(children);
 		children.add(newChild);
 		
 		if (newRendererIfNull()) {
@@ -203,6 +224,45 @@ public abstract class Part<T extends Part<?>> implements Renderable {
 	
 	public Collection<T> getChildren() {
 		return children;
+	}
+	
+	
+	
+	
+	@Override
+	public int getX() {
+		return pos.x;
+	}
+
+	@Override
+	public int getY() {
+		return pos.y;
+		
+	}
+
+	@Override
+	public Positionable setX(int newX) {
+		pos.x = newX;
+		return this;
+	}
+
+	@Override
+	public Positionable setY(int newY) {
+		pos.y = newY;
+		return this;
+	}
+
+	@Override
+	public Position getPosition() {
+		return pos;
+	}
+
+	@Override
+	public Positionable setPosition(int newX, int newY) {
+		setX(newX);
+		setY(newY);
+		
+		return this;
 	}
 	
 }

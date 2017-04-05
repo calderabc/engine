@@ -1,9 +1,8 @@
 package engine.puzzle;
 
 import engine.Part;
-import engine.StaticPart;
 
-public class Digit extends StaticPart<Part<?>> {
+public class Digit extends Part<Part<?>> {
 	private int value;
 	
 	public Digit(int newX, int newY, int newValue) {

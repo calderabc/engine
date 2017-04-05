@@ -1,6 +1,6 @@
 package engine;
 
-public abstract class MovablePart<T extends Part<?>> extends StaticPart<T> implements Movable, HasDimension {
+public abstract class MovablePart<T extends Part<?>> extends Part<T> implements Movable, HasDimension {
 	
 
 	
@@ -25,7 +25,7 @@ public abstract class MovablePart<T extends Part<?>> extends StaticPart<T> imple
 	 * Constructs a MovablePart based on a deep copy of the specified MovablePart
 	 * @param other
 	 */
-	public MovablePart(StaticPart<T> other) {
+	public MovablePart(Part<T> other) {
 		super(other);
 		//pos = new Position(other.pos);
 	}
