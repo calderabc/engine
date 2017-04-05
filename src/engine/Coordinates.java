@@ -8,35 +8,9 @@ package engine;
  */
 public class Coordinates implements Cloneable, Comparable<Object>{
 	
-	public static class Double {
-		public double x;
-		public double y;
-		public double z;
-		
-		
-		public Double(double newX, double newY) {
-			this(newX, newY, 0);
-		}
-		
-		public Double(double newX, double newY, double newZ) {
-			x = newX;
-			y = newY;
-			z = newZ;
-		}
-		
-		public Double(Coordinates.Double other) {
-			this(other.x, other.y, other.z);
-		}
-	}
-	
-	
 	public int x;
 	public int y;
 	public int z;
-	
-	protected Coordinates() {
-		this(0, 0, 0);
-	}
 	
 	/**
 	 * Constructs Coordinates from the specified X and Y values, setting Z to default 0.
@@ -70,13 +44,6 @@ public class Coordinates implements Cloneable, Comparable<Object>{
 	
 
 	//*************** Override some methods from the Object class **************
-	
-	// Make Coordinates clonable
-	@Override
-	public Coordinates clone() throws CloneNotSupportedException
-	{
-		return (Coordinates) super.clone();
-	}
 	
 	/**
 	 *  a.equals(b) is true if the x, y, and z coordinates in 'a' equal 

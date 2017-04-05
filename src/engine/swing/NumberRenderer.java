@@ -44,7 +44,7 @@ public class NumberRenderer extends Renderer {
 		
 		height += 2 * NumberRenderer.padding;
 		
-		this.setBounds(number.getX() * 80, number.getY() * 80 + 10, width, height);
+		this.setBounds(number.pos.x * 80, number.pos.y * 80 + 10, width, height);
 		
 	}
 }

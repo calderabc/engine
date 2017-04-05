@@ -6,7 +6,7 @@ package engine;
  * @author Aaron Calder
  *
  */
-public class Position extends Coordinates implements Positionable, Movable {
+public class Position extends Coordinates implements  Movable {
 	
 	/**
 	 * Constructs Position based the values in the specified Coordinates.
@@ -52,8 +52,7 @@ public class Position extends Coordinates implements Positionable, Movable {
 	 */
 	@Override
 	public final synchronized Position move(int offsetX, int offsetY) {
-		moveX(offsetX);
-		moveY(offsetY);
+		move(offsetX, offsetY, 0);
 		return this;
 	}
 	
@@ -68,45 +67,8 @@ public class Position extends Coordinates implements Positionable, Movable {
 	 */
 	@Override
 	public final synchronized Position move(int offsetX, int offsetY, int offsetZ) {
-		moveX(offsetX);
-		moveY(offsetY);
-		moveZ(offsetZ);
-		return this;
-	}
-	
-	
-	/**
-	 * Relocates Position, in the x direction, by the specified offset amount.
-	 * @param offsetX offset to move Position in the X direction
-	 * @return reference to the moved Position object
-	 */
-	@Override
-	public final synchronized Position moveX(int offsetX)
-	{
 		x += offsetX;
-		return this;
-	}
-	
-	/**
-	 * Relocates Position, in the y direction, by the specified offset amount.
-	 * @param offsetY offset to move Position in the Y direction.
-	 * @return reference to the moved Position object
-	 */
-	@Override
-	public final synchronized Position moveY(int offsetY)
-	{
 		y += offsetY;
-		return this;
-	}
-	
-	/**
-	 * Relocates Position, in the z direction, by the specified offset amount.
-	 * @param offsetZ amount to move Position in the Z direction.
-	 * @return reference to the moved Position object
-	 */
-	@Override
-	public final synchronized Position moveZ(int offsetZ)
-	{
 		z += offsetZ;
 		return this;
 	}
@@ -122,58 +84,4 @@ public class Position extends Coordinates implements Positionable, Movable {
 		z = other.z;
 		return this;
 	}
-	
-	
-	@Override
-	public int getX() {
-		return x;
-	}
-
-	@Override
-	public int getY() {
-		return y;
-	}
-	
-	
-	/**
-	 * Sets the X and Y Coordinate values and leave the Z Coordinate value unchanged.
-	 * @param newX x coordinate value
-	 * @param newY y coordinate value
-	 * @return reference to the Coordinates object just set
-	 */
-	@Override
-	public Position setPosition(int newX, int newY) {
-		setX(newX);
-		setY(newY);
-		return this;
-	}
-	
-	/**
-	 * Sets the x Coordinate value.
-	 * @param newX 
-	 * @return reference to the Coordinate object
-	 */
-	@Override
-	public final synchronized Position setX(int newX) {
-			x = newX;
-			return this;
-	}
-	
-	
-	/**
-	 * Sets the y coordinate value.
-	 * @param newY
-	 * @return reference to the Coordinate object
-	 */
-	@Override
-	public final synchronized Position setY(int newY) {
-		y = newY;
-		return this;
-	}
-
-	@Override
-	public Position getPosition() {
-		return this;
-	}
-
 }

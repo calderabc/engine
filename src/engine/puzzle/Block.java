@@ -41,8 +41,8 @@ public class Block extends MovablePart<Part<?>> implements HasDimension, Debug {
 			return false;
 		}
 		else {
-			return getX() == ((Block) obj).getX() 
-				&& getY() == ((Block) obj).getY();
+			return pos.x == ((Block) obj).pos.x 
+				&& pos.y == ((Block) obj).pos.y;
 		}
 	}
 	
@@ -68,8 +68,8 @@ public class Block extends MovablePart<Part<?>> implements HasDimension, Debug {
 	*/
 	
 	private boolean isEqual(Block other) {
-		return getX() == other.getX() 
-			&& getY() == other.getY();
+		return pos.x == other.pos.x 
+			&& pos.y == other.pos.y;
 	}
 	
 	// Overridden to fulfill hashCode's general contract since equals was also overridden.
@@ -79,8 +79,8 @@ public class Block extends MovablePart<Part<?>> implements HasDimension, Debug {
 		int result = 17;
 		
 		synchronized(this) {
-			result = prime * result + getX();
-			result = prime * result + getY();
+			result = prime * result + pos.x;
+			result = prime * result + pos.y;
 		}
 		
 		return result;
@@ -102,12 +102,12 @@ public class Block extends MovablePart<Part<?>> implements HasDimension, Debug {
 
 	@Override
 	public int getMaxX() {
-		return getX();
+		return pos.x;
 	}
 
 	@Override
 	public int getMaxY() {
-		return getY();
+		return pos.y;
 	}
 
 	@Override

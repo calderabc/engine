@@ -50,7 +50,7 @@ public class DigitRenderer extends ImageRenderer {
 		this.setOpaque(false);
 		
 		this.setBounds(
-			digit.getX() * (getWidth() + NumberRenderer.padding) + NumberRenderer.padding,
+			digit.pos.x * (getWidth() + NumberRenderer.padding) + NumberRenderer.padding,
 			NumberRenderer.padding, 
 			getWidth(), 
 			getHeight());

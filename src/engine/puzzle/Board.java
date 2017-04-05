@@ -100,7 +100,7 @@ public final class Board extends Part<MovablePart<?>> {
 	public final Collection<Collection<TestBlock>> getFullRows(Piece landedPiece) {
 		Collection<Collection<TestBlock>> fullRows = new ArrayList<Collection<TestBlock>>(height);
 		
-		int landedPieceMinY = landedPiece.getY();
+		int landedPieceMinY = landedPiece.pos.y;
 		int landedPieceMaxY = landedPieceMinY + landedPiece.getHeight() - 1;
 		
 		fullRows = new ArrayList<Collection<TestBlock>>(width);
@@ -183,16 +183,16 @@ public final class Board extends Part<MovablePart<?>> {
 		int currPartMinX, currPartMaxX, currPartMinY, currPartMaxY;
 		
 		// Calculate bounds of test piece.
-		int testPieceMinX = testPiece.getX();
+		int testPieceMinX = testPiece.pos.x;
 		int testPieceMaxX = testPiece.getMaxX();
-		int testPieceMinY = testPiece.getY();
+		int testPieceMinY = testPiece.pos.y;
 		int testPieceMaxY = testPiece.getMaxY();
 		
 		for (MovablePart<?> currPart: getChildren()) {
 			// Calculate bounds of current part.
-			currPartMinX = currPart.getX();
+			currPartMinX = currPart.pos.x;
 			currPartMaxX = currPart.getMaxX();
-			currPartMinY = currPart.getY();
+			currPartMinY = currPart.pos.y;
 			currPartMaxY = currPart.getMaxY();
 			
 			// Only check individual blocks in the test piece if its 
@@ -315,8 +315,8 @@ public final class Board extends Part<MovablePart<?>> {
 		for (MovablePart<?> currChild: getChildren()) {
 			if (currChild instanceof Block) {
 				currBlock = (Block)currChild;
-				if (currBlock.getY() < rowY) {
-					currBlock.moveY(1);
+				if (currBlock.pos.y < rowY) {
+					currBlock.move(0,1);
 				}
 			}
 		}
@@ -345,9 +345,9 @@ public final class Board extends Part<MovablePart<?>> {
 	
 	private final boolean isPieceOutOfBounds(Piece testPiece) {
 		// TODO: Make sure this is correct
-		return (testPiece.getY() + testPiece.getHeight() > height)
-				|| (testPiece.getX() + testPiece.getWidth() > width)
-				|| (testPiece.getX() < 0);
+		return (testPiece.pos.y + testPiece.getHeight() > height)
+				|| (testPiece.pos.x + testPiece.getWidth() > width)
+				|| (testPiece.pos.x < 0);
 	}
 	
 	/**

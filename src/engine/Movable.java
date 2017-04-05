@@ -16,11 +16,5 @@ public interface Movable {
 	
 	public Movable move(int offsetX, int offsetY, int offsetZ);
 	
-	public Movable moveX(int offsetX);
-	
-	public Movable moveY(int offsetY);
-	
-	public Movable moveZ(int offsetZ);
-	
 }
 

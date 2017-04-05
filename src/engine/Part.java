@@ -15,7 +15,7 @@ import tetris.FlagException;
 
 
 @SuppressWarnings("serial")
-public abstract class Part<T extends Part<?>> implements Renderable, Positionable {
+public abstract class Part<T extends Part<?>> implements Renderable {
 	
 		
 	private static final Map<String, String> PART_TO_RENDERER_MAP = 
@@ -33,6 +33,8 @@ public abstract class Part<T extends Part<?>> implements Renderable, Positionabl
 					put("Screen",      "Screen");
 				}
 			});
+
+	public Position pos;
 	
 	private Collection<T> children;
 	
@@ -47,8 +49,6 @@ public abstract class Part<T extends Part<?>> implements Renderable, Positionabl
 	protected final void setVisible(boolean visible) {
 		this.visible = visible;
 	}
-
-	private Position pos;
 
 	protected Part(){
 		// If pos hasn't been set it will still be null.
@@ -75,7 +75,7 @@ public abstract class Part<T extends Part<?>> implements Renderable, Positionabl
 	
 	public Part(Part<T> other) {
 		this();
-		pos = new Position(other.getPosition());
+		pos = new Position(other.pos);
 	}	
 	
 	/*
@@ -221,48 +221,7 @@ public abstract class Part<T extends Part<?>> implements Renderable, Positionabl
 	}
 	
 	
-	
 	public Collection<T> getChildren() {
 		return children;
 	}
-	
-	
-	
-	
-	@Override
-	public int getX() {
-		return pos.x;
-	}
-
-	@Override
-	public int getY() {
-		return pos.y;
-		
-	}
-
-	@Override
-	public Positionable setX(int newX) {
-		pos.x = newX;
-		return this;
-	}
-
-	@Override
-	public Positionable setY(int newY) {
-		pos.y = newY;
-		return this;
-	}
-
-	@Override
-	public Position getPosition() {
-		return pos;
-	}
-
-	@Override
-	public Positionable setPosition(int newX, int newY) {
-		setX(newX);
-		setY(newY);
-		
-		return this;
-	}
-	
 }

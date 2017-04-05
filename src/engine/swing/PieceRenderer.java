@@ -15,7 +15,7 @@ public class PieceRenderer extends ImageRenderer {
 	
 	private final void loadImages(Iterable<Block> blocks) {
 		for (Block currBlock: blocks) {
-			drawImageOnMe(((BlockRenderer) currBlock.getRenderer()), currBlock.getX(), currBlock.getY());
+			drawImageOnMe(((BlockRenderer) currBlock.getRenderer()), currBlock.pos.x, currBlock.pos.y);
 		}
 	
 	}
@@ -47,8 +47,8 @@ public class PieceRenderer extends ImageRenderer {
 		
 		for (Block currBlock: piece.getBlocks()) {
 			drawImageOnMe(((BlockRenderer) currBlock.getRenderer()),
-						  (currBlock.getX() - piece.getX()) * BlockRenderer.getDisplayWidth(),
-						  (currBlock.getY() - piece.getY()) * BlockRenderer.getDisplayHeight());
+						  (currBlock.pos.x - piece.pos.x) * BlockRenderer.getDisplayWidth(),
+						  (currBlock.pos.y - piece.pos.y) * BlockRenderer.getDisplayHeight());
 		}
 		
 	}
@@ -57,8 +57,8 @@ public class PieceRenderer extends ImageRenderer {
 	public void update() {
 		//System.out.println("Update PieceRenderer");
 		
-		this.setBounds(piece.getX() * BlockRenderer.getDisplayWidth(), 
-					   piece.getY() * BlockRenderer.getDisplayHeight(),
+		this.setBounds(piece.pos.x * BlockRenderer.getDisplayWidth(), 
+					   piece.pos.y * BlockRenderer.getDisplayHeight(),
 					   getWidth(),
 					   getHeight());
 		

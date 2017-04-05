@@ -3,6 +3,7 @@ package engine.puzzle;
 import java.util.Vector;
 
 import engine.Debug;
+import engine.Position;
 import engine.Movable;
 import engine.MovablePart;
 
@@ -112,14 +113,14 @@ public class Piece extends MovablePart<Block> implements Movable, Debug {
 		}
 		
 		
-		currCenter[X] = pieceCenter[pieceID][0] + getX();
-		currCenter[Y] = pieceCenter[pieceID][1] + getY();
-		destCenter[X] = pieceCenter[pieceID][2] + getX();
-		destCenter[Y] = pieceCenter[pieceID][3] + getY();
+		currCenter[X] = pieceCenter[pieceID][0] + pos.x;
+		currCenter[Y] = pieceCenter[pieceID][1] + pos.y;
+		destCenter[X] = pieceCenter[pieceID][2] + pos.x;
+		destCenter[Y] = pieceCenter[pieceID][3] + pos.y; 
 	
 		for (Block currBlock: this.getChildren()) {
 			if (currBlock instanceof Block) {
-				currBlock.move(getPosition());
+				currBlock.move(pos);
 			}
 		}
 		//setCenterOfMass();
@@ -132,16 +133,16 @@ public class Piece extends MovablePart<Block> implements Movable, Debug {
 		
 		for(Block currBlock: getChildren()) {
 			
-			currX = currBlock.getX();
+			currX = currBlock.pos.x;
 			if (currX > maxX) maxX = currX;
 			if (currX < minX) minX = currX;
 			
-			currY = currBlock.getY();
+			currY = currBlock.pos.y;
 			if (currY > maxY) maxY = currY;
 			if (currY < minY) minY = currY;
 		}
 		
-		this.setPosition(minX, minY);
+		pos = new Position(minX, minY); 
 		width = maxX - minX + 1;
 		height = maxY - minY + 1;
 	}
@@ -239,12 +240,11 @@ public class Piece extends MovablePart<Block> implements Movable, Debug {
 		// Move the Blocks in the piece to their new positions.
 		for(Block currBlock: getChildren()) {
 				currBlock.printInfo();
-				System.out.println("adjustX:" + adjustX + " adjustY:" + adjustY + " flip:" + flip + " x:" + currBlock.getX() + " y:" + currBlock.getY());
-				currBlock.setPosition(
-					flip * currBlock.getY() + adjustX, 
-					-flip * currBlock.getX() + adjustY);
+				System.out.println("adjustX:" + adjustX + " adjustY:" + adjustY + " flip:" + flip + " x:" + currBlock.pos.x + " y:" + currBlock.pos.y);
+				currBlock.pos = new Position(flip * currBlock.pos.y + adjustX,
+				                             -flip * currBlock.pos.x + adjustY);
 				currBlock.printInfo();
-				System.out.println("adjustX:" + adjustX + " adjustY:" + adjustY + " flip:" + flip + " x:" + currBlock.getX() + " y:" + currBlock.getY());
+				System.out.println("adjustX:" + adjustX + " adjustY:" + adjustY + " flip:" + flip + " x:" + currBlock.pos.x + " y:" + currBlock.pos.y);
 						
 		}
 		System.out.println("Rotate debug end");
@@ -311,12 +311,12 @@ public class Piece extends MovablePart<Block> implements Movable, Debug {
 
 	@Override
 	public int getMaxX() {
-		return getX() + width - 1;
+		return pos.x + width - 1;
 	}
 	
 	@Override
 	public int getMaxY() {
-		return getY() + height - 1;
+		return pos.y + height - 1;
 	}
 
 	/*

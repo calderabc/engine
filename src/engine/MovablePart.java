@@ -34,7 +34,7 @@ public abstract class MovablePart<T extends Part<?>> extends Part<T> implements 
 	
 	@Override
 	public final MovablePart<T> move(Coordinates offset) {
-		getPosition().move(offset);
+		pos.move(offset);
 		
 		update();
 		
@@ -43,7 +43,7 @@ public abstract class MovablePart<T extends Part<?>> extends Part<T> implements 
 	
 	@Override
 	public MovablePart<T> move(int offsetX, int offsetY) {
-		getPosition().move(offsetX, offsetY);
+		pos.move(offsetX, offsetY);
 		
 		update();
 		
@@ -52,37 +52,11 @@ public abstract class MovablePart<T extends Part<?>> extends Part<T> implements 
 	
 	@Override
 	public final MovablePart<T> move(int offsetX, int offsetY, int offsetZ) {
-		getPosition().move(offsetX, offsetY, offsetZ);
+		pos.move(offsetX, offsetY, offsetZ);
 		
 		update();
 		
 		return this;
 	}
 
-	@Override
-	public final MovablePart<T> moveX(int offsetX) {
-		getPosition().moveX(offsetX);
-		
-		update();
-		
-		return this;
-	}
-
-	@Override
-	public final MovablePart<T> moveY(int offsetY) {
-		getPosition().moveY(offsetY);
-		
-		update();
-		
-		return this;
-	}
-	
-	@Override
-	public MovablePart<T> moveZ(int offsetZ) {
-		getPosition().moveZ(offsetZ);
-		
-		update();
-		
-		return this;
-	}
 }
