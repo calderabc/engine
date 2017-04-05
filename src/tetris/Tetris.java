@@ -1,6 +1,6 @@
 package tetris;
 
-import tetris.parts.Game;
+import engine.puzzle.Game;
 
 public class Tetris  {
 
