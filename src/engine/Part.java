@@ -34,7 +34,7 @@ public abstract class Part<T extends Part<?>> implements Renderable {
 				}
 			});
 
-	public Position pos;
+	public Coordinates pos;
 	
 	private Collection<T> children;
 	
@@ -65,17 +65,17 @@ public abstract class Part<T extends Part<?>> implements Renderable {
 
 	public Part(int newX, int newY) {
 		this();
-		pos = new Position(newX, newY);
+		pos = new Coordinates(newX, newY);
 	}
 	
 	public Part(Coordinates newPosition) {
 		this();
-		pos = new Position(newPosition); 
+		pos = new Coordinates(newPosition); 
 	}
 	
 	public Part(Part<T> other) {
 		this();
-		pos = new Position(other.pos);
+		pos = new Coordinates(other.pos);
 	}	
 	
 	/*

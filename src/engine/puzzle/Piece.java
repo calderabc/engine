@@ -3,7 +3,7 @@ package engine.puzzle;
 import java.util.Vector;
 
 import engine.Debug;
-import engine.Position;
+import engine.Coordinates;
 import engine.Movable;
 import engine.MovablePart;
 
@@ -16,7 +16,7 @@ import java.util.Collection;
  *
  */
 
-public class Piece extends MovablePart<Block> implements Movable, Debug {
+public class Piece extends MovablePart<Block> implements Debug {
 	private final static int X = 0;
 	private final static int Y = 1;
 	
@@ -142,7 +142,7 @@ public class Piece extends MovablePart<Block> implements Movable, Debug {
 			if (currY < minY) minY = currY;
 		}
 		
-		pos = new Position(minX, minY); 
+		pos = new Coordinates(minX, minY); 
 		width = maxX - minX + 1;
 		height = maxY - minY + 1;
 	}
@@ -241,8 +241,8 @@ public class Piece extends MovablePart<Block> implements Movable, Debug {
 		for(Block currBlock: getChildren()) {
 				currBlock.printInfo();
 				System.out.println("adjustX:" + adjustX + " adjustY:" + adjustY + " flip:" + flip + " x:" + currBlock.pos.x + " y:" + currBlock.pos.y);
-				currBlock.pos = new Position(flip * currBlock.pos.y + adjustX,
-				                             -flip * currBlock.pos.x + adjustY);
+				currBlock.pos = new Coordinates(flip * currBlock.pos.y + adjustX,
+				                                -flip * currBlock.pos.x + adjustY);
 				currBlock.printInfo();
 				System.out.println("adjustX:" + adjustX + " adjustY:" + adjustY + " flip:" + flip + " x:" + currBlock.pos.x + " y:" + currBlock.pos.y);
 						
@@ -282,17 +282,17 @@ public class Piece extends MovablePart<Block> implements Movable, Debug {
 	
 
 	@Override
-	public MovablePart<Block> move(int offsetX, int offsetY) {
-		super.move(offsetX, offsetY);
+	public MovablePart<Block> move(Coordinates offset) {
+		super.move(offset);
 		
 		System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
-		currCenter[X] += offsetX;
-		currCenter[Y] += offsetY;
-		destCenter[X] += offsetX;
-		destCenter[Y] += offsetY;
+		currCenter[X] += offset.x;
+		currCenter[Y] += offset.y;
+		destCenter[X] += offset.x;
+		destCenter[Y] += offset.y;
 		
 		for (Block currBlock: getChildren()) {
-			currBlock.move(offsetX, offsetY);
+			currBlock.move(offset);
 		}
 		this.printInfo();
 		

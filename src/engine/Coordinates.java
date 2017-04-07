@@ -9,7 +9,7 @@ package engine;
 // TODO: Not sure if I need to make this class implement Comparable.  Do more research. 
 /* public class Coordinates implements Comparable<Object>{ */
 
-public class Coordinates {
+public class Coordinates implements Movable {
 	
 	public int x;
 	public int y;
@@ -44,6 +44,30 @@ public class Coordinates {
 	public Coordinates(Coordinates other) {
 		this(other.x, other.y, other.z);
 	}
+	
+	@Override
+	public final Coordinates move(Coordinates offset) {
+		x += offset.x;
+		y += offset.y;
+		z += offset.z;
+		return this;
+	}	
+	
+	@Override
+	public final Coordinates move(int offsetX, int offsetY) {
+		x += offsetX;
+		y += offsetY;
+		return this;
+	}
+
+	@Override
+	public final Coordinates move(int offsetX, int offsetY, int offsetZ) {
+		x += offsetX;
+		y += offsetY;
+		z += offsetZ;
+		return this;
+	}
+}
 	
 
 	//*************** Override some methods from the Object class **************
@@ -109,4 +133,3 @@ public class Coordinates {
 		return result; 
 	}
 	*/
-}
