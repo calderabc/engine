@@ -44,20 +44,16 @@ public class Coordinates implements Movable {
 	public Coordinates(Coordinates other) {
 		this(other.x, other.y, other.z);
 	}
+
 	
 	@Override
 	public final Coordinates move(Coordinates offset) {
-		x += offset.x;
-		y += offset.y;
-		z += offset.z;
-		return this;
+		return move(offset.x, offset.y, offset.z);
 	}	
 	
 	@Override
 	public final Coordinates move(int offsetX, int offsetY) {
-		x += offsetX;
-		y += offsetY;
-		return this;
+		return move(offsetX, offsetY, 0);
 	}
 
 	@Override
