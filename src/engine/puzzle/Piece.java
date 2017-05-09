@@ -20,31 +20,6 @@ public class Piece extends MovablePart<Block> implements Debug {
 	private final static int X = 0;
 	private final static int Y = 1;
 
-	public static final int[][][] pieceTemplate =
-		{{{0, 0}, {1, 0}, {0, 1}, {1, 1}},  //  ##
-		                                    //  ##
-		 {{0, 0}, {1, 0}, {2, 0}, {1, 1}},  //     ###
-		                                    //      #
-		 {{0, 0}, {1, 0}, {2, 0}, {2, 1}},  //  ###
-		                                    //    #
-		 {{0, 0}, {1, 0}, {2, 0}, {0, 1}},  //      ###
-		                                    //      #
-		 {{0, 0}, {1, 0}, {2, 0}, {3, 0}},  // ####
-		                                    //
-		 {{0, 0}, {1, 0}, {2, 1}, {1, 1}},  //    ##
-		                                    //     ##
-		 {{0, 1}, {1, 0}, {2, 0}, {1, 1}}}; //  ##
-		                                    // ##
-
-	/* These values are twice their intended values so that floating point half
-	 * fractions can be represented as integers. */
-	public static final int[][] pieceCenter = {{1, 1, 1, 1},
-	                                           {2, 0, 2, 0},
-	                                           {2, 0, 2, 0},
-	                                           {2, 0, 2, 0},
-	                                           {3, 0, 4,-1},
-	                                           {2, 1, 3, 0},
-	                                           {2, 1, 3, 0}};
 	private final int blockCount;
 	public final int getBlockCount() {
 		return blockCount;
@@ -58,9 +33,6 @@ public class Piece extends MovablePart<Block> implements Debug {
 		return id;
 	}
 
-	//private Coordinates centerOfMass;
-	//private Coordinates otherCenterOfMass;
-
 	public int[] currCenter = new int[2];
 	public  int[] destCenter = new int[2];
 
@@ -70,14 +42,13 @@ public class Piece extends MovablePart<Block> implements Debug {
 	/**
 	 * Default Constructor.  Will have better features when I get around to it.
 	 */
-	public Piece(int newBlockCount, int newID) {
+	public Piece(int newID, int[][][] pieceTemplate, int[][] pieceCenter) {
 		super(3, 0);
-		//System.out.println("Piece");
 
-		blockCount = newBlockCount;
 		id = newID;
-
-		generatePiece(id);
+		blockCount = pieceTemplate[id].length;
+		
+		generatePiece(pieceTemplate[id], pieceCenter[id]);
 		generateDimensions();
 
 		//newRenderer();
@@ -102,20 +73,21 @@ public class Piece extends MovablePart<Block> implements Debug {
 			//addChild(currOtherBlock.move(-getPosition().getX(), -getPosition().getY()));
 		}
 
-
 		generateDimensions();
 		init();
 	}
 
-	private final void generatePiece(int pieceID) {
-		for (int[] blockXY: pieceTemplate[pieceID]) {
-			addChild(new Block(blockXY[0], blockXY[1], pieceID));
+	private final void generatePiece(int[][] pieceTemplate, int[] pieceCenter) {
+		for (int[] blockXY: pieceTemplate) {
+			addChild(new Block(blockXY[0], blockXY[1], id));
 		}
 
-		currCenter[X] = pieceCenter[pieceID][0] + (pos.x << 1);
-		currCenter[Y] = pieceCenter[pieceID][1] + (pos.y << 1);
-		destCenter[X] = pieceCenter[pieceID][2] + (pos.x << 1);
-		destCenter[Y] = pieceCenter[pieceID][3] + (pos.y << 1);
+		// Everything in represented multiplied by two, this is why the 'pos' 
+		// variables are doubled to match the already doubled 'pieceCenter'.
+		currCenter[X] = pieceCenter[0] + (pos.x << 1);
+		currCenter[Y] = pieceCenter[1] + (pos.y << 1);
+		destCenter[X] = pieceCenter[2] + (pos.x << 1);
+		destCenter[Y] = pieceCenter[3] + (pos.y << 1);
 
 		for (Block currBlock: this.getChildren()) {
 			if (currBlock instanceof Block) {
@@ -280,23 +252,6 @@ public class Piece extends MovablePart<Block> implements Debug {
 		return pos.y + height - 1;
 	}
 
-	/*
-	@Override
-	public boolean equals(Object obj) {
-		//System.out.println("***************** hello ********************************");
-		if (!(obj instanceof Block || obj instanceof Piece))
-			return false;
-
-		for (Block currChild: getBlocks()) {
-			if (currChild.equals(obj)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-	*/
-
 	@Override
 	public void printInfo() {
 		System.out.println("Piece - Start");
@@ -305,6 +260,5 @@ public class Piece extends MovablePart<Block> implements Debug {
 		}
 		System.out.println("Piece - End");
 	}
-
 
 }

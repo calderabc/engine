@@ -2,19 +2,16 @@ package tetris;
 
 import engine.puzzle.Game;
 
-public class Tetris  {
+public class Tetris extends Game {
+	public Tetris() {
+		super(new TetrisPiecePool());
+	}
 
 	public static void main(String argv[]) {
-		Game game = new Game();
-		Thread abc = new Thread(game);
-		abc.isDaemon();
-		abc.start();
-
-		try {
-			abc.join();
-		} catch (InterruptedException e) { }
+		Tetris.profile = new Profile(Profile.option1);
+		@SuppressWarnings("unused")
+		Game tetrisGame = new Tetris();
 
 		System.exit(0);
-
 	}
 }

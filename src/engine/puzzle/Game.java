@@ -17,6 +17,7 @@ import engine.swing.ScreenRenderer;
 import tetris.Profile;
 import tetris.RowsCleared;
 import tetris.ScoreCalculator;
+import tetris.TetrisPiecePool;
 
 public class Game extends Part<Part<?>> implements Runnable {
 	
@@ -27,6 +28,7 @@ public class Game extends Part<Part<?>> implements Runnable {
 	private Info info;
 	private Piece piece;
 	private Score score;
+
 	
 	Level level;
 	RowsCleared rowsCleared;
@@ -36,9 +38,18 @@ public class Game extends Part<Part<?>> implements Runnable {
 	private ScheduledExecutorService scheduler = 
 		Executors.newScheduledThreadPool(2);
 	
-	public Game() {
+	public Game(PiecePool newPieces) {
 		super(false);
-		profile = new Profile(Profile.option1);
+		board = new Board(newPieces);
+
+		Thread abc = new Thread(this);
+		abc.isDaemon();
+		abc.start();
+
+		try {
+			abc.join();
+		} catch (InterruptedException e) { }
+
 	}
 	
 	public void initInputMap(InputMap map) {
@@ -157,7 +168,6 @@ public class Game extends Part<Part<?>> implements Runnable {
 		score = new Score(ScoreCalculator.NINTENDO, 10, 0);
 		level = new Level(1);
 		rowsCleared = new RowsCleared();
-		board = new Board();
 		screen = new Screen();
 		
 		JComponent component = ((JComponent) screen.getRenderer());

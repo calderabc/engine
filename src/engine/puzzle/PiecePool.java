@@ -4,26 +4,21 @@ import java.util.Random;
 
 import engine.Debug;
 
-public final class Pieces implements Debug {
+public abstract class PiecePool implements Debug {
 	private final Piece[] pieces;
 	
-	private final int blocksPerPiece;
+	private final int[][][] pieceTemplate;
+	public final int[][] pieceCenter;
 	
-	public Pieces(int newBlocksPerPiece) {
-		int pieceCount;
+	protected PiecePool(int[][][] newPieceTemplate, int[][] newPieceCenter) {
+		pieceTemplate = newPieceTemplate;
+		pieceCenter = newPieceCenter;
 		
-		blocksPerPiece = newBlocksPerPiece;
-		
-		if (blocksPerPiece == 4) {
-			pieceCount = 7;
-		} else {
-			pieceCount = 0;
-		}
-		int dummy = 1/pieceCount; // so I'll remember to fix above code later
-		
+		int pieceCount = pieceTemplate.length;
+
 		pieces = new Piece[pieceCount];
 		for (int i = 0; i < pieceCount; i++) {
-			pieces[i] = new Piece(blocksPerPiece, i);	
+			pieces[i] = new Piece(i, pieceTemplate, pieceCenter);	
 		}	
 	}
 	
@@ -36,11 +31,6 @@ public final class Pieces implements Debug {
 		return pieces[pieceIndex];
 	}
 				
-	
-	public int blocksPerPiece() {
-		return blocksPerPiece;
-	}
-	
 	@Override
 	public void printInfo() {
 		System.out.println("Pieces - Start");
