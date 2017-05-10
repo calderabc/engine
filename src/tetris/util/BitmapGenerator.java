@@ -93,6 +93,7 @@ public class BitmapGenerator {
 	}
 
 	/* Decorate each piece custom.  For now just adds color filter. */
+	// TODO: Improve code.  Not high priority.
 	private static void decoratePiece(BufferedImage image, int imageID) {
 		int rgba;
 		double luminance, weight;
@@ -162,6 +163,20 @@ public class BitmapGenerator {
 		}
 	}
 	
+	// Rotate piece coordinates 90 degrees clockwise
+	private static void rotatePiece(int[][] pieceCoords, int[] max) {
+		int dummy;
+		for (int[] blockCoords: pieceCoords) {
+			dummy = blockCoords[X];
+			blockCoords[X] = max[Y] - blockCoords[Y];
+			blockCoords[Y] = dummy;
+		}
+		
+		dummy = max[Y];
+		max[Y] = max[X];
+		max[X] = dummy;
+	}
+	
 	public static void main(String argv[]) {
 		final int IMAGES_PER_BLOCK = 8;
 		final int BLOCK_DISPLAY_WIDTH = IMAGES_PER_BLOCK * ImageType.BLOCK.WIDTH;
@@ -176,90 +191,93 @@ public class BitmapGenerator {
 
 		int pieceID = 0;
 		for (int[][] pieceCoords: pieceTemplate) {
-			int maxX = 0, maxY = 0;
-
+			
+			int[] max = new int[2];
 			for (int[] blockCoords: pieceCoords) {
-				if (blockCoords[X] > maxX) {
-					maxX = blockCoords[X];
+				if (blockCoords[X] > max[X]) {
+					max[X] = blockCoords[X];
 				}
 
-				if (blockCoords[Y] > maxY) {
-					maxY = blockCoords[Y];
+				if (blockCoords[Y] > max[Y]) {
+					max[Y] = blockCoords[Y];
 				}
 			}
-			
-			int mapWidth = (maxX + 1);
-			int mapHeight = (maxY + 1);
 
+			for (int orient = 0; orient < 4; orient++) {
+				int mapWidth = (max[X] + 1);
+				int mapHeight = (max[Y] + 1);
 
-			pieceMap = new boolean[mapHeight][mapWidth];
-			for (int[] blockCoords: pieceCoords) {
-				pieceMap[blockCoords[Y]][blockCoords[X]] = true;
-			}
-			
-			int expandedMapHeight = mapHeight * IMAGES_PER_BLOCK; 
-			int expandedMapWidth = mapWidth * IMAGES_PER_BLOCK;
+				pieceMap = new boolean[mapHeight][mapWidth];
+				for (int[] blockCoords: pieceCoords) {
+					pieceMap[blockCoords[Y]][blockCoords[X]] = true;
+				}
+				
+				int expandedMapHeight = mapHeight * IMAGES_PER_BLOCK; 
+				int expandedMapWidth = mapWidth * IMAGES_PER_BLOCK;
 
-			boolean[][] expandedPieceMap = new boolean[expandedMapHeight][expandedMapWidth];
-			for (int mapY = 0; mapY < mapHeight; mapY++) {
-				for (int mapX = 0; mapX < mapWidth; mapX++) {
-					int originY = mapY * IMAGES_PER_BLOCK;
-					int originX = mapX * IMAGES_PER_BLOCK; 
-					
-					if (pieceMap[mapY][mapX]) {
-						for (int fillY = originY; fillY < (originY + IMAGES_PER_BLOCK); fillY++) {
-							for (int fillX = originX; fillX < (originX + IMAGES_PER_BLOCK); fillX++) {
-								expandedPieceMap[fillY][fillX] = true;
+				boolean[][] expandedPieceMap = new boolean[expandedMapHeight][expandedMapWidth];
+				for (int mapY = 0; mapY < mapHeight; mapY++) {
+					for (int mapX = 0; mapX < mapWidth; mapX++) {
+						int originY = mapY * IMAGES_PER_BLOCK;
+						int originX = mapX * IMAGES_PER_BLOCK; 
+						
+						if (pieceMap[mapY][mapX]) {
+							for (int fillY = originY; fillY < (originY + IMAGES_PER_BLOCK); fillY++) {
+								for (int fillX = originX; fillX < (originX + IMAGES_PER_BLOCK); fillX++) {
+									expandedPieceMap[fillY][fillX] = true;
+								}
 							}
 						}
 					}
 				}
-			}
-			
-			
-			byte[][] imageCellCodeMap = new byte[expandedMapHeight][expandedMapWidth];
-			for (int expandedMapY = 0; expandedMapY < expandedMapHeight; expandedMapY++) {
-				for (int expandedMapX = 0; expandedMapX < expandedMapWidth; expandedMapX++) {
-					imageCellCodeMap[expandedMapY][expandedMapX] = 
-						getCellImageCode(expandedPieceMap, expandedMapX, expandedMapY);
-				}
-			}
-			
-			int pieceDisplayWidth = BLOCK_DISPLAY_WIDTH * mapWidth;
-			int pieceDisplayHeight = BLOCK_DISPLAY_HEIGHT * mapHeight;
-			
-			pieceImages[pieceID] = new BufferedImage(pieceDisplayWidth, 
-			                                         pieceDisplayHeight, 
-			                                         BufferedImage.TYPE_4BYTE_ABGR);
-			Graphics pieceGraphics = pieceImages[pieceID].createGraphics();
-			
-			for (int expandedMapY = 0, drawY = 0; 
-			     expandedMapY < expandedMapHeight; 
-			     expandedMapY++, drawY += ImageType.BLOCK.HEIGHT) {
-
-				for (int expandedMapX = 0, drawX = 0; 
-				     expandedMapX < expandedMapWidth; 
-				     expandedMapX++, drawX += ImageType.BLOCK.WIDTH) {
-
-					byte cellCode = imageCellCodeMap[expandedMapY][expandedMapX];
-					int imageID = getImageIDFromCode(cellCode);
-					if (imageID >= 0) {
-						pieceGraphics.drawImage(images[imageID], 
-						                        drawX, drawY, 
-						                        ImageType.BLOCK.WIDTH, ImageType.BLOCK.HEIGHT, 
-						                        null);
+				
+				
+				byte[][] imageCellCodeMap = new byte[expandedMapHeight][expandedMapWidth];
+				for (int expandedMapY = 0; expandedMapY < expandedMapHeight; expandedMapY++) {
+					for (int expandedMapX = 0; expandedMapX < expandedMapWidth; expandedMapX++) {
+						imageCellCodeMap[expandedMapY][expandedMapX] = 
+							getCellImageCode(expandedPieceMap, expandedMapX, expandedMapY);
 					}
 				}
-			}
-			
+				
+				int pieceDisplayWidth = BLOCK_DISPLAY_WIDTH * mapWidth;
+				int pieceDisplayHeight = BLOCK_DISPLAY_HEIGHT * mapHeight;
+				
+				pieceImages[pieceID] = new BufferedImage(pieceDisplayWidth, 
+														 pieceDisplayHeight, 
+														 BufferedImage.TYPE_4BYTE_ABGR);
+				Graphics pieceGraphics = pieceImages[pieceID].createGraphics();
+				
+				for (int expandedMapY = 0, drawY = 0; 
+					 expandedMapY < expandedMapHeight; 
+					 expandedMapY++, drawY += ImageType.BLOCK.HEIGHT) {
 
-			decoratePiece(pieceImages[pieceID], pieceID);
-			
+					for (int expandedMapX = 0, drawX = 0; 
+						 expandedMapX < expandedMapWidth; 
+						 expandedMapX++, drawX += ImageType.BLOCK.WIDTH) {
 
-			try {
-				ImageIO.write(pieceImages[pieceID], "png", new File("piece_image" + pieceID + ".png"));
-			} catch (IOException e) {
-				e.printStackTrace();
+						byte cellCode = imageCellCodeMap[expandedMapY][expandedMapX];
+						int imageID = getImageIDFromCode(cellCode);
+						if (imageID >= 0) {
+							pieceGraphics.drawImage(images[imageID], 
+													drawX, drawY, 
+													ImageType.BLOCK.WIDTH, ImageType.BLOCK.HEIGHT, 
+													null);
+						}
+					}
+				}
+				
+
+				decoratePiece(pieceImages[pieceID], pieceID);
+				
+				try {
+					ImageIO.write(pieceImages[pieceID], "png", new File("piece_image" + pieceID + orient + ".png"));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				rotatePiece(pieceCoords, max);
+				
 			}
 
 			pieceID++;
