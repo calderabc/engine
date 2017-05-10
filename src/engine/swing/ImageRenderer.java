@@ -29,7 +29,7 @@ public abstract class ImageRenderer extends Renderer {
 		spritesImage = tempImage; 
 	}
 	
-	protected static final BufferedImage[] loadImages(ImageType type) {
+	public static final BufferedImage[] loadImages(ImageType type) {
 		BufferedImage[] returnImages = new BufferedImage[type.COUNT]; 
 		
 		for (int i = 0; i < type.COUNT; i++) {

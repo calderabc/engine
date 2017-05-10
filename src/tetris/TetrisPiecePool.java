@@ -4,7 +4,7 @@ import engine.puzzle.PiecePool;
 
 public final class TetrisPiecePool extends PiecePool {
 	// TODO: Make this load from a file instead of hard coding.
-	static private final int[][][] tetrisPieceTemplate =
+	public static final int[][][] tetrisPieceTemplate =
 		{{{0, 0}, {1, 0}, {0, 1}, {1, 1}},  //  ##
 		                                    //  ##
 		 {{0, 0}, {1, 0}, {2, 0}, {1, 1}},  //     ###
