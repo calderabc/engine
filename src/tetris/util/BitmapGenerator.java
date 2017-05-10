@@ -1,5 +1,6 @@
 package tetris.util;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -89,6 +90,76 @@ public class BitmapGenerator {
 				};
 		}
 		return imageID;
+	}
+
+	/* Decorate each piece custom.  For now just adds color filter. */
+	private static void decoratePiece(BufferedImage image, int imageID) {
+		int rgba;
+		double luminance, weight;
+		int red, green, blue, alpha;
+		Color xyz;
+		int[] colorMasks = {0xFFFFFF, 0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0xFF00FF, 0x00FFFF};
+		boolean hasRed, hasGreen, hasBlue;
+			
+		int displayWidth = image.getWidth();
+		int displayHeight = image.getHeight();
+
+		for(int j = 0; j < displayWidth; j++) {
+			for(int k = 0; k < displayHeight; k++) {
+				rgba = image.getRGB(j, k);
+
+				luminance = rgba & 0xFF;
+
+				alpha = rgba >>> 24;
+				if (alpha != 0x00) {
+
+					rgba &= colorMasks[imageID];
+
+					xyz = new Color(rgba);
+
+					red = xyz.getRed();
+					green = xyz.getGreen();
+					blue = xyz.getBlue();
+
+					weight = 0;
+					hasRed = false;
+					hasGreen = false;
+					hasBlue = false;
+					if (red > 0) {
+						hasRed = true;
+						weight += .30;
+					}
+					if (green > 0) {
+						hasGreen = true;
+						weight += .59;
+					}
+					if (blue > 0) {
+						hasBlue = true;
+						weight += .11;
+					}
+
+					if ((weight * 0xFF) < luminance) {
+						int remainder = (int) Math.round((luminance - (weight * 0xFF)) / (1 - weight));
+
+						red = (hasRed) ? 0xFF : remainder;
+						green = (hasGreen) ? 0xFF : remainder;
+						blue = (hasBlue) ? 0xFF : remainder;
+
+					}
+					else {
+						int value = (int) Math.round(luminance / weight);
+
+						if (hasRed) red = value;
+						if (hasGreen) green = value;
+						if (hasBlue) blue = value;
+					}
+
+					xyz = new Color(red, green, blue);
+
+					image.setRGB(j, k, xyz.getRGB());
+				}
+			}
+		}
 	}
 	
 	public static void main(String argv[]) {
@@ -180,6 +251,10 @@ public class BitmapGenerator {
 					}
 				}
 			}
+			
+
+			decoratePiece(pieceImages[pieceID], pieceID);
+			
 
 			try {
 				ImageIO.write(pieceImages[pieceID], "png", new File("piece_image" + pieceID + ".png"));
