@@ -30,9 +30,15 @@ public class BitmapGenerator {
 	private static final int ITR = ITL + 1;
 	private static final int IBR = ITL + 2;
 	private static final int IBL = ITL + 3;
-	
-	private static final int NUM_OF_ORIENTATIONS = 4;
 
+	private static final int IMAGES_PER_BLOCK = 8;
+	private static final int NUM_OF_ORIENTATIONS = 4;
+	private static final int BLOCK_DISPLAY_WIDTH = IMAGES_PER_BLOCK * ImageType.BLOCK.WIDTH;
+	private static final int BLOCK_DISPLAY_HEIGHT = IMAGES_PER_BLOCK * ImageType.BLOCK.HEIGHT;
+	private static final int SHEET_DISPLAY_WIDTH = NUM_OF_ORIENTATIONS * BLOCK_DISPLAY_WIDTH;
+	private static final int BUFF_IMAGE_TYPE = BufferedImage.TYPE_4BYTE_ABGR;
+
+	private static final BufferedImage[] images = ImageRenderer.loadImages(ImageType.BLOCK);
 	
 	// Easier than doing programmatically.
 	private static final int[][] aroundCoords = {{-1,-1},
@@ -105,7 +111,7 @@ public class BitmapGenerator {
 	
 	private static int getImageIDFromCode(byte cellCode) {
 		int imageID = -1;
-		switch (cellCode) { // 
+		switch (cellCode) { // (byte) conversions -> more Java no unsigned lameness.
 			case (byte)0b11111111: imageID = F; break;
 			case       0b01111111: imageID = ITL; break;
 			case (byte)0b11011111: imageID = ITR; break;
@@ -136,7 +142,7 @@ public class BitmapGenerator {
 				
 		BufferedImage returnPieceImage = new BufferedImage(pieceDisplayWidth, 
 		                                                   pieceDisplayHeight, 
-		                                                   BufferedImage.TYPE_4BYTE_ABGR);
+		                                                   BUFF_IMAGE_TYPE);
 		Graphics pieceGraphics = returnPieceImage.createGraphics();
 		
 		for (int expandedMapY = 0, drawY = 0; 
@@ -162,7 +168,7 @@ public class BitmapGenerator {
 	}
 
 	/* Decorate each piece custom.  For now just adds color filter. */
-	// TODO: Improve code.  Not high priority.
+	// TODO: Old code. Improve.  Not a high priority.
 	private static void decoratePiece(BufferedImage image, int imageID) {
 		int rgba;
 		double luminance, weight;
@@ -182,7 +188,6 @@ public class BitmapGenerator {
 
 				alpha = rgba >>> 24;
 				if (alpha != 0x00) {
-
 					rgba &= colorMasks[imageID];
 
 					xyz = new Color(rgba);
@@ -214,7 +219,6 @@ public class BitmapGenerator {
 						red = (hasRed) ? 0xFF : remainder;
 						green = (hasGreen) ? 0xFF : remainder;
 						blue = (hasBlue) ? 0xFF : remainder;
-
 					}
 					else {
 						int value = (int) Math.round(luminance / weight);
@@ -225,7 +229,6 @@ public class BitmapGenerator {
 					}
 
 					xyz = new Color(red, green, blue);
-
 					image.setRGB(j, k, xyz.getRGB());
 				}
 			}
@@ -246,31 +249,27 @@ public class BitmapGenerator {
 		max[X] = dummy;
 	}
 
-	private static final int IMAGES_PER_BLOCK = 8;
-	private static final int BLOCK_DISPLAY_WIDTH = IMAGES_PER_BLOCK * ImageType.BLOCK.WIDTH;
-	private static final int BLOCK_DISPLAY_HEIGHT = IMAGES_PER_BLOCK * ImageType.BLOCK.HEIGHT;
-
-	private static final BufferedImage[] images = ImageRenderer.loadImages(ImageType.BLOCK);
 	
 	public static void main(String argv[]) {
+		int maxSpriteSheetHeight = 0;
 		int[][][] pieceTemplate = TetrisPiecePool.tetrisPieceTemplate;
-		boolean[][] pieceMap;
+		int numOfPieces = pieceTemplate.length;
 
-
-		BufferedImage[][] pieceImages = 
-				new BufferedImage[pieceTemplate.length][NUM_OF_ORIENTATIONS];
-
-
-		BufferedImage[] spriteSheet = new BufferedImage[pieceTemplate.length];
+		BufferedImage[] spriteSheet = new BufferedImage[numOfPieces];
 
 		int pieceID = 0;
 		for (int[][] pieceCoords: pieceTemplate) {
+			BufferedImage[] pieceImages = new BufferedImage[NUM_OF_ORIENTATIONS];
+				
+			int spriteSheetHeight = pieceCoords.length * BLOCK_DISPLAY_HEIGHT;
+			if (spriteSheetHeight > maxSpriteSheetHeight) {
+				maxSpriteSheetHeight = spriteSheetHeight;
+			}
 
-				spriteSheet[pieceID] = new BufferedImage(
-					NUM_OF_ORIENTATIONS * BLOCK_DISPLAY_WIDTH, 
-					pieceCoords.length * BLOCK_DISPLAY_HEIGHT, 
-					BufferedImage.TYPE_4BYTE_ABGR);
-				Graphics spriteSheetGraphics = spriteSheet[pieceID].createGraphics();
+			spriteSheet[pieceID] = new BufferedImage(SHEET_DISPLAY_WIDTH, 
+			                                         spriteSheetHeight, 
+			                                         BUFF_IMAGE_TYPE);
+			Graphics spriteSheetGraphics = spriteSheet[pieceID].createGraphics();
 			
 			int[] max = new int[2];
 			for (int[] blockCoords: pieceCoords) {
@@ -279,10 +278,10 @@ public class BitmapGenerator {
 			}
 
 			for (int orient = 0; orient < NUM_OF_ORIENTATIONS; orient++) {
-				int mapWidth = (max[X] + 1);
-				int mapHeight = (max[Y] + 1);
+				int mapWidth = max[X] + 1;
+				int mapHeight = max[Y] + 1;
 
-				pieceMap = new boolean[mapHeight][mapWidth];
+				boolean[][] pieceMap = new boolean[mapHeight][mapWidth];
 				for (int[] blockCoords: pieceCoords) {
 					pieceMap[blockCoords[Y]][blockCoords[X]] = true;
 				}
@@ -298,16 +297,16 @@ public class BitmapGenerator {
 				                                                expandedMapWidth, 
 				                                                expandedMapHeight);
 				
-				pieceImages[pieceID][orient] = drawPieceImage(imageCellCodeMap, 
-				                                              expandedMapWidth, 
-				                                              expandedMapHeight);
+				pieceImages[orient] = drawPieceImage(imageCellCodeMap, 
+				                                     expandedMapWidth, 
+				                                     expandedMapHeight);
 						
-				decoratePiece(pieceImages[pieceID][orient], pieceID);
+				decoratePiece(pieceImages[orient], pieceID);
 				
 				int yDrawPos = 0;
 				for (int[] blockCoords: pieceCoords) {
 					spriteSheetGraphics.drawImage(
-						pieceImages[pieceID][orient].getSubimage(
+						pieceImages[orient].getSubimage(
 							blockCoords[X] * BLOCK_DISPLAY_WIDTH, 
 							blockCoords[Y] * BLOCK_DISPLAY_HEIGHT,
 							BLOCK_DISPLAY_WIDTH,
@@ -323,16 +322,25 @@ public class BitmapGenerator {
 				
 				rotatePiece(pieceCoords, max);
 			}
-			
-			try {
-				ImageIO.write(spriteSheet[pieceID], "png", new File("piece_image" + pieceID + ".png"));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 
 			pieceID++;
 		}
+		
+		BufferedImage imageToFile = new BufferedImage(pieceID * SHEET_DISPLAY_WIDTH, 
+		                                              maxSpriteSheetHeight,
+		                                              BUFF_IMAGE_TYPE);
+		Graphics imageToFileGraphics = imageToFile.createGraphics();
+		for (int i = 0; i < numOfPieces; i++) {
+			imageToFileGraphics.drawImage(spriteSheet[i], 
+			                              i * SHEET_DISPLAY_WIDTH, 0, 
+			                              spriteSheet[i].getHeight(), SHEET_DISPLAY_WIDTH, 
+			                              null);
+		}
 
-
+		try {
+			ImageIO.write(imageToFile, "png", new File("piece_image_sheet.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
