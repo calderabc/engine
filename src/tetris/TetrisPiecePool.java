@@ -18,6 +18,7 @@ public final class TetrisPiecePool extends PiecePool {
 		 {{0, 0}, {1, 0}, {2, 1}, {1, 1}},  //    ##
 		                                    //     ##
 		 {{0, 1}, {1, 0}, {2, 0}, {1, 1}}}; //  ##
+		                                    // ##
 	
 	/* These values are twice their intended values so that floating point half
 	 * fractions can be represented as integers. */
