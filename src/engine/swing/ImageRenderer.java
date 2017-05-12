@@ -11,21 +11,18 @@ import javax.imageio.ImageIO;
 
 @SuppressWarnings("serial")
 public abstract class ImageRenderer extends Renderer {
-	
-	//private static final HashMap<ImageReadY, Integer> imagesReadY;
-	
 	private static final BufferedImage spritesImage;
 	
 	static {
+		/* Using tempImage so compiler doesn't complain that spritesImage might 
+		 * not get initialized. Thank you over-protective compiler. */
 		BufferedImage tempImage = null;
-		
 		try {
 			tempImage = ImageIO.read(new File("sprites.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}	
-		
 		spritesImage = tempImage; 
 	}
 	

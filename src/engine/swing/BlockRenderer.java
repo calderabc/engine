@@ -38,6 +38,7 @@ public class BlockRenderer extends ImageRenderer {
 	private static final int IBR = ITL + 2;
 	private static final int IBL = ITL + 3;
 
+	/*
 	// TODO: Figure out original intent
 	//public int[][] setDrawMap(int adjacent) {
 	public void setDrawMap(int adjacent) {
@@ -79,6 +80,7 @@ public class BlockRenderer extends ImageRenderer {
 		drawMap[1][2] = edges[2];
 		drawMap[0][1] = edges[3];
 	}
+	*/
 
 
 	private static final int[][] drawMap = {{OTL, T, OTR},
@@ -96,7 +98,6 @@ public class BlockRenderer extends ImageRenderer {
 	static {
 		images = loadImages(ImageType.BLOCK);
 
-
 		int[] colorMasks = {0xFFFFFF, 0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0xFF00FF, 0x00FFFF};
 		int rgba;
 		Color xyz;
@@ -105,19 +106,7 @@ public class BlockRenderer extends ImageRenderer {
 		boolean hasRed, hasGreen, hasBlue;
 
 		for (int i = 0; i < 7; i++) {
-			/*
-			try {
-				baseImages[i] = ImageIO.read(new File("grey_block.png"));
-//				baseImages[i] = ImageIO.read(new File("other.png"));
-
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			*/
-
 			baseImages[i] = new BufferedImage(displayWidth, displayHeight, BufferedImage.TYPE_4BYTE_ABGR);
-
 
 			Graphics2D g2d = (Graphics2D)baseImages[i].getGraphics();
 
@@ -208,15 +197,6 @@ public class BlockRenderer extends ImageRenderer {
 
 				}
 			}
-
-			/* System.out.println(Integer.toHexString(baseImages[i].getRGB(1, 1))); */
-
-			try {
-				/* System.out.println(i); */
-				ImageIO.write(baseImages[i], "png", new File("image" + i + ".png"));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 	}
 
@@ -251,20 +231,7 @@ public class BlockRenderer extends ImageRenderer {
 		this.setOpaque(false);
 		this.setBackground(Color.RED); // for testing
 
-		//this.setDoubleBuffered(true);
-
-		//BufferedImage abc = new BufferedImage(30, 30, BufferedImage.TYPE_4BYTE_ABGR);
-
-		//for (int j = 0; j < 30; j++) {
-			//for (int k = 0; k < 30; k++) {
-				////abc.setRGB(j, k, ScreenRenderer.colorFilter);
-				//
-			//}
-		//}
-
-
 		init();
-
 	}
 
 	@Override
