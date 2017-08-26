@@ -2,65 +2,65 @@ package engine.swing;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.util.Collection;
 
+import engine.Coordinates;
 import engine.Part;
 import engine.puzzle.Block;
 import engine.puzzle.Piece;
 
 @SuppressWarnings("serial")
 public class PieceRenderer extends ImageRenderer {
-	private BufferedImage images[];
+	//private BufferedImage images[];
+	//Piece piece;
 	
-	Piece piece;
+	private final Collection<BlockRenderer> blockRenderers;
+	private final int blockWidth;
+	private final int blockHeight;
 	
-	private final void loadImages(Iterable<Block> blocks) {
-		for (Block currBlock: blocks) {
-			drawImageOnMe(((BlockRenderer) currBlock.getRenderer()), currBlock.pos.x, currBlock.pos.y);
+	/*
+	private final void drawBlocks() {
+		for (BlockRenderer currBlockRend: blockRenderers) {
+			drawImageOnMe(currBlockRend,
+						  (currBlock.pos.x - piece.pos.x) * ((BlockRenderer)currBlock.getRenderer()).getDisplayWidth(),
+						  (currBlock.pos.y - piece.pos.y) * (currBlock.getRenderer()).getDisplayHeight());
 		}
 	
 	}
+	*/
 	
-	
-	public PieceRenderer(Part<?> newPiece) {
+	public PieceRenderer(Part<?> myPiece) {
 /* 		System.out.println("PieceRenderer"); */
-		piece = (Piece) newPiece;
+		BlockRenderer bRend;
+		for (Block pieceBlock : ((Piece)myPiece).getBlocks()) {
+			bRend = (BlockRenderer)pieceBlock.getRenderer();
+			blockRenderers.add(bRend);
+		}
+		
+		blockWidth = bRend.getWidth();
+		blockHeight = bRend.getHeight();
 		
 		this.setOpaque(false);
 		this.setBackground(Color.GREEN);  // for testing
 		this.setLayout(null);
 		//this.setDoubleBuffered(true);
-	
 		this.setFocusable(false);
-		//update();
-		
-		
-		
-		//this.setBounds(0, 0, 2000, 2000);
-	}
-	
-	@Override 
-	public void init() {
 		
 		// get width/height from difference of edge coordinates by adding 1
-		newImage(piece.getWidth() * BlockRenderer.getDisplayWidth(),
-				 piece.getHeight() * BlockRenderer.getDisplayHeight());
+		newImage(((Piece)myPiece).getWidth() * blockWidth,
+				 ((Piece)myPiece).getHeight() * blockHeight);
 		
-		for (Block currBlock: piece.getBlocks()) {
-			drawImageOnMe(((BlockRenderer) currBlock.getRenderer()),
-						  (currBlock.pos.x - piece.pos.x) * BlockRenderer.getDisplayWidth(),
-						  (currBlock.pos.y - piece.pos.y) * BlockRenderer.getDisplayHeight());
-		}
-		
+		drawBlocks(piece.getBlocks());
 	}
 	
 	@Override
-	public void update() {
+	public void update(Coordinates partPosition) {
 		//System.out.println("Update PieceRenderer");
-		
-		this.setBounds(piece.pos.x * BlockRenderer.getDisplayWidth(), 
-					   piece.pos.y * BlockRenderer.getDisplayHeight(),
+		this.setBounds(partPosition.x * blockWidth, 
+					   partPosition.y * blockHeight,
 					   getWidth(),
 					   getHeight());
 		
+		drawBlocks(piece.getBlocks());
 	}
 }

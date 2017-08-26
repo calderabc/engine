@@ -19,7 +19,7 @@ public class Digit extends Part<Part<?>> {
 		if (value != newValue) {
 			value = newValue;
 			
-			getRenderer().update();
+			//getRenderer().update();
 		}
 		
 		return value;

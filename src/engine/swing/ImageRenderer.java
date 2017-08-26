@@ -5,9 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-
 
 @SuppressWarnings("serial")
 public abstract class ImageRenderer extends Renderer {
@@ -38,10 +36,6 @@ public abstract class ImageRenderer extends Renderer {
 	
 //*****************************************************************************	
 	
-	
-	protected int readWidth;
-	protected int readHeight;
-	
 	private BufferedImage image;
 	
 	private int width;
@@ -54,7 +48,6 @@ public abstract class ImageRenderer extends Renderer {
 	
 	public ImageRenderer(int newWidth, int newHeight) {
 		newImage(newWidth, newHeight);
-		
 	}
 	
 	protected final void newImage() {

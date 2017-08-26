@@ -1,4 +1,4 @@
-package tetris.util;
+package engine.swing.tetris;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -8,15 +8,27 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import engine.swing.BlockRenderer;
 import engine.swing.ImageRenderer;
 import engine.swing.ImageType;
-import tetris.TetrisPiecePool;
+import tetris.Tetris;
 
 public class BitmapGenerator {
 	private static final int X=0;
 	private static final int Y=1;
 	
 	// TODO: Make more elegant. Low priority.
+	// Legend:
+	// F = Front
+	// T = Top
+	// R = Right
+	// B = Bottom
+	// L = Left
+	// O = Outwards (corner pointing out)
+	//     Convex vertex of this block. No other blocks share this vertex.
+	// I = Inwards (corner pointing in)
+	//     Concave vertex of this block where the edges of two adjacent blocks,
+	//     who both share this vertex, connect.
 	private static final int F = 0;
 	private static final int T = 1;
 	private static final int R = T + 1;
@@ -31,12 +43,12 @@ public class BitmapGenerator {
 	private static final int IBR = ITL + 2;
 	private static final int IBL = ITL + 3;
 
-	private static final int IMAGES_PER_BLOCK = 8;
-	private static final int NUM_OF_ORIENTATIONS = 4;
-	private static final int BLOCK_DISPLAY_WIDTH = IMAGES_PER_BLOCK * ImageType.BLOCK.WIDTH;
-	private static final int BLOCK_DISPLAY_HEIGHT = IMAGES_PER_BLOCK * ImageType.BLOCK.HEIGHT;
-	private static final int SHEET_DISPLAY_WIDTH = NUM_OF_ORIENTATIONS * BLOCK_DISPLAY_WIDTH;
-	private static final int BUFF_IMAGE_TYPE = BufferedImage.TYPE_4BYTE_ABGR;
+	private static final int BLOCK_DISPLAY_WIDTH = 
+			BlockRenderer.IMAGES_PER_BLOCK * ImageType.BLOCK.WIDTH;
+	private static final int BLOCK_DISPLAY_HEIGHT = 
+			BlockRenderer.IMAGES_PER_BLOCK * ImageType.BLOCK.HEIGHT;
+	private static final int SHEET_DISPLAY_WIDTH = 
+			BlockRenderer.NUM_OF_ORIENTATIONS * BLOCK_DISPLAY_WIDTH;
 
 	private static final BufferedImage[] images = ImageRenderer.loadImages(ImageType.BLOCK);
 	
@@ -49,7 +61,7 @@ public class BitmapGenerator {
 	                                             { 0, 1},
 	                                             {-1, 1},
 	                                             {-1, 0}};
-	                                
+
 	private static byte getCellImageCode(boolean[][] expandedPieceMap, int cellX, int cellY) {
 		byte code = 0b0;
 		byte mask = (byte)0b1000_0000;
@@ -83,12 +95,18 @@ public class BitmapGenerator {
 		boolean[][] returnExpandedPieceMap = new boolean[expandedMapHeight][expandedMapWidth];
 		for (int mapY = 0; mapY < mapHeight; mapY++) {
 			for (int mapX = 0; mapX < mapWidth; mapX++) {
-				int originY = mapY * IMAGES_PER_BLOCK;
-				int originX = mapX * IMAGES_PER_BLOCK; 
+				int originY = mapY * BlockRenderer.IMAGES_PER_BLOCK;
+				int originX = mapX * BlockRenderer.IMAGES_PER_BLOCK; 
 				
 				if (pieceMap[mapY][mapX]) {
-					for (int fillY = originY; fillY < (originY + IMAGES_PER_BLOCK); fillY++) {
-						for (int fillX = originX; fillX < (originX + IMAGES_PER_BLOCK); fillX++) {
+					for (int fillY = originY; 
+					     fillY < (originY + BlockRenderer.IMAGES_PER_BLOCK); 
+					     fillY++) {
+
+						for (int fillX = originX; 
+						     fillX < (originX + BlockRenderer.IMAGES_PER_BLOCK); 
+						     fillX++) {
+
 							returnExpandedPieceMap[fillY][fillX] = true;
 						}
 					}
@@ -142,7 +160,7 @@ public class BitmapGenerator {
 				
 		BufferedImage returnPieceImage = new BufferedImage(pieceDisplayWidth, 
 		                                                   pieceDisplayHeight, 
-		                                                   BUFF_IMAGE_TYPE);
+		                                                   BlockRenderer.BUFF_IMAGE_TYPE);
 		Graphics pieceGraphics = returnPieceImage.createGraphics();
 		
 		for (int expandedMapY = 0, drawY = 0; 
@@ -252,14 +270,14 @@ public class BitmapGenerator {
 	
 	public static void main(String argv[]) {
 		int maxSpriteSheetHeight = 0;
-		int[][][] pieceTemplate = TetrisPiecePool.tetrisPieceTemplate;
+		int[][][] pieceTemplate = Tetris.TETRIS_PIECE_DATA.pieceTemplate;
 		int numOfPieces = pieceTemplate.length;
 
 		BufferedImage[] spriteSheet = new BufferedImage[numOfPieces];
 
 		int pieceID = 0;
 		for (int[][] pieceCoords: pieceTemplate) {
-			BufferedImage[] pieceImages = new BufferedImage[NUM_OF_ORIENTATIONS];
+			BufferedImage[] pieceImages = new BufferedImage[BlockRenderer.NUM_OF_ORIENTATIONS];
 				
 			int spriteSheetHeight = pieceCoords.length * BLOCK_DISPLAY_HEIGHT;
 			if (spriteSheetHeight > maxSpriteSheetHeight) {
@@ -268,7 +286,7 @@ public class BitmapGenerator {
 
 			spriteSheet[pieceID] = new BufferedImage(SHEET_DISPLAY_WIDTH, 
 			                                         spriteSheetHeight, 
-			                                         BUFF_IMAGE_TYPE);
+			                                         BlockRenderer.BUFF_IMAGE_TYPE);
 			Graphics spriteSheetGraphics = spriteSheet[pieceID].createGraphics();
 			
 			int[] max = new int[2];
@@ -277,7 +295,7 @@ public class BitmapGenerator {
 				if (blockCoords[Y] > max[Y]) max[Y] = blockCoords[Y];
 			}
 
-			for (int orient = 0; orient < NUM_OF_ORIENTATIONS; orient++) {
+			for (int orient = 0; orient < BlockRenderer.NUM_OF_ORIENTATIONS; orient++) {
 				int mapWidth = max[X] + 1;
 				int mapHeight = max[Y] + 1;
 
@@ -286,8 +304,8 @@ public class BitmapGenerator {
 					pieceMap[blockCoords[Y]][blockCoords[X]] = true;
 				}
 				
-				int expandedMapHeight = mapHeight * IMAGES_PER_BLOCK; 
-				int expandedMapWidth = mapWidth * IMAGES_PER_BLOCK;
+				int expandedMapHeight = mapHeight * BlockRenderer.IMAGES_PER_BLOCK; 
+				int expandedMapWidth = mapWidth * BlockRenderer.IMAGES_PER_BLOCK;
 
 				boolean[][] expandedPieceMap = getExpandedPieceMap(pieceMap, 
 				                                                   expandedMapWidth, 
@@ -328,7 +346,7 @@ public class BitmapGenerator {
 		
 		BufferedImage imageToFile = new BufferedImage(pieceID * SHEET_DISPLAY_WIDTH, 
 		                                              maxSpriteSheetHeight,
-		                                              BUFF_IMAGE_TYPE);
+		                                              BlockRenderer.BUFF_IMAGE_TYPE);
 		Graphics imageToFileGraphics = imageToFile.createGraphics();
 		for (int i = 0; i < numOfPieces; i++) {
 			imageToFileGraphics.drawImage(spriteSheet[i], 
@@ -338,7 +356,7 @@ public class BitmapGenerator {
 		}
 
 		try {
-			ImageIO.write(imageToFile, "png", new File("piece_image_sheet.png"));
+			ImageIO.write(imageToFile, "png", new File(BlockRenderer.BLOCK_IMAGE_FILE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

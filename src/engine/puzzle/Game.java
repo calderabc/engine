@@ -17,7 +17,6 @@ import engine.swing.ScreenRenderer;
 import tetris.Profile;
 import tetris.RowsCleared;
 import tetris.ScoreCalculator;
-import tetris.TetrisPiecePool;
 
 public class Game extends Part<Part<?>> implements Runnable {
 	
@@ -38,9 +37,9 @@ public class Game extends Part<Part<?>> implements Runnable {
 	private ScheduledExecutorService scheduler = 
 		Executors.newScheduledThreadPool(2);
 	
-	public Game(PiecePool newPieces) {
+	public Game(PieceData pieceData) {
 		super(false);
-		board = new Board(newPieces);
+		board = new Board(pieceData);
 
 		Thread abc = new Thread(this);
 		abc.isDaemon();
@@ -188,7 +187,7 @@ public class Game extends Part<Part<?>> implements Runnable {
 		
 		this.addChild(screen);
 		
-		screen.getRenderer().update();
+		//screen.getRenderer().update();
 		
 		System.out.println(board.getRenderer().getWidth());
 		System.out.println(board.getRenderer().getHeight());

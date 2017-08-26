@@ -10,7 +10,6 @@ import engine.puzzle.Board;
 public class BoardRenderer extends Renderer {
 	private Board board;
 	
-	
 	public static int padding = 10;
 	public static int verticalPadding;
 	
@@ -25,31 +24,18 @@ public class BoardRenderer extends Renderer {
 		this.setBackground(Color.DARK_GRAY);
 		
 		this.setLayout(null);
-		//this.setMinimumSize(new Dimension(board.getWidth() * BlockRenderer.BLOCK_WIDTH,
-							  			  //board.getHeight() * BlockRenderer.BLOCK_HEIGHT));
-		//this.setMaximumSize(new Dimension(board.getWidth() * BlockRenderer.BLOCK_WIDTH,
-							  			  //board.getHeight() * BlockRenderer.BLOCK_HEIGHT));
-		//this.setSize(board.getWidth() * BlockRenderer.BLOCK_WIDTH - 30,
-					 //board.getHeight() * BlockRenderer.BLOCK_HEIGHT);			
 		
 		height = BlockRenderer.getDisplayHeight() * board.getHeight();
 		width = BlockRenderer.getDisplayWidth() * board.getWidth(); 
-		
-		
-		
 		
 		this.setBounds(padding, padding, width, height); 
 					 
 		//this.setDoubleBuffered(true);
 	}
 	
-
-	
 	@Override
 	public void update() {
-		/* System.out.println("IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");*/
 		height = this.getParent().getHeight() - 2 * padding;
-		
 		
 		BlockRenderer.setDisplayHeight((int) (((double) height) / board.getHeight()));
 		BlockRenderer.setDisplayWidth(BlockRenderer.getDisplayHeight());
@@ -58,10 +44,6 @@ public class BoardRenderer extends Renderer {
 		
 		verticalPadding = (height - adjustedHeight) / 2;
 		height = adjustedHeight;
-		
-		
-		
-		
 		width = board.getWidth() * BlockRenderer.getDisplayWidth(); 
 		
 		this.setBounds(padding, padding + verticalPadding, width, height); 
@@ -71,7 +53,5 @@ public class BoardRenderer extends Renderer {
 				((Renderer) currRenderer).update();
 			}
 		}
-		
-		super.update();
 	}
 }

@@ -17,7 +17,7 @@ public abstract class MovablePart<T extends Part<?>> extends Part<T> implements 
 	 * @param newY
 	 */
 	public MovablePart(int newX, int newY) {
-		super(newX, newY);
+		this(new Coordinates(newX, newY));
 	}
 	/**
 	 * Constructs a MovablePart based on a deep copy of the specified MovablePart

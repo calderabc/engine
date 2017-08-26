@@ -3,11 +3,13 @@ package engine.swing;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import engine.Coordinates;
 import engine.Part;
 import engine.Renderable;
 
 @SuppressWarnings("serial")
-public abstract class Renderer extends JPanel implements Renderable {
+//public abstract class Renderer extends JPanel implements Renderable {
+public abstract class Renderer extends JPanel {
 	
 	public void add(Part<?> owner) {
 		if (owner.isVisible()) {
@@ -37,14 +39,5 @@ public abstract class Renderer extends JPanel implements Renderable {
 		}
 	}
 	
-	@Override
-	public void init() {
-		
-	}
-	
-	@Override
-	public void update() {
-		//this.getTopLevelAncestor().repaint();
-		
-	}
+	abstract public void update(Coordinates partPosition);
 }

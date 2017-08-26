@@ -17,8 +17,6 @@ import java.util.Collection;
  */
 
 public class Piece extends MovablePart<Block> implements Debug {
-	private final static int X = 0;
-	private final static int Y = 1;
 
 	private final int blockCount;
 	public final int getBlockCount() {
@@ -33,8 +31,8 @@ public class Piece extends MovablePart<Block> implements Debug {
 		return id;
 	}
 
-	public int[] currCenter = new int[2];
-	public  int[] destCenter = new int[2];
+	public Coordinates currCenter = null;
+	public  Coordinates destCenter = null;
 
 	private int width;
 	private int height;
@@ -42,17 +40,14 @@ public class Piece extends MovablePart<Block> implements Debug {
 	/**
 	 * Default Constructor.  Will have better features when I get around to it.
 	 */
-	public Piece(int newID, int[][][] pieceTemplate, int[][] pieceCenter) {
-		super(3, 0);
+	public Piece(int newID, PieceData newPieceData) {
+		super(newPieceData.pieceStartPos);
 
 		id = newID;
-		blockCount = pieceTemplate[id].length;
+		blockCount = newPieceData.pieceTemplate[id].length;
 		
-		generatePiece(pieceTemplate[id], pieceCenter[id]);
+		generatePiece(newPieceData, id);
 		generateDimensions();
-
-		//newRenderer();
-		init();
 	}
 
 	public Piece(Piece other) {
@@ -62,10 +57,8 @@ public class Piece extends MovablePart<Block> implements Debug {
 		blockCount = other.getBlockCount();
 		id = other.getID();
 
-		currCenter[X] = other.currCenter[X];
-		currCenter[Y] = other.currCenter[Y];
-		destCenter[X] = other.destCenter[X];
-		destCenter[Y] = other.destCenter[Y];
+		currCenter = new Coordinates(other.currCenter);
+		destCenter = new Coordinates(other.destCenter);
 
 		for (Block currOtherBlock: other.getBlocks()) {
 		//System.out.println("Construct me");
@@ -74,20 +67,18 @@ public class Piece extends MovablePart<Block> implements Debug {
 		}
 
 		generateDimensions();
-		init();
 	}
 
-	private final void generatePiece(int[][] pieceTemplate, int[] pieceCenter) {
-		for (int[] blockXY: pieceTemplate) {
+	private final void generatePiece(PieceData newPieceData, int pieceID) {
+		for (int[] blockXY: newPieceData.pieceTemplate[pieceID]) {
 			addChild(new Block(blockXY[0], blockXY[1], id));
 		}
 
 		// Everything in represented multiplied by two, this is why the 'pos' 
 		// variables are doubled to match the already doubled 'pieceCenter'.
-		currCenter[X] = pieceCenter[0] + (pos.x << 1);
-		currCenter[Y] = pieceCenter[1] + (pos.y << 1);
-		destCenter[X] = pieceCenter[2] + (pos.x << 1);
-		destCenter[Y] = pieceCenter[3] + (pos.y << 1);
+		int posXDoubled = pos.x << 1, posYDoubled = pos.y << 1;
+		currCenter = newPieceData.getCurrCenter(pieceID).move(posXDoubled, posYDoubled);
+		destCenter = newPieceData.getDestCenter(pieceID).move(posXDoubled, posYDoubled);
 
 		for (Block currBlock: this.getChildren()) {
 			if (currBlock instanceof Block) {
@@ -116,7 +107,6 @@ public class Piece extends MovablePart<Block> implements Debug {
 		width = maxX - minX + 1;
 		height = maxY - minY + 1;
 	}
-
 
 	/**
 	 * The description below does not match the method.  The method returns the actual
@@ -197,32 +187,30 @@ public class Piece extends MovablePart<Block> implements Debug {
 				/* Equivalent but slower:
 				currBlock.pos = new Coordinates( (destCenter[X] + flip * (2 * currBlock.pos.y - currCenter[Y])) / 2,
 				                                 (destCenter[Y] - flip * (2 * currBlock.pos.x - currCenter[X])) / 2 ); */
-				currBlock.pos = new Coordinates( destCenter[X] + flip * ((currBlock.pos.y << 1) - currCenter[Y]) >> 1,
-				                                 destCenter[Y] - flip * ((currBlock.pos.x << 1) - currCenter[X]) >> 1 );
+				currBlock.pos = new Coordinates( destCenter.x + flip * ((currBlock.pos.y << 1) - currCenter.y) >> 1,
+				                                 destCenter.y - flip * ((currBlock.pos.x << 1) - currCenter.x) >> 1 );
 		}
 		this.generateDimensions();
 
 		// swap values of current center and destination center
-		int[] dummy = destCenter;
+		Coordinates dummy = destCenter;
 		destCenter = currCenter;
 		currCenter = dummy;
 
-		init();
 		update();
 
 		return this;
 	}
 
-
 	@Override
 	public MovablePart<Block> move(Coordinates offset) {
 		super.move(offset);
 
-		System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
-		currCenter[X] += offset.x << 1;
-		currCenter[Y] += offset.y << 1;
-		destCenter[X] += offset.x << 1;
-		destCenter[Y] += offset.y << 1;
+		//System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
+
+		Coordinates offsetDoubled = new Coordinates(offset.x << 1, offset.y << 1);
+		currCenter.move(offsetDoubled);
+		destCenter.move(offsetDoubled);
 
 		for (Block currBlock: getChildren()) {
 			currBlock.move(offset);
@@ -260,5 +248,4 @@ public class Piece extends MovablePart<Block> implements Debug {
 		}
 		System.out.println("Piece - End");
 	}
-
 }

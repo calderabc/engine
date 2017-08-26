@@ -4,21 +4,19 @@ import java.util.Random;
 
 import engine.Debug;
 
-public abstract class PiecePool implements Debug {
+public final class PiecePool implements Debug {
 	private final Piece[] pieces;
 	
-	private final int[][][] pieceTemplate;
-	public final int[][] pieceCenter;
+	private final PieceData pieceData;
 	
-	protected PiecePool(int[][][] newPieceTemplate, int[][] newPieceCenter) {
-		pieceTemplate = newPieceTemplate;
-		pieceCenter = newPieceCenter;
+	protected PiecePool(PieceData newPieceData) {
+		pieceData = newPieceData;
 		
-		int pieceCount = pieceTemplate.length;
+		int pieceCount = pieceData.pieceTemplate.length;
 
 		pieces = new Piece[pieceCount];
 		for (int i = 0; i < pieceCount; i++) {
-			pieces[i] = new Piece(i, pieceTemplate, pieceCenter);	
+			pieces[i] = new Piece(i, pieceData);	
 		}	
 	}
 	

@@ -15,9 +15,8 @@ import tetris.FlagException;
 
 
 @SuppressWarnings("serial")
-public abstract class Part<T extends Part<?>> implements Renderable {
-	
-		
+public abstract class Part<T extends Part<?>> {
+
 	private static final Map<String, String> PART_TO_RENDERER_MAP = 
 		Collections.unmodifiableMap(
 			new HashMap<String, String>() {
@@ -205,18 +204,18 @@ public abstract class Part<T extends Part<?>> implements Renderable {
 		return renderer;
 	}
 	
-	
+/*	
 	@Override 
 	public void init() {
 		if (newRendererIfNull()) {
 			renderer.init();
 		}
 	}
+	*/
 	
-	@Override
 	public void update() {
 		if (newRendererIfNull()) {
-			renderer.update();
+			renderer.update(this.pos);
 		}
 	}
 	

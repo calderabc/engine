@@ -1,241 +1,115 @@
 package engine.swing;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import java.lang.reflect.Method;
+
+import engine.Coordinates;
 import engine.Part;
 import engine.puzzle.Block;
+import engine.puzzle.Game;
 
 @SuppressWarnings("serial")
 public class BlockRenderer extends ImageRenderer {
-	// Legend:
-	// F = Front
-	// T = Top
-	// R = Right
-	// B = Bottom
-	// L = Left
-	// O = Outwards (corner pointing out)
-	//     Convex vertex of this block. No other blocks share this vertex.
-	// I = Inwards (corner pointing in)
-	//     Concave vertex of this block where the edges of two adjacent blocks,
-	//     who both share this vertex, connect.
-	private static final int F = 0;
-	private static final int T = 1;
-	private static final int R = T + 1;
-	private static final int B = T + 2;
-	private static final int L = T + 3;
-	private static final int OTL = 5;
-	private static final int OTR = OTL + 1;
-	private static final int OBR = OTL + 2;
-	private static final int OBL = OTL + 3;
-	private static final int ITL = 9;
-	private static final int ITR = ITL + 1;
-	private static final int IBR = ITL + 2;
-	private static final int IBL = ITL + 3;
+	public static final int IMAGES_PER_BLOCK = 8;
+	public static final int NUM_OF_ORIENTATIONS = 4;
+	public static final int BUFF_IMAGE_TYPE = BufferedImage.TYPE_4BYTE_ABGR;
 
-	/*
-	// TODO: Figure out original intent
-	//public int[][] setDrawMap(int adjacent) {
-	public void setDrawMap(int adjacent) {
-		int[] vertices = new int[4];
-		int[] edges = new int[4];
 
-		for (int i = 0; i < 4; i--) {
-			adjacent = Integer.rotateLeft(adjacent, 8);
+	private final BufferedImage[] blockImages;
 
-			edges[i] = ((0xF & adjacent) == 0x0) ? T + i : F;
+	public final String blockImageFile;
 
-			switch(0xFFF & adjacent) {
-				case 0x00F:
-					vertices[i] = T + i - 1;
-					if (vertices[i] < T) {
-						vertices[i] += 4;
-					}
-					break;
-				case 0xF00:
-					vertices[i] = T + i;
-					break;
-				case 0x000:
-					vertices[i] = OTL + i;
-					break;
-				case 0xF0F:
-					vertices[i] = ITL + i;
-					break;
-				case 0xFFF:
-					vertices[i] = F;
-			}
+	private final BufferedImage[][][] everyBlockImage;
+
+	public int getDisplayWidth() {
+		return getWidth();
+	}
+
+	public int getDisplayHeight() {
+		return getHeight();
+	}
+	
+	public void loadBlockImages (Game myGame) {
+		String packageName = this.getClass().getPackage().getName();
+		
+		String typeOfGame = myGame.getClass().getName();
+		switch (typeOfGame) {
+			case "Tetris": packageName += ".tetris";
+			default:
 		}
+		
+		Class<?> bitmapGeneratorClass;
 
-		drawMap[0][0] = vertices[0];
-		drawMap[2][0] = vertices[1];
-		drawMap[2][2] = vertices[2];
-		drawMap[0][2] = vertices[3];
-		drawMap[1][0] = edges[0];
-		drawMap[2][1] = edges[1];
-		drawMap[1][2] = edges[2];
-		drawMap[0][1] = edges[3];
-	}
-	*/
-
-
-	private static final int[][] drawMap = {{OTL, T, OTR},
-									 {  L, F,   R},
-									 {OBL, B, OBR}};
-
-	private static int displayWidth = 8 * ImageType.BLOCK.WIDTH;
-	private static int displayHeight = 8 * ImageType.BLOCK.WIDTH;
-
-
-	private static BufferedImage[] baseImages = new BufferedImage[7];
-	private static final BufferedImage[] images;
-
-
-	static {
-		images = loadImages(ImageType.BLOCK);
-
-		int[] colorMasks = {0xFFFFFF, 0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0xFF00FF, 0x00FFFF};
-		int rgba;
-		Color xyz;
-		double luminance, weight;
-		int red, green, blue, alpha;
-		boolean hasRed, hasGreen, hasBlue;
-
-		for (int i = 0; i < 7; i++) {
-			baseImages[i] = new BufferedImage(displayWidth, displayHeight, BufferedImage.TYPE_4BYTE_ABGR);
-
-			Graphics2D g2d = (Graphics2D)baseImages[i].getGraphics();
-
-			int middleColumn = displayWidth / ImageType.BLOCK.WIDTH - 2;
-			int column = 0;
-			for (int x = 0; x < displayWidth; x += ImageType.BLOCK.WIDTH) {
-
-				int middleRow = displayHeight / ImageType.BLOCK.HEIGHT - 2;
-				int row = 0;
-				for (int y = 0; y < displayHeight; y += ImageType.BLOCK.HEIGHT) {
-
-					g2d.drawImage(images[drawMap[row][column]],
-					              x, y,
-					              ImageType.BLOCK.WIDTH, ImageType.BLOCK.HEIGHT,
-					              null);
-
-					if (row != 1 || middleRow <= 1) {
-						row++;
-					}
-					else {
-						middleRow--;
-					}
-				}
-
-				if (column != 1 || middleColumn <= 1) {
-					column++;
-				}
-				else {
-					middleColumn--;
-				}
-			}
-
-
-			for(int j = 0; j < displayWidth; j++) {
-				for(int k = 0; k < displayHeight; k++) {
-					rgba = baseImages[i].getRGB(j, k);
-
-					luminance = rgba & 0xFF;
-
-					alpha = rgba >>> 24;
-					if (alpha != 0x00) {
-
-						rgba &= colorMasks[i];
-
-						xyz = new Color(rgba);
-
-						red = xyz.getRed();
-						green = xyz.getGreen();
-						blue = xyz.getBlue();
-
-						weight = 0;
-						hasRed = false;
-						hasGreen = false;
-						hasBlue = false;
-						if (red > 0) {
-							hasRed = true;
-							weight += .30;
-						}
-						if (green > 0) {
-							hasGreen = true;
-							weight += .59;
-						}
-						if (blue > 0) {
-							hasBlue = true;
-							weight += .11;
-						}
-
-						if ((weight * 0xFF) < luminance) {
-							int remainder = (int) Math.round((luminance - (weight * 0xFF)) / (1 - weight));
-
-							red = (hasRed) ? 0xFF : remainder;
-							green = (hasGreen) ? 0xFF : remainder;
-							blue = (hasBlue) ? 0xFF : remainder;
-
-						}
-						else {
-							int value = (int) Math.round(luminance / weight);
-
-							if (hasRed) red = value;
-							if (hasGreen) green = value;
-							if (hasBlue) blue = value;
-						}
-
-						xyz = new Color(red, green, blue);
-
-						baseImages[i].setRGB(j, k, xyz.getRGB());
-					}
-
-				}
-			}
+		try {
+			bitmapGeneratorClass = Class.forName(packageName + ".BitmapGenerator")
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+		Method main = bitmapGeneratorClass.getMethod("main", String[].class);
+		main.invoke(bitmapGeneratorClass, new String() );
+
+		
 	}
-
-
-	public static int getDisplayWidth() {
-		return displayWidth;
-	}
-
-	public static void setDisplayWidth(int displayWidth) {
-		BlockRenderer.displayWidth = displayWidth;
-	}
-
-	public static int getDisplayHeight() {
-		return displayHeight;
-	}
-
-	public static void setDisplayHeight(int displayHeight) {
-		BlockRenderer.displayHeight = displayHeight;
-	}
-
 
 //*****************************************************************************
 
-	private Block block;
+	private BufferedImage currBlockImage;
+	
+	private void drawBlockImage() {
+		this.drawImageOnMe(currBlockImage, 0, 0, getDisplayWidth(), getDisplayHeight());
+	}
 
-	public BlockRenderer(Part<?> newBlock) {
-		super(displayWidth, displayHeight);
+	public void orient(int orientation) {
+		currBlockImage = blockImages[orientation];
+	}
 
-		block = (Block) newBlock;
+	public BlockRenderer(Block newBlock) {
+		super(IMAGES_PER_BLOCK * ImageType.BLOCK.WIDTH,
+		      IMAGES_PER_BLOCK * ImageType.BLOCK.HEIGHT);
 		//System.out.println("BlockRenderer");
+
+		BufferedImage blockImageSheet;
+		try {
+			blockImageSheet = ImageIO.read(new File(blockImageFile));
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}	
+		
+		for (int pieceID = 0; pieceID < )
+		blockImageSheet.getSubimage(x, y, w, h)
+		
+		everyBlockImage = new BufferedImage(displayWidth, displayHeight, BUFF_IMAGE_TYPE);
+
+		blockImages = new BufferedImage[NUM_OF_ORIENTATIONS];
+
 
 		this.setOpaque(false);
 		this.setBackground(Color.RED); // for testing
 
-		init();
+		orient(0);
+		drawBlockImage();
 	}
-
+	
+	@Override
+	public void update(Coordinates partPosition) {
+		drawBlockImage();
+	}
+	/*
 	@Override
 	public void init() {
 		this.drawImageOnMe(baseImages[block.getType()], 0, 0, getDisplayWidth(), getDisplayHeight());
 	}
+	*/
 }

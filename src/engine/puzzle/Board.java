@@ -6,7 +6,6 @@ import java.util.Collections;
 
 import engine.MovablePart;
 import engine.Part;
-import tetris.TetrisPiecePool;
 
 import java.util.Collection;
 
@@ -50,8 +49,8 @@ public final class Board extends Part<MovablePart<?>> {
 	/**
 	 * Default Constructor
 	 */
-	public Board(PiecePool newPieces) {
-		this(DEFAULT_BOARD_WIDTH, DEFAULT_BOARD_HEIGHT, newPieces);
+	public Board(PieceData newPieceData) {
+		this(DEFAULT_BOARD_WIDTH, DEFAULT_BOARD_HEIGHT, newPieceData);
 	}
 	
 	/**
@@ -60,8 +59,8 @@ public final class Board extends Part<MovablePart<?>> {
 	 * @param newWidth how many Blocks wide to make the Board
 	 * @param newHeight how many Blocks high to make the Board
 	 */
-	private Board(int newWidth, int newHeight, PiecePool newPieces) {
-		pieces = newPieces;
+	private Board(int newWidth, int newHeight, PieceData newPieceData) {
+		pieces = new PiecePool(newPieceData);
 
 		System.out.println("Board");
 		
