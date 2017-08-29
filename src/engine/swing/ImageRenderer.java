@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+import engine.puzzle.tetris.swing.ImageType;
+
 @SuppressWarnings("serial")
 public abstract class ImageRenderer extends Renderer {
 	private static final BufferedImage spritesImage;
@@ -28,7 +30,7 @@ public abstract class ImageRenderer extends Renderer {
 		BufferedImage[] returnImages = new BufferedImage[type.COUNT]; 
 		
 		for (int i = 0; i < type.COUNT; i++) {
-			returnImages[i] = spritesImage.getSubimage(type.X + i * type.WIDTH, type.Y, type.WIDTH, type.HEIGHT);
+			//returnImages[i] = spritesImage.getSubimage(type.X + i * type.WIDTH, type.Y, type.WIDTH, type.HEIGHT);
 		}
 		
 		return returnImages;

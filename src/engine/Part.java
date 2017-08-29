@@ -10,8 +10,6 @@ import java.util.Vector;
 
 import engine.puzzle.Game;
 import engine.swing.Renderer;
-import tetris.Flag;
-import tetris.FlagException;
 
 
 @SuppressWarnings("serial")
@@ -116,41 +114,26 @@ public abstract class Part<T extends Part<?>> {
 			}
 				
 			try {
-				if (partClassName == null) {
-					throw new NoRendererException();
-				}
 
 				System.out.println(partClassName);
-				System.out.println(Game.profile.getOption(Flag.DISPLAY).getHandle() );
+				//System.out.println(Game.profile.getOption(Flag.DISPLAY).getHandle() );
 
+				/*
 				Constructor<?> con = 
 					Class.forName(Game.profile.getOption(Flag.DISPLAY).getHandle() 
 								  + "." 
 								  + partClassName 
 								  + "Renderer")
 						 .getConstructor(new Class[] {Part.class});
-				
+
 				renderer = (Renderer) con.newInstance(new Object[] {this});
+				*/
 			
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
 			} catch (SecurityException e) {
 				e.printStackTrace();
 			} catch (IllegalArgumentException e) {
 				e.printStackTrace();
-			} catch (NoSuchMethodException e) {
-				e.printStackTrace(); 
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
 			} catch (NullPointerException e) {
-				e.printStackTrace();
-			} catch (NoRendererException e) {
-				e.printStackTrace();
-			} catch (FlagException e) {
 				e.printStackTrace();
 			}
 		}
@@ -162,9 +145,11 @@ public abstract class Part<T extends Part<?>> {
 		System.out.println(children);
 		children.add(newChild);
 		
+		/*
 		if (newRendererIfNull()) {
 			renderer.add(newChild);
 		}
+		*/
 			
 		return this;
 	}
@@ -215,7 +200,7 @@ public abstract class Part<T extends Part<?>> {
 	
 	public void update() {
 		if (newRendererIfNull()) {
-			renderer.update(this.pos);
+//			renderer.update(this.pos);
 		}
 	}
 	

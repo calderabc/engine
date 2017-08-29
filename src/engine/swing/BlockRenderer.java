@@ -13,6 +13,7 @@ import engine.Coordinates;
 import engine.Part;
 import engine.puzzle.Block;
 import engine.puzzle.Game;
+import engine.puzzle.tetris.swing.ImageType;
 
 @SuppressWarnings("serial")
 public class BlockRenderer extends ImageRenderer {
@@ -23,9 +24,9 @@ public class BlockRenderer extends ImageRenderer {
 
 	private final BufferedImage[] blockImages;
 
-	public final String blockImageFile;
+	public static String blockImageFile = "piece_image_sheet.png";
 
-	private final BufferedImage[][][] everyBlockImage;
+	private BufferedImage everyBlockImage;
 
 	public int getDisplayWidth() {
 		return getWidth();
@@ -47,7 +48,7 @@ public class BlockRenderer extends ImageRenderer {
 		Class<?> bitmapGeneratorClass;
 
 		try {
-			bitmapGeneratorClass = Class.forName(packageName + ".BitmapGenerator")
+			bitmapGeneratorClass = Class.forName(packageName + ".BitmapGenerator");
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -56,8 +57,10 @@ public class BlockRenderer extends ImageRenderer {
 			e.printStackTrace();
 		}
 		
+		/*
 		Method main = bitmapGeneratorClass.getMethod("main", String[].class);
 		main.invoke(bitmapGeneratorClass, new String() );
+		*/
 
 		
 	}
@@ -75,8 +78,8 @@ public class BlockRenderer extends ImageRenderer {
 	}
 
 	public BlockRenderer(Block newBlock) {
-		super(IMAGES_PER_BLOCK * ImageType.BLOCK.WIDTH,
-		      IMAGES_PER_BLOCK * ImageType.BLOCK.HEIGHT);
+		super(IMAGES_PER_BLOCK * 4,
+		      IMAGES_PER_BLOCK * 4);
 		//System.out.println("BlockRenderer");
 
 		BufferedImage blockImageSheet;
@@ -87,10 +90,11 @@ public class BlockRenderer extends ImageRenderer {
 			System.exit(1);
 		}	
 		
-		for (int pieceID = 0; pieceID < )
+		/*
 		blockImageSheet.getSubimage(x, y, w, h)
 		
 		everyBlockImage = new BufferedImage(displayWidth, displayHeight, BUFF_IMAGE_TYPE);
+		*/
 
 		blockImages = new BufferedImage[NUM_OF_ORIENTATIONS];
 
@@ -102,7 +106,6 @@ public class BlockRenderer extends ImageRenderer {
 		drawBlockImage();
 	}
 	
-	@Override
 	public void update(Coordinates partPosition) {
 		drawBlockImage();
 	}
@@ -112,4 +115,10 @@ public class BlockRenderer extends ImageRenderer {
 		this.drawImageOnMe(baseImages[block.getType()], 0, 0, getDisplayWidth(), getDisplayHeight());
 	}
 	*/
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		
+	}
 }

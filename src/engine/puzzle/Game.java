@@ -5,187 +5,56 @@ import java.awt.event.KeyEvent;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
+/*
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
+*/
+
+import javax.swing.JComponent;
 
 import engine.Part;
-import engine.swing.ScreenRenderer;
-import tetris.Profile;
-import tetris.RowsCleared;
-import tetris.ScoreCalculator;
+import engine.puzzle.tetris.ScoreCalculator;
+import engine.puzzle.tetris.swing.Keyboard;
+import engine.swing.Screen;
 
-public class Game extends Part<Part<?>> implements Runnable {
-	
-	public static Profile profile;
-	
+public class Game extends Part<Part<?>> {
 	private Screen screen;
 	private Board board;
-	private Info info;
 	private Piece piece;
 	private Score score;
 
 	
 	Level level;
-	RowsCleared rowsCleared;
 	 
 	private boolean isPieceLanded;
 	
 	private ScheduledExecutorService scheduler = 
 		Executors.newScheduledThreadPool(2);
 	
+	
 	public Game(PieceData pieceData) {
 		super(false);
-		board = new Board(pieceData);
 
-		Thread abc = new Thread(this);
-		abc.isDaemon();
-		abc.start();
-
-		try {
-			abc.join();
-		} catch (InterruptedException e) { }
-
-	}
-	
-	public void initInputMap(InputMap map) {
-		map.put(KeyStroke.getKeyStroke("UP"), "warp down");
-		map.put(KeyStroke.getKeyStroke("DOWN"), "move down");
-		map.put(KeyStroke.getKeyStroke("released DOWN"), "stop move down");
-		map.put(KeyStroke.getKeyStroke("LEFT"), "move left");
-		map.put(KeyStroke.getKeyStroke("released LEFT"), "stop move left");
-		map.put(KeyStroke.getKeyStroke("RIGHT"), "move right");
-		map.put(KeyStroke.getKeyStroke("released RIGHT"), "stop move right");
-		map.put(KeyStroke.getKeyStroke("ESCAPE"), "quit");
-		map.put(KeyStroke.getKeyStroke(KeyEvent.VK_CONTROL, KeyEvent.CTRL_DOWN_MASK), "rotate counterclockwise");
-		map.put(KeyStroke.getKeyStroke("released CONTROL"), "stop rotate counterclockwise");
-		map.put(KeyStroke.getKeyStroke(KeyEvent.VK_ALT, KeyEvent.ALT_DOWN_MASK), "rotate clockwise");
-		map.put(KeyStroke.getKeyStroke("released ALT"), "stop rotate clockwise");
-	}
-	
-	@SuppressWarnings("serial")
-	private void initActionMap(ActionMap aMap) {
-	
-		aMap.put("warp down", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				warpDown();
-			}
-		});
-		
-		aMap.put("move down", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				if (PieceAction.DOWN.isLegitKeyPress()) {
-					startMovingDown();
-				}
-				
-			}
-		});
-		
-		aMap.put("stop move down", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				PieceAction.DOWN.setReleaseTime();
-				stopMovingDown();
-			}
-		});
-		
-		aMap.put("move left", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				if (PieceAction.LEFT.isLegitKeyPress()) {
-					startMovingLeft();
-				}
-			}
-		});
-		
-		aMap.put("stop move left", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				PieceAction.LEFT.setReleaseTime();
-				stopMovingLeft();
-			}
-		});
-		
-		aMap.put("move right", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				if (PieceAction.RIGHT.isLegitKeyPress()) {
-					startMovingRight();
-				}
-			}
-		});
-		
-		aMap.put("stop move right", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				PieceAction.RIGHT.setReleaseTime(); 
-				
-				stopMovingRight();
-			}
-		});
-		
-		aMap.put("rotate clockwise", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-	//			if (PieceAction.CLOCKWISE.isLegitKeyPress()) { 
-					startRotatingClockwise();
-	//			}
-			}
-		});
-		
-		aMap.put("stop rotate clockwise", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				PieceAction.CLOCKWISE.setReleaseTime();
-				stopRotatingClockwise();
-			}
-		});
-		
-		aMap.put("rotate counterclockwise", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-	//			if (PieceAction.COUNTERCLOCKWISE.isLegitKeyPress()) { 
-					startRotatingCounterClockwise();
-	//			}
-			}
-		});
-		
-		aMap.put("stop rotate counterclockwise", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				PieceAction.COUNTERCLOCKWISE.setReleaseTime();
-				stopRotatingCounterClockwise();
-			}
-		});
-		
-		aMap.put("quit", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
-		
-	}
-	
-	
-	public void run() {
 		//PieceAction.FALL.setSpeed(2 / 1.0e9);
 		
+		screen = new Screen();
+		board = new Board(pieceData);
 		score = new Score(ScoreCalculator.NINTENDO, 10, 0);
 		level = new Level(1);
-		rowsCleared = new RowsCleared();
-		screen = new Screen();
 		
-		JComponent component = ((JComponent) screen.getRenderer());
-		initInputMap(component.getInputMap());
-		initActionMap(component.getActionMap());
+		JComponent component = (JComponent)screen.getContentPane();
+		Keyboard.initInputMap(component.getInputMap());
+		Keyboard.initActionMap(component.getActionMap());
 		
 		// always add the board to the screen first because all the other
 		// elements depend on the size of the board for their positioning
-		screen.addChild(board);
-		info = new Info();
-		info.addChild(score);
-		info.addChild(level);
-		info.addChild(rowsCleared);
-		screen.addChild(info);
+		// screen.addChild(board);
 		//screen.addChild(score);
 		//screen.addChild(level);
 		//screen.addChild(rowsCleared);
-		
-		this.addChild(screen);
 		
 		//screen.getRenderer().update();
 		
@@ -237,14 +106,14 @@ public class Game extends Part<Part<?>> implements Runnable {
 			if (rowCount > 0) {
 				score.updateScore(level, rowCount);
 				
-				rowsCleared.add(rowCount);
-					
+				/*
 				if (score.isLevelUp(level, rowsCleared)) {
 				System.out.println("**************************************************************************");
 					level.next();
 					
 					((ScreenRenderer) screen.getRenderer()).changeColorFilter();
 				}
+				*/
 			}
 		}
 				
@@ -271,9 +140,11 @@ public class Game extends Part<Part<?>> implements Runnable {
 			
 			testPiece.rotate(action);
 			System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
+			/*
 			for (Block currBlock: piece.getBlocks()) {
 				currBlock.printInfo();
 			}
+			*/
 			System.out.println("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
 			/** 
 			 * TODO:  Add code to slide the piece left or right if there is room
@@ -290,9 +161,11 @@ public class Game extends Part<Part<?>> implements Runnable {
 			if (board.doesPieceFit(testPiece)) {
 				piece.rotate(action);
 				System.out.println("ssssssssssssssssssssssssssssssssssss");
+				/*
 				for (Block currBlock: piece.getBlocks()) {
 					currBlock.printInfo();
 				}
+				*/
 				System.out.println("ttttttttttttttttttttttttttttttt");
 				
 				return true;

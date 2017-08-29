@@ -2,9 +2,7 @@ package engine.puzzle;
 
 import java.util.Random;
 
-import engine.Debug;
-
-public final class PiecePool implements Debug {
+public final class PiecePool {
 	private final Piece[] pieces;
 	
 	private final PieceData pieceData;
@@ -29,6 +27,7 @@ public final class PiecePool implements Debug {
 		return pieces[pieceIndex];
 	}
 				
+	/*
 	@Override
 	public void printInfo() {
 		System.out.println("Pieces - Start");
@@ -37,5 +36,6 @@ public final class PiecePool implements Debug {
 		}
 		System.out.println("Pieces - Finish");
 	}
+	*/
 
 }

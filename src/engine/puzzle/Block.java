@@ -1,12 +1,11 @@
 package engine.puzzle;
 
 import engine.Coordinates;
-import engine.Debug;
 import engine.HasDimension;
 import engine.MovablePart;
 import engine.Part;
 
-public class Block extends MovablePart<Part<?>> implements HasDimension, Debug {	
+public class Block extends MovablePart<Part<?>> implements HasDimension {	
 	private final int type;
 
 	public Block(Coordinates newCoords, int newType) {
@@ -110,8 +109,4 @@ public class Block extends MovablePart<Part<?>> implements HasDimension, Debug {
 		return pos.y;
 	}
 
-	@Override
-	public void printInfo() {
-		/*System.out.println("Block - X:" + getX() + " Y:" + getY() + " Type:" + getType());*/
-	}
 }

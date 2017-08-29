@@ -1,4 +1,4 @@
-package engine.swing;
+package engine.swing.banish;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -8,15 +8,19 @@ import engine.Coordinates;
 import engine.Part;
 import engine.puzzle.Block;
 import engine.puzzle.Piece;
+import engine.swing.BlockRenderer;
+import engine.swing.ImageRenderer;
 
 @SuppressWarnings("serial")
-public class PieceRenderer extends ImageRenderer {
+public class PieceRenderer {
 	//private BufferedImage images[];
 	//Piece piece;
 	
+	/*
 	private final Collection<BlockRenderer> blockRenderers;
 	private final int blockWidth;
 	private final int blockHeight;
+	*/
 	
 	/*
 	private final void drawBlocks() {
@@ -27,10 +31,9 @@ public class PieceRenderer extends ImageRenderer {
 		}
 	
 	}
-	*/
 	
+	/*
 	public PieceRenderer(Part<?> myPiece) {
-/* 		System.out.println("PieceRenderer"); */
 		BlockRenderer bRend;
 		for (Block pieceBlock : ((Piece)myPiece).getBlocks()) {
 			bRend = (BlockRenderer)pieceBlock.getRenderer();
@@ -50,10 +53,9 @@ public class PieceRenderer extends ImageRenderer {
 		newImage(((Piece)myPiece).getWidth() * blockWidth,
 				 ((Piece)myPiece).getHeight() * blockHeight);
 		
-		drawBlocks(piece.getBlocks());
+		//drawBlocks(piece.getBlocks());
 	}
 	
-	@Override
 	public void update(Coordinates partPosition) {
 		//System.out.println("Update PieceRenderer");
 		this.setBounds(partPosition.x * blockWidth, 
@@ -63,4 +65,11 @@ public class PieceRenderer extends ImageRenderer {
 		
 		drawBlocks(piece.getBlocks());
 	}
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		
+	}
+	*/
 }

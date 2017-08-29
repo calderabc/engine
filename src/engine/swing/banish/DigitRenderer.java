@@ -1,4 +1,4 @@
-package engine.swing;
+package engine.swing.banish;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -8,6 +8,8 @@ import javax.imageio.ImageIO;
 
 import engine.Part;
 import engine.puzzle.Digit;
+import engine.swing.ImageRenderer;
+import engine.swing.NumberRenderer;
 
 
 @SuppressWarnings("serial")

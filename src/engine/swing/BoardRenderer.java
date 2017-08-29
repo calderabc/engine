@@ -25,8 +25,10 @@ public class BoardRenderer extends Renderer {
 		
 		this.setLayout(null);
 		
+		/*
 		height = BlockRenderer.getDisplayHeight() * board.getHeight();
 		width = BlockRenderer.getDisplayWidth() * board.getWidth(); 
+		*/
 		
 		this.setBounds(padding, padding, width, height); 
 					 
@@ -37,6 +39,7 @@ public class BoardRenderer extends Renderer {
 	public void update() {
 		height = this.getParent().getHeight() - 2 * padding;
 		
+		/*
 		BlockRenderer.setDisplayHeight((int) (((double) height) / board.getHeight()));
 		BlockRenderer.setDisplayWidth(BlockRenderer.getDisplayHeight());
 		
@@ -46,6 +49,7 @@ public class BoardRenderer extends Renderer {
 		height = adjustedHeight;
 		width = board.getWidth() * BlockRenderer.getDisplayWidth(); 
 		
+		*/
 		this.setBounds(padding, padding + verticalPadding, width, height); 
 		
 		for (Component currRenderer: this.getComponents()) {

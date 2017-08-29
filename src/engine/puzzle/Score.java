@@ -1,8 +1,7 @@
 package engine.puzzle;
 
 
-import tetris.RowsCleared;
-import tetris.ScoreCalculator;
+import engine.puzzle.tetris.ScoreCalculator;
 
 public class Score extends Number {
 	private ScoreCalculator calculator;
@@ -22,7 +21,7 @@ public class Score extends Number {
 	public int getRowsPerLevel() {
 		return calculator.rowsPerLevel;
 	}
-	
+/*	
 	public boolean isLevelUp(Level level, RowsCleared rowsCleared) {
 		System.out.println(rowsCleared.getValue());
 		System.out.println(level.getValue());
@@ -30,4 +29,5 @@ public class Score extends Number {
 			>= (level.getValue() * calculator.rowsPerLevel);
 		
 	}
+	*/
 }

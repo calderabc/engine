@@ -1,4 +1,4 @@
-package tetris;
+package engine.puzzle.tetris;
 
 import engine.puzzle.Level;
 

@@ -2,7 +2,6 @@ package engine.puzzle;
 
 import java.util.Vector;
 
-import engine.Debug;
 import engine.Coordinates;
 import engine.Movable;
 import engine.MovablePart;
@@ -16,7 +15,7 @@ import java.util.Collection;
  *
  */
 
-public class Piece extends MovablePart<Block> implements Debug {
+public class Piece extends MovablePart<Block> {
 
 	private final int blockCount;
 	public final int getBlockCount() {
@@ -215,7 +214,7 @@ public class Piece extends MovablePart<Block> implements Debug {
 		for (Block currBlock: getChildren()) {
 			currBlock.move(offset);
 		}
-		this.printInfo();
+		//this.printInfo();
 
 		return this;
 	}
@@ -240,6 +239,7 @@ public class Piece extends MovablePart<Block> implements Debug {
 		return pos.y + height - 1;
 	}
 
+	/*
 	@Override
 	public void printInfo() {
 		System.out.println("Piece - Start");
@@ -248,4 +248,5 @@ public class Piece extends MovablePart<Block> implements Debug {
 		}
 		System.out.println("Piece - End");
 	}
+	*/
 }

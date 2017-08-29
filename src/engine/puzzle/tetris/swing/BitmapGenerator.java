@@ -1,4 +1,4 @@
-package engine.swing.tetris;
+package engine.puzzle.tetris.swing;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -8,10 +8,9 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import engine.puzzle.tetris.Tetris;
 import engine.swing.BlockRenderer;
 import engine.swing.ImageRenderer;
-import engine.swing.ImageType;
-import tetris.Tetris;
 
 public class BitmapGenerator {
 	private static final int X=0;
@@ -44,9 +43,9 @@ public class BitmapGenerator {
 	private static final int IBL = ITL + 3;
 
 	private static final int BLOCK_DISPLAY_WIDTH = 
-			BlockRenderer.IMAGES_PER_BLOCK * ImageType.BLOCK.WIDTH;
+			BlockRenderer.IMAGES_PER_BLOCK * 4;
 	private static final int BLOCK_DISPLAY_HEIGHT = 
-			BlockRenderer.IMAGES_PER_BLOCK * ImageType.BLOCK.HEIGHT;
+			BlockRenderer.IMAGES_PER_BLOCK * 4;
 	private static final int SHEET_DISPLAY_WIDTH = 
 			BlockRenderer.NUM_OF_ORIENTATIONS * BLOCK_DISPLAY_WIDTH;
 
@@ -155,8 +154,8 @@ public class BitmapGenerator {
 	}
 
 	private static BufferedImage drawPieceImage(byte[][] imageCellCodeMap, int expandedMapWidth, int expandedMapHeight) {
-		int pieceDisplayWidth = expandedMapWidth * ImageType.BLOCK.WIDTH;
-		int pieceDisplayHeight = expandedMapHeight * ImageType.BLOCK.HEIGHT;
+		int pieceDisplayWidth = expandedMapWidth * 4;
+		int pieceDisplayHeight = expandedMapHeight * 4;
 				
 		BufferedImage returnPieceImage = new BufferedImage(pieceDisplayWidth, 
 		                                                   pieceDisplayHeight, 
@@ -165,18 +164,18 @@ public class BitmapGenerator {
 		
 		for (int expandedMapY = 0, drawY = 0; 
 			 expandedMapY < expandedMapHeight; 
-			 expandedMapY++, drawY += ImageType.BLOCK.HEIGHT) {
+			 expandedMapY++, drawY += 4) {
 
 			for (int expandedMapX = 0, drawX = 0; 
 				 expandedMapX < expandedMapWidth; 
-				 expandedMapX++, drawX += ImageType.BLOCK.WIDTH) {
+				 expandedMapX++, drawX += 4) {
 
 				byte cellCode = imageCellCodeMap[expandedMapY][expandedMapX];
 				int imageID = getImageIDFromCode(cellCode);
 				if (imageID >= 0) {
 					pieceGraphics.drawImage(images[imageID], 
 											drawX, drawY, 
-											ImageType.BLOCK.WIDTH, ImageType.BLOCK.HEIGHT, 
+											4, 4, 
 											null);
 				}
 			}
@@ -356,7 +355,7 @@ public class BitmapGenerator {
 		}
 
 		try {
-			ImageIO.write(imageToFile, "png", new File(BlockRenderer.BLOCK_IMAGE_FILE));
+			ImageIO.write(imageToFile, "png", new File(BlockRenderer.blockImageFile));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -5,10 +5,8 @@ import javax.swing.JPanel;
 
 import engine.Coordinates;
 import engine.Part;
-import engine.Renderable;
 
 @SuppressWarnings("serial")
-//public abstract class Renderer extends JPanel implements Renderable {
 public abstract class Renderer extends JPanel {
 	
 	public void add(Part<?> owner) {
@@ -39,5 +37,5 @@ public abstract class Renderer extends JPanel {
 		}
 	}
 	
-	abstract public void update(Coordinates partPosition);
+	abstract public void update();
 }

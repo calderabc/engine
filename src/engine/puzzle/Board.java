@@ -68,12 +68,13 @@ public final class Board extends Part<MovablePart<?>> {
 		height = newHeight;
 		
 		//TestRow = new ArrayList<TestBlock>(height);
+		/*
 		for (int i = 0; i < 7; i++) {
 			for (Block currBlock : pieces.getPiece(i).getChildren()) {
 				currBlock.printInfo();
 			}
 		}
-		
+	*/	
 	}
 	
 	public Piece startNewPiece() {
