@@ -1,18 +1,15 @@
 package engine.swing;
 
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.Hashtable;
 import java.util.Map;
 
-import javax.swing.JPanel;
-
 import engine.Coordinates;
 import engine.puzzle.tetris.swing.ImageType;
 
-@SuppressWarnings("serial")
-public class Sprite extends JPanel {
+public class Sprite {
 	private ImageList images;
+	private Graphics2D canvas;
 
 	private Coordinates position;
 	private Coordinates dimensions;
@@ -34,13 +31,21 @@ public class Sprite extends JPanel {
 		}
 	}
 	
-	public Sprite(int id, Coordinates newPosition) {
+	public Sprite(int id, Coordinates newPosition, Graphics2D graphics) {
 		images = imageListMap.get(id);
 		position = newPosition;
 		dimensions = images.imageType.DIMENSIONS;
 		currImage = 0;
+		canvas = graphics;
 	}
 
+	public void draw() {
+		canvas.drawImage(images.get(currImage),  
+					     position.x, position.y, 
+					     dimensions.x, dimensions.y, null);
+	}
+
+/*
 	@Override 
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -48,4 +53,5 @@ public class Sprite extends JPanel {
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.drawImage(images.get(currImage), 0, 0, getWidth(), getHeight(), null);
 	}
+*/
 }

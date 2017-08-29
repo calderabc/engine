@@ -3,7 +3,6 @@ package engine.swing;
 import java.awt.Color;
 
 import engine.Part;
-import engine.puzzle.Digit;
 import engine.puzzle.Number;
 
 
@@ -14,7 +13,7 @@ public class NumberRenderer extends Renderer {
 	private Number number;
 	
 	
-	public NumberRenderer(Part<?> newNumber) {
+	public NumberRenderer(Part newNumber) {
 		number = (Number) newNumber;
 		
 		this.setOpaque(true);
@@ -29,6 +28,7 @@ public class NumberRenderer extends Renderer {
 		int height = 0;
 		int digitHeight;
 		
+		/*
 		for(Part<?> child: number.getChildren()) {
 			if (child instanceof Digit) {
 				
@@ -41,10 +41,10 @@ public class NumberRenderer extends Renderer {
 				}
 			}
 		}
+		*/
 		
 		height += 2 * NumberRenderer.padding;
 		
 		this.setBounds(number.pos.x * 80, number.pos.y * 80 + 10, width, height);
-		
 	}
 }

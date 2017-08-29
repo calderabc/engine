@@ -1,6 +1,6 @@
 package engine;
 
-public abstract class MovablePart<T extends Part<?>> extends Part<T> implements Movable, HasDimension {
+public abstract class MovablePart extends Part implements Movable {
 	
 	/**
 	 * Constructs a MovablePart given the specified Coordinates
@@ -23,7 +23,7 @@ public abstract class MovablePart<T extends Part<?>> extends Part<T> implements 
 	 * Constructs a MovablePart based on a deep copy of the specified MovablePart
 	 * @param other
 	 */
-	public MovablePart(Part<T> other) {
+	public MovablePart(MovablePart other) {
 		super(other);
 		//pos = new Position(other.pos);
 	}
@@ -31,22 +31,19 @@ public abstract class MovablePart<T extends Part<?>> extends Part<T> implements 
 	// Implement the Movable interface.
 	
 	@Override
-	public MovablePart<T> move(Coordinates offset) {
+	public Movable move(Coordinates offset) {
 		pos.move(offset);
-		
-		update();
 		
 		return this;
 	}
 	
 	@Override
-	public final MovablePart<T> move(int offsetX, int offsetY) {
+	public final Movable move(int offsetX, int offsetY) {
 		return move(new Coordinates(offsetX, offsetY));
 	}
 	
 	@Override
-	public final MovablePart<T> move(int offsetX, int offsetY, int offsetZ) {
+	public final Movable move(int offsetX, int offsetY, int offsetZ) {
 		return move(new Coordinates(offsetX, offsetY, offsetZ));
 	}
-
 }

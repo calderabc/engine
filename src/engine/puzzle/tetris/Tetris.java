@@ -1,6 +1,5 @@
 package engine.puzzle.tetris;
 
-import engine.Coordinates;
 import engine.puzzle.Game;
 import engine.puzzle.PieceData;
 

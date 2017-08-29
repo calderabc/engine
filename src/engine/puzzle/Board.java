@@ -1,13 +1,6 @@
 package engine.puzzle;
 
-
-import java.util.ArrayList;
-import java.util.Collections;
-
-import engine.MovablePart;
 import engine.Part;
-
-import java.util.Collection;
 
 /**
  * A Board represents the game element that Blocks collect on after Pieces 
@@ -16,21 +9,10 @@ import java.util.Collection;
  * @author Aaron Calder
  *
  */
-public final class Board extends Part<MovablePart<?>> {
-	private class TestBlock {
-		public Block element;
-		public MovablePart<Block> parent;
-		public boolean below;
-	}
-
+public final class Board extends Part {
 	private final PiecePool pieces;
 	
-	//private final Collection<TestBlock> TestRow;
-	
-	
 	private Piece fallPiece;
-	
-	private static final boolean BY_BLOCK = false;
 	
 	private static final int DEFAULT_BOARD_HEIGHT = 20;
 	private static final int DEFAULT_BOARD_WIDTH = 10;
@@ -62,8 +44,6 @@ public final class Board extends Part<MovablePart<?>> {
 	private Board(int newWidth, int newHeight, PieceData newPieceData) {
 		pieces = new PiecePool(newPieceData);
 
-		System.out.println("Board");
-		
 		width = newWidth;
 		height = newHeight;
 		
@@ -78,15 +58,7 @@ public final class Board extends Part<MovablePart<?>> {
 	}
 	
 	public Piece startNewPiece() {
-		//System.out.println("Before getRandomPiece()");
-		//pieces.printInfo();
 		fallPiece = pieces.getRandomPiece();
-		//fallPiece = new Piece(4);
-		
-		getRenderer().add(fallPiece.getRenderer());
-		
-		//System.out.println("After getRandomPiece()");
-		//pieces.printInfo();
 		return fallPiece;
 	}
 	
@@ -97,29 +69,7 @@ public final class Board extends Part<MovablePart<?>> {
 	 * @return a Collection of integers each representing the y position of 
 	 * 		   a row that is full
 	 */
-	public final Collection<Collection<TestBlock>> getFullRows(Piece landedPiece) {
-		Collection<Collection<TestBlock>> fullRows = new ArrayList<Collection<TestBlock>>(height);
-		
-		int landedPieceMinY = landedPiece.pos.y;
-		int landedPieceMaxY = landedPieceMinY + landedPiece.getHeight() - 1;
-		
-		fullRows = new ArrayList<Collection<TestBlock>>(width);
-		for (int i = landedPieceMinY; i <= landedPieceMaxY; i++) {
-			// TODO: Finish
-		}
-		
-		for (MovablePart<?> currPart: getChildren()) {
-			// TODO: Finish
-		}
-		
-		/*	
-		for (int i = 0; i < height; i++) {
-			if (isRowFull(i)) {
-				fullRows.add(i);
-			}
-		}
-		*/
-		return fullRows;
+	public final void getFullRows(Piece landedPiece) {
 	}
 	
 	/**
@@ -128,16 +78,7 @@ public final class Board extends Part<MovablePart<?>> {
 	 * @param testY the y position of the row to be checked
 	 * @return
 	 */
-	private final boolean isRowFull(int testY) {
-		int blockCount = 0;
-		
-		for (int i = 0; i < width; i++) {
-			if (isSquareOccupied(new Block(i, testY))) {
-				blockCount++;
-			}
-		}
-		
-		return blockCount == width;
+	private final void isRowFull(int testY) {
 	}
 
 	
@@ -147,21 +88,8 @@ public final class Board extends Part<MovablePart<?>> {
 	 * @param landingPiece piece containing Blocks to be added to this Board
 	 * @return reference to the Board
 	 */
-	public final Board landPiece() {
+	public final void landPiece() {
 		
-		if (BY_BLOCK) {
-			this.addChildren(fallPiece.getChildren());
-			System.out.println(this.getChildren());
-			// TODO: make sure this is correct
-			getRenderer().remove(fallPiece.getRenderer());
-			
-			this.removeChild(fallPiece);
-		}
-		else {
-			this.addChild(fallPiece);
-		}
-			
-		return this;
 	}
 	
 
@@ -175,92 +103,8 @@ public final class Board extends Part<MovablePart<?>> {
 	 * @return true if the Piece fits somewhere on the board, and false if it does not.
 	 */
 	public final boolean doesPieceFit(Piece testPiece) {
-		// If test piece is out of bounds of the board it doesn't fit.
-		if (isPieceOutOfBounds(testPiece)) {
-			return false;
-		}
-		
-		int currPartMinX, currPartMaxX, currPartMinY, currPartMaxY;
-		
-		// Calculate bounds of test piece.
-		int testPieceMinX = testPiece.pos.x;
-		int testPieceMaxX = testPiece.getMaxX();
-		int testPieceMinY = testPiece.pos.y;
-		int testPieceMaxY = testPiece.getMaxY();
-		
-		for (MovablePart<?> currPart: getChildren()) {
-			// Calculate bounds of current part.
-			currPartMinX = currPart.pos.x;
-			currPartMaxX = currPart.getMaxX();
-			currPartMinY = currPart.pos.y;
-			currPartMaxY = currPart.getMaxY();
-			
-			// Only check individual blocks in the test piece if its 
-			// boundaries overlap with the boundaries of the current
-			// part.  Use standard algorithm (analogue to checking 
-			// two rectangular 2D sprites for overlap)
-			// TODO: Reorder/alter these comparisons for efficiency
-			// Maybe base order on what sort of move the test piece 
-			// has just tried to make.
-			if (   currPartMaxX  >= testPieceMinX
-				&& testPieceMaxX >= currPartMinX 
-				&& currPartMaxY  >= testPieceMinY 
-				&& testPieceMaxY >= currPartMinY) {
-				
-				return (currPart instanceof Piece) 
-					? Collections.disjoint(testPiece.getChildren(), 
-										   currPart.getChildren())
-					: !testPiece.getChildren().contains(currPart);
-			/*	
-				if (currPartIsPiece) {
-					return Collections.disjoint(testPiece.getChildren(), 
-											    currPart.getChildren());
-				}
-				else {
-					return !testPiece.getChildren().contains(currPart);
-				}
-				*/
-				
-				/*
-				Collection<Block> blocksInCurrPart;
-				if (currPartIsPiece) {
-					blocksInCurrPart = ((Piece) currPart).getChildren();
-				}
-				else {
-					blocksInCurrPart = new Vector<Block>();
-					blocksInCurrPart.add((Block) currPart);
-				}
-				
-				for (Block currPartBlock: blocksInCurrPart) {
-					if (testPiece.getChildren().contains(currPartBlock)) {
-						return false;
-					}
-				}
-				*/
-				
-				/*
-				if (currPartIsPiece) {
-					// test if any blocks in testPiece are contained in currPart
-					blocksInCurrPart = ((Piece) currPart).getChildren();
-					for (Block currTestBlock: testPiece.getChildren()) {
-						if (blocksInCurrPart.contains(currTestBlock)) {
-							return false;
-						}
-					}
-				} 
-				else {
-					// test if currPart (a Block) is contained in testPiece
-					if (testPiece.getChildren().contains(currPart)) {
-						return false;
-					}
-				}
-				*/
-			} 
-			
-		} // end: for (MovablePart<?> currPart: getChildren())
 			
 		return true;
-		
 	}
 	
 	
@@ -273,25 +117,8 @@ public final class Board extends Part<MovablePart<?>> {
 	 * @param fullRows Collection of integers each representing the y position
 	 * 		  of a row to remove all the Blocks from
 	 */
-	public final int removeRows(Collection<Collection<MovablePart<?>>> fullRows) {
-		
-		for (Collection<MovablePart<?>> currRow: fullRows) {
-			
-		}
-		
-		/*
-		for (Integer row : fullRows) {
-			removeRow(row);
-		}
-		*/
-		
-		return fullRows.size();
+	public final void removeRows() {
 	}
-/*	
-	private final boolean doesBlockOverlap(Block testBlock) {
-		return isBlockOutOfBounds(testBlock) || isSquareOccupied(testBlock);
-	}
-*/
 	
 	/**
 	 * Removes all the Blocks on the specified row of the Board.
@@ -299,9 +126,7 @@ public final class Board extends Part<MovablePart<?>> {
 	 */
 	private final void removeRow(int rowY) {
 		for (int i = 0; i < width; i ++) {
-			removeChild(new Block(i, rowY));
 			
-			update();
 			
 			try {
 				Thread.sleep(20);
@@ -312,16 +137,7 @@ public final class Board extends Part<MovablePart<?>> {
 		}
 		// TODO: finish this for Board with Pieces on
 		Block currBlock;
-		for (MovablePart<?> currChild: getChildren()) {
-			if (currChild instanceof Block) {
-				currBlock = (Block)currChild;
-				if (currBlock.pos.y < rowY) {
-					currBlock.move(0,1);
-				}
-			}
-		}
 		
-		update();
 	}
 	
 	/**
@@ -350,13 +166,4 @@ public final class Board extends Part<MovablePart<?>> {
 				|| (testPiece.pos.x < 0);
 	}
 	
-	/**
-	 * Returns true if the Board contains a Block at the same
-	 * position as the specified Block else returns false.
-	 * @param testBlock Block to be tested. 
-	 * @return true if Board already has Block at that position, false otherwise.
-	 */
-	private final boolean isSquareOccupied(Block testBlock) {
-		return getChildren().contains(testBlock);
-	}
 }

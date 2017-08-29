@@ -1,30 +1,23 @@
 package engine.puzzle;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-/*
-import javax.swing.AbstractAction;
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
 import javax.swing.JComponent;
-import javax.swing.KeyStroke;
-*/
-
-import javax.swing.JComponent;
-
 import engine.Part;
 import engine.puzzle.tetris.ScoreCalculator;
 import engine.puzzle.tetris.swing.Keyboard;
 import engine.swing.Screen;
+import engine.swing.Sprite;
 
-public class Game extends Part<Part<?>> {
+public class Game {
 	private Screen screen;
 	private Board board;
 	private Piece piece;
 	private Score score;
+	private List<Part> spriteParts = new Vector<Part>();
 
 	
 	Level level;
@@ -36,7 +29,6 @@ public class Game extends Part<Part<?>> {
 	
 	
 	public Game(PieceData pieceData) {
-		super(false);
 
 		//PieceAction.FALL.setSpeed(2 / 1.0e9);
 		
@@ -49,31 +41,10 @@ public class Game extends Part<Part<?>> {
 		Keyboard.initInputMap(component.getInputMap());
 		Keyboard.initActionMap(component.getActionMap());
 		
-		// always add the board to the screen first because all the other
-		// elements depend on the size of the board for their positioning
-		// screen.addChild(board);
-		//screen.addChild(score);
-		//screen.addChild(level);
-		//screen.addChild(rowsCleared);
-		
-		//screen.getRenderer().update();
-		
-		System.out.println(board.getRenderer().getWidth());
-		System.out.println(board.getRenderer().getHeight());
-		System.out.println(board.getRenderer().getSize());
-		//System.exit(0);
-		
 		while (true) {		
-			/*
-			PieceAction.RIGHT.setSpeed(
-				PieceAction.LEFT.setSpeed(
-					PieceAction.DOWN.setSpeed(PieceAction.FALL.getSpeed() * 4)
-				)
-			);
-			*/
-			
 			piece = board.startNewPiece();
-			board.update();
+			spriteParts.addAll(piece.getBlocks());
+
 			isPieceLanded = false;
 			startFalling();
 			

@@ -1,15 +1,17 @@
 package engine.puzzle;
 
+import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 
 import engine.Part;
 
 
-public class Number extends Part<Part<?>> {
+public class Number extends Part {
 	private long value;
 	private int size;
 	private final long max;
+	private List<Digit> digits = new Vector<Digit>();
 	
 	public Number(int newX, int newY, int newSize, int newValue) {
 		super(newX, newY);
@@ -21,7 +23,7 @@ public class Number extends Part<Part<?>> {
 		//children = new Vector<Part>();
 		
 		for (int i = 0; i < size; i++) {
-			this.addChild(new Digit(i, 0, 0));
+			digits.add(new Digit(i, 0, 0));
 		}
 		
 		assignDigits();
@@ -36,10 +38,10 @@ public class Number extends Part<Part<?>> {
 	}
 	
 	private final void assignDigits() {
-		if (value <= max && value >= 0 && !getChildren().isEmpty() ) {
+		if (value <= max && value >= 0 && !digits.isEmpty() ) {
 			
 			ListIterator<Digit> iterator = 
-				((Vector) getChildren()).listIterator(getChildren().size());
+				digits.listIterator(digits.size());
 			
 			int lastDigitValue;
 			for (long quotient = value; 

@@ -1,11 +1,10 @@
 package engine.puzzle;
 
 import engine.Coordinates;
-import engine.HasDimension;
 import engine.MovablePart;
 import engine.Part;
 
-public class Block extends MovablePart<Part<?>> implements HasDimension {	
+public class Block extends MovablePart {	
 	private final int type;
 
 	public Block(Coordinates newCoords, int newType) {
@@ -89,22 +88,18 @@ public class Block extends MovablePart<Part<?>> implements HasDimension {
 		return type;
 	}
 
-	@Override
 	public int getHeight() {
 		return 1;
 	}
 	
-	@Override
 	public int getWidth() {
 		return 1;
 	}
 
-	@Override
 	public int getMaxX() {
 		return pos.x;
 	}
 
-	@Override
 	public int getMaxY() {
 		return pos.y;
 	}

@@ -3,10 +3,12 @@ package engine.puzzle;
 import java.util.Vector;
 
 import engine.Coordinates;
+import engine.HasDimension;
 import engine.Movable;
 import engine.MovablePart;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * This Piece class represents a Tetris piece.  It is composed of Blocks.  It has
@@ -15,7 +17,7 @@ import java.util.Collection;
  *
  */
 
-public class Piece extends MovablePart<Block> {
+public class Piece extends MovablePart implements HasDimension {
 
 	private final int blockCount;
 	public final int getBlockCount() {
@@ -35,6 +37,7 @@ public class Piece extends MovablePart<Block> {
 
 	private int width;
 	private int height;
+	private List<Block> blocks = new Vector<Block>();
 
 	/**
 	 * Default Constructor.  Will have better features when I get around to it.
@@ -51,7 +54,6 @@ public class Piece extends MovablePart<Block> {
 
 	public Piece(Piece other) {
 		super(other);
-		setVisible(true);
 
 		blockCount = other.getBlockCount();
 		id = other.getID();
@@ -60,9 +62,7 @@ public class Piece extends MovablePart<Block> {
 		destCenter = new Coordinates(other.destCenter);
 
 		for (Block currOtherBlock: other.getBlocks()) {
-		//System.out.println("Construct me");
-			addChild(currOtherBlock);
-			//addChild(currOtherBlock.move(-getPosition().getX(), -getPosition().getY()));
+			blocks.add(currOtherBlock);
 		}
 
 		generateDimensions();
@@ -70,19 +70,17 @@ public class Piece extends MovablePart<Block> {
 
 	private final void generatePiece(PieceData newPieceData, int pieceID) {
 		for (int[] blockXY: newPieceData.pieceTemplate[pieceID]) {
-			addChild(new Block(blockXY[0], blockXY[1], id));
+			blocks.add(new Block(blockXY[0], blockXY[1], id));
 		}
 
-		// Everything in represented multiplied by two, this is why the 'pos' 
+		// Centers are represented multiplied by two, this is why the 'pos' 
 		// variables are doubled to match the already doubled 'pieceCenter'.
 		int posXDoubled = pos.x << 1, posYDoubled = pos.y << 1;
 		currCenter = newPieceData.getCurrCenter(pieceID).move(posXDoubled, posYDoubled);
 		destCenter = newPieceData.getDestCenter(pieceID).move(posXDoubled, posYDoubled);
 
-		for (Block currBlock: this.getChildren()) {
-			if (currBlock instanceof Block) {
+		for (Block currBlock: blocks) {
 				currBlock.move(pos);
-			}
 		}
 	}
 
@@ -91,7 +89,7 @@ public class Piece extends MovablePart<Block> {
 		int currX, currY;
 		int minX = 100, minY = 100, maxX = 0, maxY = 0;
 
-		for(Block currBlock: getChildren()) {
+		for(Block currBlock: blocks) {
 
 			currX = currBlock.pos.x;
 			if (currX > maxX) maxX = currX;
@@ -103,29 +101,13 @@ public class Piece extends MovablePart<Block> {
 		}
 
 		pos = new Coordinates(minX, minY);
+		//dimensions = new Coordinates(maxX - minX + 1, maxY - minY + 1);
 		width = maxX - minX + 1;
 		height = maxY - minY + 1;
 	}
 
-	/**
-	 * The description below does not match the method.  The method returns the actual
-	 * coordinates.  If board coordinates are added they do not appear to be added
-	 * here.  06/06/2013
-	 *
-	 * Return a collection of blocks whose coordinates are absolute and correspond
-	 * with the coordinates on the board.
-	 * @return Collection of Blocks with their coordinates adjusted to match
-	 * 		   board coordinates.
-	 */
-	public Collection<Block> getBlocks() {
-		Collection<Block> returnBlocks = new Vector<Block>();
-
-		synchronized(this) {
-			for (Block currBlock : getChildren()) {
-				returnBlocks.add(new Block(currBlock));
-			}
-			return returnBlocks;
-		}
+	public List<Block> getBlocks() {
+		return blocks;
 	}
 
 	/**
@@ -182,7 +164,7 @@ public class Piece extends MovablePart<Block> {
 		int flip = (action == PieceAction.CLOCKWISE) ? -1: 1;
 
 		// Move the Blocks in the piece to their new positions.
-		for(Block currBlock: getChildren()) {
+		for(Block currBlock: blocks) {
 				/* Equivalent but slower:
 				currBlock.pos = new Coordinates( (destCenter[X] + flip * (2 * currBlock.pos.y - currCenter[Y])) / 2,
 				                                 (destCenter[Y] - flip * (2 * currBlock.pos.x - currCenter[X])) / 2 ); */
@@ -196,13 +178,11 @@ public class Piece extends MovablePart<Block> {
 		destCenter = currCenter;
 		currCenter = dummy;
 
-		update();
-
 		return this;
 	}
 
 	@Override
-	public MovablePart<Block> move(Coordinates offset) {
+	public Movable move(Coordinates offset) {
 		super.move(offset);
 
 		//System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
@@ -211,7 +191,7 @@ public class Piece extends MovablePart<Block> {
 		currCenter.move(offsetDoubled);
 		destCenter.move(offsetDoubled);
 
-		for (Block currBlock: getChildren()) {
+		for (Block currBlock: blocks) {
 			currBlock.move(offset);
 		}
 		//this.printInfo();

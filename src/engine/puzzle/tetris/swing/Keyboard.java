@@ -32,14 +32,14 @@ public class Keyboard {
 	
 		aMap.put("warp down", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				warpDown();
+				//warpDown();
 			}
 		});
 		
 		aMap.put("move down", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				if (PieceAction.DOWN.isLegitKeyPress()) {
-					startMovingDown();
+				//	startMovingDown();
 				}
 				
 			}
@@ -48,14 +48,14 @@ public class Keyboard {
 		aMap.put("stop move down", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				PieceAction.DOWN.setReleaseTime();
-				stopMovingDown();
+			//	stopMovingDown();
 			}
 		});
 		
 		aMap.put("move left", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				if (PieceAction.LEFT.isLegitKeyPress()) {
-					startMovingLeft();
+			//		startMovingLeft();
 				}
 			}
 		});
@@ -63,14 +63,14 @@ public class Keyboard {
 		aMap.put("stop move left", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				PieceAction.LEFT.setReleaseTime();
-				stopMovingLeft();
+			//	stopMovingLeft();
 			}
 		});
 		
 		aMap.put("move right", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				if (PieceAction.RIGHT.isLegitKeyPress()) {
-					startMovingRight();
+			//		startMovingRight();
 				}
 			}
 		});
@@ -79,14 +79,14 @@ public class Keyboard {
 			public void actionPerformed(ActionEvent e) {
 				PieceAction.RIGHT.setReleaseTime(); 
 				
-				stopMovingRight();
+			//	stopMovingRight();
 			}
 		});
 		
 		aMap.put("rotate clockwise", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 	//			if (PieceAction.CLOCKWISE.isLegitKeyPress()) { 
-					startRotatingClockwise();
+			//		startRotatingClockwise();
 	//			}
 			}
 		});
@@ -94,14 +94,14 @@ public class Keyboard {
 		aMap.put("stop rotate clockwise", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				PieceAction.CLOCKWISE.setReleaseTime();
-				stopRotatingClockwise();
+			//	stopRotatingClockwise();
 			}
 		});
 		
 		aMap.put("rotate counterclockwise", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 	//			if (PieceAction.COUNTERCLOCKWISE.isLegitKeyPress()) { 
-					startRotatingCounterClockwise();
+			//		startRotatingCounterClockwise();
 	//			}
 			}
 		});
@@ -109,7 +109,7 @@ public class Keyboard {
 		aMap.put("stop rotate counterclockwise", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				PieceAction.COUNTERCLOCKWISE.setReleaseTime();
-				stopRotatingCounterClockwise();
+			//	stopRotatingCounterClockwise();
 			}
 		});
 		

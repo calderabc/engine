@@ -16,23 +16,15 @@ public class BoardRenderer extends Renderer {
 	public static int width;
 	public static int height;
 	
-	public BoardRenderer(Part<?> newBoard) {
+	public BoardRenderer() {
 		//System.out.println("BoardRenderer");
-		board = (Board) newBoard;
 		
 		this.setOpaque(true);
 		this.setBackground(Color.DARK_GRAY);
 		
 		this.setLayout(null);
 		
-		/*
-		height = BlockRenderer.getDisplayHeight() * board.getHeight();
-		width = BlockRenderer.getDisplayWidth() * board.getWidth(); 
-		*/
-		
 		this.setBounds(padding, padding, width, height); 
-					 
-		//this.setDoubleBuffered(true);
 	}
 	
 	@Override
