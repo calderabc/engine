@@ -2,7 +2,7 @@ package engine.puzzle;
 
 import engine.Coordinates;
 import engine.MovablePart;
-import engine.Part;
+import engine.swing.Sprite;
 
 public class Block extends MovablePart {	
 	private final int type;
@@ -10,27 +10,27 @@ public class Block extends MovablePart {
 	public Block(Coordinates newCoords, int newType) {
 		super(newCoords);
 		type = newType;
-		
+		init();
+	}
+
+	public Block(int newX, int newY, int newType)
+	{
+		this(new Coordinates(newX, newY), newType);
 	}
 	
 	public Block(int newX, int newY) {
-		super(newX, newY);
-		type = 0;
-	}
-	
-	public Block(int newX, int newY, int newType)
-	{
-		super(newX, newY);
-		type = newType;
-		//System.out.println("Block");
-		
+		this(newX, newY, 0);
 	}
 	
 	public Block(Block other)
 	{
-		super(other);
-		type = other.getType();
-		
+		this(other.pos.x, other.pos.y, other.getType());
+	}
+	
+	private void init() {
+		if(sprite == null) {
+			sprite = Sprite.factory(this);
+		}
 	}
 	
 	@Override

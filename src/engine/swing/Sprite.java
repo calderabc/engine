@@ -5,11 +5,12 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import engine.Coordinates;
+import engine.Part;
+import engine.puzzle.Block;
 import engine.puzzle.tetris.swing.ImageType;
 
 public class Sprite {
 	private ImageList images;
-	private Graphics2D canvas;
 
 	private Coordinates position;
 	private Coordinates dimensions;
@@ -31,15 +32,26 @@ public class Sprite {
 		}
 	}
 	
-	public Sprite(int id, Coordinates newPosition, Graphics2D graphics) {
+	public static Sprite factory(Part part) {
+		String className = part.getClass().getSimpleName();
+		
+		switch(className) {
+			case "Block" : 
+				Block block = (Block)part;
+				return new Sprite(100, new Coordinates(block.pos.x * 32, block.pos.y * 32);
+		}
+		
+		return new Sprite(100, new Coordinates(0, 0));
+	}
+
+	private Sprite(int id, Coordinates newPosition) {
 		images = imageListMap.get(id);
 		position = newPosition;
 		dimensions = images.imageType.DIMENSIONS;
 		currImage = 0;
-		canvas = graphics;
 	}
 
-	public void draw() {
+	public void draw(Graphics2D canvas) {
 		canvas.drawImage(images.get(currImage),  
 					     position.x, position.y, 
 					     dimensions.x, dimensions.y, null);

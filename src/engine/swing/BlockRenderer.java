@@ -70,7 +70,7 @@ public class BlockRenderer extends ImageRenderer {
 	private BufferedImage currBlockImage;
 	
 	private void drawBlockImage() {
-		this.drawImageOnMe(currBlockImage, 0, 0, getDisplayWidth(), getDisplayHeight());
+		//this.drawImageOnMe(currBlockImage, 0, 0, getDisplayWidth(), getDisplayHeight());
 	}
 
 	public void orient(int orientation) {
@@ -78,9 +78,6 @@ public class BlockRenderer extends ImageRenderer {
 	}
 
 	public BlockRenderer(Block newBlock) {
-		super(IMAGES_PER_BLOCK * 4,
-		      IMAGES_PER_BLOCK * 4);
-		//System.out.println("BlockRenderer");
 
 		BufferedImage blockImageSheet;
 		try {
@@ -99,9 +96,6 @@ public class BlockRenderer extends ImageRenderer {
 		blockImages = new BufferedImage[NUM_OF_ORIENTATIONS];
 
 
-		this.setOpaque(false);
-		this.setBackground(Color.RED); // for testing
-
 		orient(0);
 		drawBlockImage();
 	}
@@ -116,9 +110,4 @@ public class BlockRenderer extends ImageRenderer {
 	}
 	*/
 
-	@Override
-	public void update() {
-		// TODO Auto-generated method stub
-		
-	}
 }

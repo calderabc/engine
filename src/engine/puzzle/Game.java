@@ -10,6 +10,7 @@ import engine.Part;
 import engine.puzzle.tetris.ScoreCalculator;
 import engine.puzzle.tetris.swing.Keyboard;
 import engine.swing.Screen;
+import engine.swing.SwingScreen;
 import engine.swing.Sprite;
 
 public class Game {
@@ -17,7 +18,7 @@ public class Game {
 	private Board board;
 	private Piece piece;
 	private Score score;
-	private List<Part> spriteParts = new Vector<Part>();
+	private List<Part> displayedParts = new Vector<Part>();
 
 	
 	Level level;
@@ -32,18 +33,19 @@ public class Game {
 
 		//PieceAction.FALL.setSpeed(2 / 1.0e9);
 		
-		screen = new Screen();
+		// TODO: Here I would choose between graphical engines.
+		screen = new SwingScreen(displayedParts);
+
 		board = new Board(pieceData);
 		score = new Score(ScoreCalculator.NINTENDO, 10, 0);
 		level = new Level(1);
 		
-		JComponent component = (JComponent)screen.getContentPane();
-		Keyboard.initInputMap(component.getInputMap());
-		Keyboard.initActionMap(component.getActionMap());
+		
+		
 		
 		while (true) {		
 			piece = board.startNewPiece();
-			spriteParts.addAll(piece.getBlocks());
+			displayedParts.addAll(piece.getBlocks());
 
 			isPieceLanded = false;
 			startFalling();
@@ -51,12 +53,10 @@ public class Game {
 				//board.addChild(piece);
 				
 				if (!board.doesPieceFit(piece)) {
-					if (!board.doesPieceFit(piece)) {
 					board.landPiece();
 					
 					System.out.println("*****asl;dkfja;lsdkf ending here ********** alkfl;askjdf;l");
 					break;
-					}
 				}
 			
 			//	System.out.println("EventDispatchThread: " + javax.swing.SwingUtilities.isEventDispatchThread());
@@ -77,14 +77,6 @@ public class Game {
 			if (rowCount > 0) {
 				score.updateScore(level, rowCount);
 				
-				/*
-				if (score.isLevelUp(level, rowsCleared)) {
-				System.out.println("**************************************************************************");
-					level.next();
-					
-					((ScreenRenderer) screen.getRenderer()).changeColorFilter();
-				}
-				*/
 			}
 		}
 				
