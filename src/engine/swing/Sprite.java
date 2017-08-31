@@ -4,20 +4,32 @@ import java.awt.Graphics2D;
 import java.util.Hashtable;
 import java.util.Map;
 
+import engine.Visual;
 import engine.Coordinates;
 import engine.Part;
 import engine.puzzle.Block;
 import engine.puzzle.tetris.swing.ImageType;
 
-public class Sprite {
+public class Sprite implements Visual {
 	private ImageList images;
 
 	private Coordinates position;
 	private Coordinates dimensions;
 	private int currImage;
+	private Updater updater;
 
 	private static Map<Integer, ImageList> imageListMap = 
 		new Hashtable<Integer, ImageList>(30);
+	
+	private interface Updater {
+		public void Update(Part part);
+	}
+	
+	static private class UpdateMethods {
+		static public void updateBlock (Part part) {
+			
+		}
+	}
 
 	static {
 		int id;
@@ -37,24 +49,37 @@ public class Sprite {
 		
 		switch(className) {
 			case "Block" : 
-				Block block = (Block)part;
-				return new Sprite(100, new Coordinates(block.pos.x * 32, block.pos.y * 32);
+				return new Sprite(100, 
+								  new Coordinates(part.pos.x * 32, part.pos.y * 32), 
+								  UpdateMethods::updateBlock ) {
+					
+				};
+			case "Digit" :
+				return new Sprite
 		}
 		
 		return new Sprite(100, new Coordinates(0, 0));
 	}
-
-	private Sprite(int id, Coordinates newPosition) {
+	
+	
+	private Sprite(int id, Coordinates newPosition, Updater newUpdater) {
 		images = imageListMap.get(id);
 		position = newPosition;
 		dimensions = images.imageType.DIMENSIONS;
 		currImage = 0;
+		updater = newUpdater;
 	}
 
 	public void draw(Graphics2D canvas) {
 		canvas.drawImage(images.get(currImage),  
 					     position.x, position.y, 
 					     dimensions.x, dimensions.y, null);
+	}
+
+
+	@Override
+	public void update(Part part) {
+		updater.Update(part);
 	}
 
 /*

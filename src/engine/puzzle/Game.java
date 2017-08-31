@@ -6,12 +6,15 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.swing.JComponent;
+
+import engine.GraphicsEngine;
 import engine.Part;
 import engine.puzzle.tetris.ScoreCalculator;
 import engine.puzzle.tetris.swing.Keyboard;
 import engine.swing.Screen;
 import engine.swing.SwingScreen;
 import engine.swing.Sprite;
+import engine.swing.Swing;
 
 public class Game {
 	private Screen screen;
@@ -31,10 +34,12 @@ public class Game {
 	
 	public Game(PieceData pieceData) {
 
+		// TODO: Here I would choose between graphical engines.
+		GraphicsEngine engine = new Swing();
+
 		//PieceAction.FALL.setSpeed(2 / 1.0e9);
 		
-		// TODO: Here I would choose between graphical engines.
-		screen = new SwingScreen(displayedParts);
+		screen = engine.newScreen();
 
 		board = new Board(pieceData);
 		score = new Score(ScoreCalculator.NINTENDO, 10, 0);

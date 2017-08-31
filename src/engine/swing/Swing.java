@@ -1,10 +1,11 @@
 package engine.swing;
 
-import engine.GraphicThing;
+import engine.GraphicsEngine;
 
-public class Swing {
-	public void Swing() {
-		GraphicThing.className = SwingScreen.class.getCanonicalName();
+public class Swing extends GraphicsEngine {
+	public Swing() {
+		screenClass = SwingScreen.class;
+		visualClass = Sprite.class;
 	}
 
 }
