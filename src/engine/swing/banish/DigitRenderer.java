@@ -9,7 +9,6 @@ import javax.imageio.ImageIO;
 import engine.Part;
 import engine.puzzle.Digit;
 import engine.swing.ImageRenderer;
-import engine.swing.NumberRenderer;
 
 
 @SuppressWarnings("serial")
@@ -49,19 +48,14 @@ public class DigitRenderer extends ImageRenderer {
 		
 		digit = (Digit) newDigit;
 		
-		this.setOpaque(false);
-		
+	/*	
 		this.setBounds(
 			digit.pos.x * (getWidth() + NumberRenderer.padding) + NumberRenderer.padding,
 			NumberRenderer.padding, 
 			getWidth(), 
 			getHeight());
 		
-		update();
+		*/
 	}
 	
-	@Override
-	public void update() {
-		setImage(images[digit.getValue()]);
-	}
 }

@@ -6,31 +6,20 @@ import engine.swing.Sprite;
 
 public class Block extends MovablePart {	
 	private final int type;
+	private int state;
 
-	public Block(Coordinates newCoords, int newType) {
+	public Block(Coordinates newCoords, int newType, int newState) {
 		super(newCoords);
 		type = newType;
-		init();
+		state = newState;
+
 	}
 
-	public Block(int newX, int newY, int newType)
-	{
-		this(new Coordinates(newX, newY), newType);
-	}
-	
-	public Block(int newX, int newY) {
-		this(newX, newY, 0);
-	}
-	
 	public Block(Block other)
 	{
-		this(other.pos.x, other.pos.y, other.getType());
-	}
-	
-	private void init() {
-		if(sprite == null) {
-			sprite = Sprite.factory(this);
-		}
+		this(new Coordinates(other.pos.x, other.pos.y), 
+			 other.getType(), 
+			 other.getState());
 	}
 	
 	@Override
@@ -86,6 +75,14 @@ public class Block extends MovablePart {
 	
 	public final int getType() {
 		return type;
+	}
+	
+	public final void setState(int newState) {
+		state = newState;
+	}
+
+	public final int getState() {
+		return state;
 	}
 
 	public int getHeight() {

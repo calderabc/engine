@@ -69,8 +69,9 @@ public class Piece extends MovablePart implements HasDimension {
 	}
 
 	private final void generatePiece(PieceData newPieceData, int pieceID) {
+		int state = 0;
 		for (int[] blockXY: newPieceData.pieceTemplate[pieceID]) {
-			blocks.add(new Block(blockXY[0], blockXY[1], id));
+			blocks.add(new Block(new Coordinates(blockXY[0], blockXY[1]), id, state++));
 		}
 
 		// Centers are represented multiplied by two, this is why the 'pos' 

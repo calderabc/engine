@@ -6,7 +6,7 @@ import engine.swing.Sprite;
 @SuppressWarnings("serial")
 public abstract class Part {
 	public Coordinates pos;
-	public Sprite sprite = null; 
+	public Visual visual = null; 
 	
 	public Part() {
 	}

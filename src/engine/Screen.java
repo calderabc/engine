@@ -1,4 +1,4 @@
-package engine.swing;
+package engine;
 
 public interface Screen {
 	void update();

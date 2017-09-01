@@ -8,9 +8,9 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import engine.puzzle.tetris.Tetris;
+import engine.puzzle.Game;
 import engine.swing.BlockRenderer;
-import engine.swing.ImageRenderer;
+//import engine.swing.ImageRenderer;
 
 public class BitmapGenerator {
 	private static final int X=0;
@@ -49,8 +49,34 @@ public class BitmapGenerator {
 	private static final int SHEET_DISPLAY_WIDTH = 
 			BlockRenderer.NUM_OF_ORIENTATIONS * BLOCK_DISPLAY_WIDTH;
 
-	private static final BufferedImage[] images = ImageRenderer.loadImages(ImageType.BLOCK);
-	
+	private static final BufferedImage spritesImage;
+
+	static {
+		/* Using tempImage so compiler doesn't complain that spritesImage might 
+		 * not get initialized. Thank you over-protective compiler. */
+		BufferedImage tempImage = null;
+		try {
+			tempImage = ImageIO.read(new File("sprites.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}	
+		spritesImage = tempImage; 
+	}
+
+	private static final int COUNT = 13;
+	private static final BufferedImage[] images = loadImages(ImageType.BLOCK);
+
+	public static final BufferedImage[] loadImages(ImageType type) {
+		BufferedImage[] returnImages = new BufferedImage[COUNT]; 
+		
+		for (int i = 0; i < COUNT; i++) {
+			returnImages[i] = spritesImage.getSubimage(i * 4, 0, 4, 4);
+		}
+		
+		return returnImages;
+	}	
+
 	// Easier than doing programmatically.
 	private static final int[][] aroundCoords = {{-1,-1},
 	                                             { 0,-1},
@@ -269,7 +295,7 @@ public class BitmapGenerator {
 	
 	public static void main(String argv[]) {
 		int maxSpriteSheetHeight = 0;
-		int[][][] pieceTemplate = Tetris.TETRIS_PIECE_DATA.pieceTemplate;
+		int[][][] pieceTemplate = Game.TETRIS_PIECE_DATA.pieceTemplate;
 		int numOfPieces = pieceTemplate.length;
 
 		BufferedImage[] spriteSheet = new BufferedImage[numOfPieces];

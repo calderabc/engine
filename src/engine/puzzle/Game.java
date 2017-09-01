@@ -9,20 +9,24 @@ import javax.swing.JComponent;
 
 import engine.GraphicsEngine;
 import engine.Part;
+import engine.Screen;
 import engine.puzzle.tetris.ScoreCalculator;
 import engine.puzzle.tetris.swing.Keyboard;
-import engine.swing.Screen;
 import engine.swing.SwingScreen;
 import engine.swing.Sprite;
 import engine.swing.Swing;
 
 public class Game {
+	static public final PieceData TETRIS_PIECE_DATA = new PieceData();
+
+	static public Game me;
+
+	public GraphicsEngine engine;
 	private Screen screen;
 	private Board board;
 	private Piece piece;
 	private Score score;
-	private List<Part> displayedParts = new Vector<Part>();
-
+	public List<Part> displayedParts = new Vector<Part>();
 	
 	Level level;
 	 
@@ -30,18 +34,26 @@ public class Game {
 	
 	private ScheduledExecutorService scheduler = 
 		Executors.newScheduledThreadPool(2);
-	
+
+	public static void main(String argv[]) {
+		me = new Game(TETRIS_PIECE_DATA);
+		me.run();
+
+		System.exit(0);
+	}
 	
 	public Game(PieceData pieceData) {
-
+		board = new Board(pieceData);
+	}
+	
+	public void run() {
 		// TODO: Here I would choose between graphical engines.
-		GraphicsEngine engine = new Swing();
+		engine = new Swing(this);
 
 		//PieceAction.FALL.setSpeed(2 / 1.0e9);
 		
-		screen = engine.newScreen();
+		screen = engine.newScreen(displayedParts);
 
-		board = new Board(pieceData);
 		score = new Score(ScoreCalculator.NINTENDO, 10, 0);
 		level = new Level(1);
 		
@@ -51,6 +63,7 @@ public class Game {
 		while (true) {		
 			piece = board.startNewPiece();
 			displayedParts.addAll(piece.getBlocks());
+			screen.update();
 
 			isPieceLanded = false;
 			startFalling();
@@ -428,4 +441,6 @@ public class Game {
 			}
 		}
 	};
+	
+	
 }

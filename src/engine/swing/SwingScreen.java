@@ -13,6 +13,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import engine.Part;
+import engine.Screen;
+import engine.puzzle.Game;
 import engine.puzzle.tetris.swing.Keyboard;
 
 
@@ -23,9 +25,10 @@ public class SwingScreen extends JPanel implements Screen {
 	private int colorFilterIndex = 0;
 	private int[] colorMasks = {0x40FFB0B0, 0x40B0FFB0, 0x40B0B0FF, 0x40FFFFB0, 0x40FFB0FF, 0x40B0FFFF};
 	
-	private List<Part> displayedParts;
+	private List<? extends Part> displayedParts;
 	
-	public SwingScreen(List<Part> newDisplayedParts) {
+
+	public SwingScreen(List<? extends Part> newDisplayedParts) {
 		displayedParts = newDisplayedParts;
 		JFrame frame = new JFrame("Tetris");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,10 +36,11 @@ public class SwingScreen extends JPanel implements Screen {
 		frame.setVisible(true);
 		frame.setFocusable(true);
 		frame.requestFocusInWindow();
+		frame.setBackground(Color.BLACK);
 
 		// Init JPanel
 		setBackground(Color.BLACK);
-		setOpaque(true);
+		setOpaque(false);
 		setDoubleBuffered(true);
 		setVisible(true);
 		frame.setContentPane(this);
@@ -59,7 +63,11 @@ public class SwingScreen extends JPanel implements Screen {
 	public void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g;
 		for (Part displayPart: displayedParts) {
-			displayPart.sprite.draw(g2d);
+			// If the sprite for the part doesn't exist create it.
+			if (displayPart.visual == null) {
+				displayPart.visual = Game.me.engine.newVisual(displayPart);
+			}
+			((Sprite)displayPart.visual).draw(g2d);
 		}
 		
 	}

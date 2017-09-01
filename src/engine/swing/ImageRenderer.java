@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 import engine.puzzle.tetris.swing.ImageType;
 
 @SuppressWarnings("serial")
-public abstract class ImageRenderer extends Renderer {
+public abstract class ImageRenderer {
 	private static final BufferedImage spritesImage;
 	
 	static {
@@ -28,10 +28,11 @@ public abstract class ImageRenderer extends Renderer {
 	
 	public static final BufferedImage[] loadImages(ImageType type) {
 		BufferedImage[] returnImages = new BufferedImage[type.COUNT]; 
-		
+	/*	
 		for (int i = 0; i < type.COUNT; i++) {
-			//returnImages[i] = spritesImage.getSubimage(type.X + i * type.WIDTH, type.Y, type.WIDTH, type.HEIGHT);
+			returnImages[i] = spritesImage.getSubimage(type.X + i * type.WIDTH, type.Y, type.WIDTH, type.HEIGHT);
 		}
+		*/
 		
 		return returnImages;
 	}
@@ -105,12 +106,4 @@ public abstract class ImageRenderer extends Renderer {
 		return image.getHeight();
 	}
 	
-	@Override 
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		
-		Graphics2D g2d = (Graphics2D)g;
-		g2d.drawImage(image, 0, 0, getWidth(), getHeight(), null);
-	}
-
 }
