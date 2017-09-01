@@ -21,6 +21,7 @@ public abstract class Part {
 	
 	public Part(Part other) {
 		pos = new Coordinates(other.pos);
+		visual = other.visual;
 	}	
 	
 }

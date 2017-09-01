@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import javax.swing.JComponent;
 
@@ -32,8 +33,7 @@ public class Game {
 	 
 	private boolean isPieceLanded;
 	
-	private ScheduledExecutorService scheduler = 
-		Executors.newScheduledThreadPool(2);
+	private ScheduledExecutorService scheduler = new ScheduledThreadPoolExecutor(2);
 
 	public static void main(String argv[]) {
 		me = new Game(TETRIS_PIECE_DATA);
@@ -63,39 +63,38 @@ public class Game {
 		while (true) {		
 			piece = board.startNewPiece();
 			displayedParts.addAll(piece.getBlocks());
-			screen.update();
+					System.out.println("*****asl;dkfja;lsdkf ending here ********** alkfl;askjdf;l");
 
 			isPieceLanded = false;
 			startFalling();
 			
+			screen.update();
+			do {
+				
+			} while (true);
 				//board.addChild(piece);
 				
+			/*
 				if (!board.doesPieceFit(piece)) {
 					board.landPiece();
 					
-					System.out.println("*****asl;dkfja;lsdkf ending here ********** alkfl;askjdf;l");
 					break;
 				}
+				*/
 			
-			//	System.out.println("EventDispatchThread: " + javax.swing.SwingUtilities.isEventDispatchThread());
-				synchronized(piece) {
-					try {
-						piece.wait();
-					} catch (InterruptedException e) {
-						
-						
-					}
-				}
 			//stopFalling();
+				//System.out.println("EventDispatchThread: " + javax.swing.SwingUtilities.isEventDispatchThread());
 				
 			// TODO: Fix!!
-			int rowCount = 0;
+			//int rowCount = 0;
 			//int rowCount = board.removeRows(board.getFullRows());
 			
+				/*
 			if (rowCount > 0) {
 				score.updateScore(level, rowCount);
 				
 			}
+			*/
 		}
 				
 	}
@@ -107,8 +106,10 @@ public class Game {
 			testPiece.move(offsetX, offsetY);
 			
 			if (board.doesPieceFit(testPiece)) {
-				piece.move(offsetX, offsetY);
-				
+				piece = testPiece; // Notice copy by reference. 
+				piece.updateVisual();
+				System.out.println("here again");
+				screen.update();
 				return true;
 			}
 		}
@@ -365,13 +366,13 @@ public class Game {
 
 	private final Runnable makePieceFall = new Runnable() {
 		public void run() {
+			tryToMovePiece(0, 1);
+			/*
 			if (!tryToMovePiece(0, 1)) {
 				landPiece();
 			
-				synchronized (piece) {
-					piece.notifyAll();
-				}
 			}
+			*/
 		}
 	};
 	

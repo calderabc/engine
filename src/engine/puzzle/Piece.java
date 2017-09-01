@@ -6,6 +6,8 @@ import engine.Coordinates;
 import engine.HasDimension;
 import engine.Movable;
 import engine.MovablePart;
+import engine.Visual;
+import engine.puzzle.tetris.swing.TetrisSprite;
 
 import java.util.Collection;
 import java.util.List;
@@ -37,7 +39,7 @@ public class Piece extends MovablePart implements HasDimension {
 
 	private int width;
 	private int height;
-	private List<Block> blocks = new Vector<Block>();
+	private List<Block> blocks;
 
 	/**
 	 * Default Constructor.  Will have better features when I get around to it.
@@ -47,6 +49,7 @@ public class Piece extends MovablePart implements HasDimension {
 
 		id = newID;
 		blockCount = newPieceData.pieceTemplate[id].length;
+		blocks = new Vector<Block>(blockCount);
 		
 		generatePiece(newPieceData, id);
 		generateDimensions();
@@ -55,15 +58,16 @@ public class Piece extends MovablePart implements HasDimension {
 	public Piece(Piece other) {
 		super(other);
 
-		blockCount = other.getBlockCount();
 		id = other.getID();
+		blockCount = other.getBlockCount();
+		blocks = new Vector<Block>(blockCount);
+
+		for (Block currOtherBlock: other.getBlocks()) {
+			blocks.add(new Block(currOtherBlock));
+		}
 
 		currCenter = new Coordinates(other.currCenter);
 		destCenter = new Coordinates(other.destCenter);
-
-		for (Block currOtherBlock: other.getBlocks()) {
-			blocks.add(currOtherBlock);
-		}
 
 		generateDimensions();
 	}
@@ -220,6 +224,15 @@ public class Piece extends MovablePart implements HasDimension {
 		return pos.y + height - 1;
 	}
 
+	
+	public void updateVisual() {
+		for (Block block : blocks) {
+			System.out.println("double visual");
+			Visual v = block.visual;
+			((TetrisSprite)block.visual).update(block);
+			System.out.println("after visual");
+		}
+	}
 	/*
 	@Override
 	public void printInfo() {

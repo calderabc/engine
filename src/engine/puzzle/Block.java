@@ -17,9 +17,9 @@ public class Block extends MovablePart {
 
 	public Block(Block other)
 	{
-		this(new Coordinates(other.pos.x, other.pos.y), 
-			 other.getType(), 
-			 other.getState());
+		super(other);
+		type = other.getType();
+		state = other.getState();
 	}
 	
 	@Override
@@ -84,6 +84,8 @@ public class Block extends MovablePart {
 	public final int getState() {
 		return state;
 	}
+	
+	// TODO: Review the following.  Make sure they have purpose.
 
 	public int getHeight() {
 		return 1;

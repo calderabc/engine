@@ -40,7 +40,8 @@ public class TetrisSprite extends Sprite {
 	
 	@Override
 	public void update(Part part) {
-		// TODO Auto-generated method stub
 		
+		System.out.println("made it here.");
+		position = new Coordinates(part.pos.x * 32, part.pos.y * 32);
 	}
 }

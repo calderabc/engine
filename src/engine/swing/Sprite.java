@@ -17,6 +17,7 @@ public abstract class Sprite implements Visual {
 	protected int currImage;
 	
 	public void draw(Graphics2D canvas) {
+		System.out.println("DRAW");
 		canvas.drawImage(images.get(currImage),  
 					     position.x, position.y, 
 					     dimensions.x, dimensions.y, null);

@@ -1,5 +1,6 @@
 package engine.puzzle;
 
+import engine.Coordinates;
 import engine.Part;
 
 /**
@@ -16,6 +17,9 @@ public final class Board extends Part {
 	
 	private static final int DEFAULT_BOARD_HEIGHT = 20;
 	private static final int DEFAULT_BOARD_WIDTH = 10;
+	
+	private static final Coordinates MAX_POSITION = 
+		new Coordinates(DEFAULT_BOARD_WIDTH - 1, DEFAULT_BOARD_HEIGHT - 1);
 	
 	
 	private final int width;
@@ -103,7 +107,10 @@ public final class Board extends Part {
 	 * @return true if the Piece fits somewhere on the board, and false if it does not.
 	 */
 	public final boolean doesPieceFit(Piece testPiece) {
-			
+		for (Block testBlock : testPiece.getBlocks()) {
+			if (!testBlock.pos.isWithin(new Coordinates(0, 0), MAX_POSITION))
+				return false;
+		}
 		return true;
 	}
 	
@@ -165,5 +172,6 @@ public final class Board extends Part {
 				|| (testPiece.pos.x + testPiece.getWidth() > width)
 				|| (testPiece.pos.x < 0);
 	}
+	
 	
 }

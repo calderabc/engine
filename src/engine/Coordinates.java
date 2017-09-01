@@ -11,6 +11,8 @@ package engine;
 
 public class Coordinates implements Movable {
 	
+	static public final Coordinates ORIGIN = new Coordinates(0, 0, 0);
+
 	public int x;
 	public int y;
 	public int z;
@@ -44,7 +46,15 @@ public class Coordinates implements Movable {
 	public Coordinates(Coordinates other) {
 		this(other.x, other.y, other.z);
 	}
+	
+	private boolean isBetween(int a, int b, int c) {
+		return !(a < b && a < c || a > c && a > b);
+	}
 
+	// Determine if this point is within rectangle formed by two points.
+	public boolean isWithin(Coordinates a, Coordinates b) {
+		return isBetween(x, a.x, b.x) && isBetween(y, a.y, b.y);
+	}
 	
 	@Override
 	public final Coordinates move(Coordinates offset) {
@@ -64,6 +74,8 @@ public class Coordinates implements Movable {
 		return this;
 	}
 }
+
+
 	
 
 	//*************** Override some methods from the Object class **************

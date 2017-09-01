@@ -62,9 +62,11 @@ public class SwingScreen extends JPanel implements Screen {
 	@Override 
 	public void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g;
+		System.out.println("paintComponent");
 		for (Part displayPart: displayedParts) {
 			// If the sprite for the part doesn't exist create it.
 			if (displayPart.visual == null) {
+				System.out.println("new Visual");
 				displayPart.visual = Game.me.engine.newVisual(displayPart);
 			}
 			((Sprite)displayPart.visual).draw(g2d);
