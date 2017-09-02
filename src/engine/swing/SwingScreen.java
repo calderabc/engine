@@ -42,7 +42,6 @@ public class SwingScreen extends JPanel implements Screen {
 		frame.requestFocusInWindow();
 		frame.setBackground(Color.BLACK);
 
-
 		// Init JPanel
 		setBackground(Color.BLACK);
 		setOpaque(false);
@@ -70,49 +69,35 @@ public class SwingScreen extends JPanel implements Screen {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D)g;
-		System.out.println("paintComponent");
-		System.out.println(javax.swing.SwingUtilities.isEventDispatchThread());
-		System.out.println(System.currentTimeMillis());
 		for (Part displayPart: displayedParts) {
 			// If the sprite for the part doesn't exist create it.
 			if (displayPart.visual == null) {
-				System.out.println("new Visual");
 				displayPart.visual = Game.me.engine.newVisual(displayPart);
 			}
 			((Sprite)displayPart.visual).draw(g2d);
 		}
-		System.out.println(System.currentTimeMillis());
 	}
 
 	@Override
 	public void update() {
-		System.out.println("Update >>>>>>");
-		System.out.println(System.currentTimeMillis());
-		System.out.println(javax.swing.SwingUtilities.isEventDispatchThread());
-
 		try {
 			// Repaint right now!
 			javax.swing.SwingUtilities.invokeAndWait(() -> paintImmediately(0, 0, this.getWidth() - 1, this.getHeight() - 1));
 		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (InterruptedException e) { }
 		
 		// This fixes a bug I've wasted many hours on.  Apparently my 
-		// development systems were buffering graphic writes causing 
-		// a erratic delay in visuals being displayed. The piece 
-		// appeared to fall at a noticeably inconsistent rate even 
-		// though swing painting was happening correctly at constant 
-		// intervals. The piece would fall at a constant rate when 
-		// the mouse was moving around in front of the window (I'm 
-		// assuming because the moving mouse graphic forced buffer 
-		// swap). Oracle/Sun, you suck. I should not have to use some 
-		// cryptic method call to force my system to refresh the 
-		// window's display when something is drawn by swing.  
-		// It should be done automatically by the JVM!
+		// development systems were buffering graphic writes causing an erratic 
+		// delay in visuals being displayed. The piece appeared to fall at a 
+		// noticeably inconsistent rate even though swing painting happened 
+		// correctly at constant intervals. The piece would fall at a constant 
+		// rate when the mouse was moving around in front of the window (I'm 
+		// assuming because the moving mouse graphic forced buffer. 
+		//
+		// Oracle/Sun, you suck. I should not have to call some cryptic method 
+		// to force my system to refresh the window's display when something is 
+		// drawn by swing. It should be done automatically by the JVM!
 		Toolkit.getDefaultToolkit().sync();
 	}
 	

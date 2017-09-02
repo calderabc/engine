@@ -59,8 +59,6 @@ public class Game {
 		level = new Level(1);
 		
 		
-		
-		
 		while (true) {		
 			piece = board.startNewPiece();
 			displayedParts.addAll(piece.getBlocks());
@@ -69,15 +67,17 @@ public class Game {
 			isPieceLanded = false;
 			startFalling();
 			
-			
-				//this.wait();
+					System.out.println("****************************************");
 			
 			do {
-				//screen.update();
-			} while (true);
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			} while (!isPieceLanded);
 
-				//board.addChild(piece);
-				
+			//stopFalling();
 			/*
 				if (!board.doesPieceFit(piece)) {
 					board.landPiece();
@@ -110,11 +110,9 @@ public class Game {
 			testPiece.move(offsetX, offsetY);
 			
 			if (board.doesPieceFit(testPiece)) {
-				piece = testPiece; // Notice copy by reference. 
+				piece = testPiece; // Intentional copy by reference. 
 				piece.updateVisual();
-				System.out.println(Instant.now().toEpochMilli());
 				screen.update();
-				System.out.println(Instant.now().toEpochMilli());
 				return true;
 			}
 		}
@@ -123,16 +121,14 @@ public class Game {
 	
 	private boolean tryToRotatePiece(PieceAction action) {
 		if (!isPieceLanded) {
-			Piece testPiece = new Piece(piece);
+			Piece testPiece = new Piece(piece).rotate(action);
 			
-			testPiece.rotate(action);
 			System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
 			/*
 			for (Block currBlock: piece.getBlocks()) {
 				currBlock.printInfo();
 			}
 			*/
-			System.out.println("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
 			/** 
 			 * TODO:  Add code to slide the piece left or right if there is room
 			 * for the rotated piece to fit but the act of rotating would cause the right
@@ -146,15 +142,13 @@ public class Game {
 			 */
 			
 			if (board.doesPieceFit(testPiece)) {
-				piece.rotate(action);
+				piece = testPiece; // Intentional copy by reference.
 				System.out.println("ssssssssssssssssssssssssssssssssssss");
 				/*
 				for (Block currBlock: piece.getBlocks()) {
 					currBlock.printInfo();
 				}
 				*/
-				System.out.println("ttttttttttttttttttttttttttttttt");
-				
 				return true;
 			}
 		} 
@@ -165,7 +159,7 @@ public class Game {
 	private void landPiece() {
 		synchronized(piece) {
 			if (!isPieceLanded) {
-				board.landPiece();
+				board.landPiece(piece);
 				
 				PieceAction.resetAll();
 				
@@ -187,7 +181,7 @@ public class Game {
 	
 	private void stopFalling() {
 		if (PieceAction.FALL.isMoving) {
-			PieceAction.FALL.future.cancel(false);
+			PieceAction.FALL.future.cancel(true);
 			PieceAction.FALL.isMoving = false;
 		}
 	}
@@ -369,85 +363,67 @@ public class Game {
 		}
 	}
 
-	private final Runnable makePieceFall = new Runnable() {
-		public void run() {
-			System.out.println(Instant.now().toEpochMilli());
-			tryToMovePiece(0, 1);
-			/*
-			if (!tryToMovePiece(0, 1)) {
-				landPiece();
-			
-			}
-			*/
+	private final Runnable makePieceFall = () -> { 
+		if (!tryToMovePiece(0, 1)) {
+			landPiece();
 		}
 	};
 	
-	private final Runnable movePieceDown = new Runnable() {
-		public void run() {
-			synchronized (PieceAction.DOWN) {
-				if (PieceAction.DOWN.isPressed) {
-					if (!tryToMovePiece(0, 1)) {
-						// "false", I don't want to interrupt the thread 
-						// since it's the thread I'm now currently running.
-						PieceAction.DOWN.future.cancel(false);
-						PieceAction.DOWN.isMoving = false;
-					}
+	private final Runnable movePieceDown = () -> {
+		synchronized (PieceAction.DOWN) {
+			if (PieceAction.DOWN.isPressed) {
+				if (!tryToMovePiece(0, 1)) {
+					// "false", I don't want to interrupt the thread 
+					// since it's the thread I'm now currently running.
+					PieceAction.DOWN.future.cancel(false);
+					PieceAction.DOWN.isMoving = false;
 				}
 			}
 		}
 	};
 	
-	private final Runnable movePieceRight = new Runnable() {
-		public void run() {
-			synchronized (PieceAction.RIGHT) {
-				if (PieceAction.RIGHT.isPressed) {
-					if (!tryToMovePiece(1, 0)) {
-						PieceAction.RIGHT.future.cancel(false);
-						PieceAction.RIGHT.isMoving = false;
-					}
+	private final Runnable movePieceRight = () -> { 
+		synchronized (PieceAction.RIGHT) {
+			if (PieceAction.RIGHT.isPressed) {
+				if (!tryToMovePiece(1, 0)) {
+					PieceAction.RIGHT.future.cancel(false);
+					PieceAction.RIGHT.isMoving = false;
 				}
 			}
 		}
 	};
 	
-	private final Runnable movePieceLeft = new Runnable() {
-		public void run() {
-			synchronized (PieceAction.LEFT) {
-				if (PieceAction.LEFT.isPressed) {
-					if (!tryToMovePiece(-1, 0)) {
-						PieceAction.LEFT.future.cancel(false);
-						PieceAction.LEFT.isMoving = false;
-					}
+	private final Runnable movePieceLeft = () -> { 
+		synchronized (PieceAction.LEFT) {
+			if (PieceAction.LEFT.isPressed) {
+				if (!tryToMovePiece(-1, 0)) {
+					PieceAction.LEFT.future.cancel(false);
+					PieceAction.LEFT.isMoving = false;
 				}
 			}
 		}
 	};
 	
-	private final Runnable rotatePieceClockwise = new Runnable() {
-		public void run() {
-			synchronized (PieceAction.CLOCKWISE) {
-				if (PieceAction.CLOCKWISE.isPressed) {
-					if (!tryToRotatePiece(PieceAction.CLOCKWISE)) {
-						PieceAction.CLOCKWISE.future.cancel(false);
-						PieceAction.CLOCKWISE.isMoving = false;
-					}
+	private final Runnable rotatePieceClockwise = () -> {
+		synchronized (PieceAction.CLOCKWISE) {
+			if (PieceAction.CLOCKWISE.isPressed) {
+				if (!tryToRotatePiece(PieceAction.CLOCKWISE)) {
+					PieceAction.CLOCKWISE.future.cancel(false);
+					PieceAction.CLOCKWISE.isMoving = false;
 				}
 			}
 		}
 	};
 	
-	private final Runnable rotatePieceCounterClockwise = new Runnable() {
-		public void run() {
-			synchronized (PieceAction.COUNTERCLOCKWISE) {
-				if (PieceAction.COUNTERCLOCKWISE.isPressed) {
-					if (!tryToRotatePiece(PieceAction.COUNTERCLOCKWISE)) {
-						PieceAction.COUNTERCLOCKWISE.future.cancel(false);
-						PieceAction.COUNTERCLOCKWISE.isMoving = false;
-					}
+	private final Runnable rotatePieceCounterClockwise = () -> {
+		synchronized (PieceAction.COUNTERCLOCKWISE) {
+			if (PieceAction.COUNTERCLOCKWISE.isPressed) {
+				if (!tryToRotatePiece(PieceAction.COUNTERCLOCKWISE)) {
+					PieceAction.COUNTERCLOCKWISE.future.cancel(false);
+					PieceAction.COUNTERCLOCKWISE.isMoving = false;
 				}
 			}
 		}
 	};
-	
 	
 }

@@ -1,5 +1,11 @@
 package engine.puzzle;
 
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Vector;
+
 import engine.Coordinates;
 import engine.Part;
 
@@ -11,26 +17,47 @@ import engine.Part;
  *
  */
 public final class Board extends Part {
-	private final PiecePool pieces;
-	
-	private Piece fallPiece;
-	
 	private static final int DEFAULT_BOARD_HEIGHT = 20;
 	private static final int DEFAULT_BOARD_WIDTH = 10;
-	
 	private static final Coordinates MAX_POSITION = 
 		new Coordinates(DEFAULT_BOARD_WIDTH - 1, DEFAULT_BOARD_HEIGHT - 1);
 	
+	private final PiecePool pieces;
+	private List<Row> blockMatrix = new Vector<Row>(DEFAULT_BOARD_HEIGHT);
+	
+	@SuppressWarnings("serial")
+	private final class Row {
+		public class PositionOccupiedException extends Exception { }
+
+		private Block[] blocks = new Block[DEFAULT_BOARD_WIDTH];
+		private int blockCount = 0;
+
+		public void set(int index, Block element) throws PositionOccupiedException {
+			if (blocks[index] != null)
+				throw new PositionOccupiedException();
+
+			blocks[index] = element;
+			blockCount++;
+		}
+		
+		public Block get(int index) {
+			if (index < 0 || index >= DEFAULT_BOARD_WIDTH)
+				throw new ArrayIndexOutOfBoundsException();
+
+			return blocks[index];
+		}
+		
+		public boolean isFull() {
+			// TODO: Should I throw exception is blockCount > DEFAULT_BOARD_WIDTH ?
+			return blockCount >= DEFAULT_BOARD_WIDTH;
+		}
+	}
 	
 	private final int width;
-	public int getWidth() {
-		return width;
-	}
+	public int getWidth() { return width; }
 	
 	private final int height;
-	public int getHeight() {
-		return height;
-	}
+	public int getHeight() { return height; }
 	
 	/**
 	 * Default Constructor
@@ -48,43 +75,17 @@ public final class Board extends Part {
 	private Board(int newWidth, int newHeight, PieceData newPieceData) {
 		pieces = new PiecePool(newPieceData);
 
+		for (int i = 0; i < DEFAULT_BOARD_HEIGHT; i++) {
+			blockMatrix.add(new Row());
+		}
+
 		width = newWidth;
 		height = newHeight;
-		
-		//TestRow = new ArrayList<TestBlock>(height);
-		/*
-		for (int i = 0; i < 7; i++) {
-			for (Block currBlock : pieces.getPiece(i).getChildren()) {
-				currBlock.printInfo();
-			}
-		}
-	*/	
 	}
 	
 	public Piece startNewPiece() {
-		fallPiece = pieces.getRandomPiece();
-		return fallPiece;
+		return pieces.getRandomPiece();
 	}
-	
-	
-	/**
-	 * Determines which rows on the board are completely full of blocks and returns
-	 * a Collection of integers representing the y Position for the full rows.
-	 * @return a Collection of integers each representing the y position of 
-	 * 		   a row that is full
-	 */
-	public final void getFullRows(Piece landedPiece) {
-	}
-	
-	/**
-	 * If every position in the specified y value's row contains a Block
-	 * returns true, otherwise returns false.
-	 * @param testY the y position of the row to be checked
-	 * @return
-	 */
-	private final void isRowFull(int testY) {
-	}
-
 	
 	
 	/**
@@ -92,8 +93,27 @@ public final class Board extends Part {
 	 * @param landingPiece piece containing Blocks to be added to this Board
 	 * @return reference to the Board
 	 */
-	public final void landPiece() {
+	public final void landPiece(Piece landingPiece) {
+		for (Block landingBlock : landingPiece.getBlocks()) {
+			try {
+				blockMatrix.get(landingBlock.pos.y)
+						   .set(landingBlock.pos.x, landingBlock);
+			} catch (engine.puzzle.Board.Row.PositionOccupiedException e) {
+				e.printStackTrace();
+			}
+
+		}
+	}
+	
+	private final Collection<Row> getFullRows() {
+		Collection<Row> fullRows = new Vector<Row>();
+		for(Row testRow : blockMatrix) {
+			if (testRow.isFull()) {
+				fullRows.add(testRow);
+			}
+		}
 		
+		return fullRows;
 	}
 	
 
@@ -108,15 +128,23 @@ public final class Board extends Part {
 	 */
 	public final boolean doesPieceFit(Piece testPiece) {
 		for (Block testBlock : testPiece.getBlocks()) {
-			if (!testBlock.pos.isWithin(new Coordinates(0, 0), MAX_POSITION))
+			try {
+				if (blockMatrix.get(testBlock.pos.y).get(testBlock.pos.x) != null)
+					return false;
+			}
+			catch (IndexOutOfBoundsException e) {
 				return false;
+			}
+			// Using try/catch for logic (above) is bad form but I reckon it'll
+			// execute faster than the procedural way (below). 
+			// TODO: Verify.
+			// if (!testBlock.pos.isWithin(new Coordinates(0, 0), MAX_POSITION)
+			//     || blockMatrix.get(testBlock.pos.y).get(testBlock.pos.x) != null) {
+			//		return false;
+			// }
 		}
 		return true;
 	}
-	
-	
-	
-	
 
 	/**
 	 * Removes the Blocks from the Board on all the rows specified in 
@@ -132,46 +160,5 @@ public final class Board extends Part {
 	 * @param rowY the y position of the row to remove
 	 */
 	private final void removeRow(int rowY) {
-		for (int i = 0; i < width; i ++) {
-			
-			
-			try {
-				Thread.sleep(20);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		// TODO: finish this for Board with Pieces on
-		Block currBlock;
-		
 	}
-	
-	/**
-	 * If the Block specified is outside the bounds of the board false is
-	 * returned, else true is returned. 
-	 * @param testBlock Block to test for out of bounds.
-	 * @return true if block is outside the allowed bounds of the Board. 
-	 * 		   false if the Block is inside the bounds of the board.
-	 */
-	/*
-	private final boolean isBlockOutOfBounds(Block testBlock) {
-		synchronized (testBlock) {
-			Position testBlockPosition = testBlock.getPosition();
-			
-			return (testBlockPosition.getY() >= height) 
-			        || (testBlockPosition.getX() >= width) 
-			        || (testBlockPosition.getX() < 0);
-		}
-	}
-	*/
-	
-	private final boolean isPieceOutOfBounds(Piece testPiece) {
-		// TODO: Make sure this is correct
-		return (testPiece.pos.y + testPiece.getHeight() > height)
-				|| (testPiece.pos.x + testPiece.getWidth() > width)
-				|| (testPiece.pos.x < 0);
-	}
-	
-	
 }
