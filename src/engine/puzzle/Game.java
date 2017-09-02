@@ -1,5 +1,6 @@
 package engine.puzzle;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.Executors;
@@ -68,10 +69,13 @@ public class Game {
 			isPieceLanded = false;
 			startFalling();
 			
-			screen.update();
+			
+				//this.wait();
+			
 			do {
-				
+				//screen.update();
 			} while (true);
+
 				//board.addChild(piece);
 				
 			/*
@@ -108,8 +112,9 @@ public class Game {
 			if (board.doesPieceFit(testPiece)) {
 				piece = testPiece; // Notice copy by reference. 
 				piece.updateVisual();
-				System.out.println("here again");
+				System.out.println(Instant.now().toEpochMilli());
 				screen.update();
+				System.out.println(Instant.now().toEpochMilli());
 				return true;
 			}
 		}
@@ -366,6 +371,7 @@ public class Game {
 
 	private final Runnable makePieceFall = new Runnable() {
 		public void run() {
+			System.out.println(Instant.now().toEpochMilli());
 			tryToMovePiece(0, 1);
 			/*
 			if (!tryToMovePiece(0, 1)) {
