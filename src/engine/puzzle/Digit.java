@@ -6,7 +6,6 @@ public class Digit extends Part {
 	private int value;
 	
 	public Digit(int newX, int newY, int newValue) {
-		super(newX, newY);
 		
 		value = newValue;
 	}

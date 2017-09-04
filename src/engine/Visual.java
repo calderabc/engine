@@ -1,5 +1,5 @@
 package engine;
 
 public interface Visual {
-	public void update(Part part);
+	public void update(MovablePart part);
 }

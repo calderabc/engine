@@ -8,12 +8,15 @@ import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 import java.util.List;
+import java.util.Vector;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.RepaintManager;
+import javax.swing.SwingUtilities;
 
 import engine.Part;
 import engine.Screen;
@@ -29,25 +32,34 @@ public class SwingScreen extends JPanel implements Screen {
 	private int colorFilterIndex = 0;
 	private int[] colorMasks = {0x40FFB0B0, 0x40B0FFB0, 0x40B0B0FF, 0x40FFFFB0, 0x40FFB0FF, 0x40B0FFFF};
 	
-	private List<? extends Part> displayedParts;
+	private List<Part> displayedParts = new Vector<Part>();
 	
 
-	public SwingScreen(List<? extends Part> newDisplayedParts) {
-		displayedParts = newDisplayedParts;
+	public SwingScreen() {
+		System.out.println("SwingScreen constructor: " + SwingUtilities.isEventDispatchThread());
 		frame = new JFrame("Tetris");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(700, 670);
-		frame.setVisible(true);
 		frame.setFocusable(true);
 		frame.requestFocusInWindow();
-		frame.setBackground(Color.BLACK);
 
 		// Init JPanel
 		setBackground(Color.BLACK);
-		setOpaque(false);
+		setOpaque(true);
 		setDoubleBuffered(true);
-		setVisible(true);
 		frame.setContentPane(this);
+
+		// This method causes the event dispatch thread to paint.
+		frame.setVisible(true);
+		/*
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		*/
+		
 
 		//RepaintManager.currentManager(this).setDoubleBufferingEnabled(false);
 
@@ -69,9 +81,17 @@ public class SwingScreen extends JPanel implements Screen {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D)g;
+		System.out.println("SwingScreen.paintComponent()");
+		System.out.println(displayedParts.size());
+		while (displayedParts.size() == 0) {
+			
+		}
 		for (Part displayPart: displayedParts) {
 			// If the sprite for the part doesn't exist create it.
+			System.out.println("SwingScreen.paintComponent() inside for loop");
+			System.out.println(displayPart);
 			if (displayPart.visual == null) {
+				System.out.println("SwingScreen.paintComponent() newVisual");
 				displayPart.visual = Game.me.engine.newVisual(displayPart);
 			}
 			((Sprite)displayPart.visual).draw(g2d);
@@ -81,6 +101,7 @@ public class SwingScreen extends JPanel implements Screen {
 	@Override
 	public void update() {
 		try {
+			System.out.println("SwingScreen.update()");
 			// Repaint right now!
 			javax.swing.SwingUtilities.invokeAndWait(() -> paintImmediately(0, 0, this.getWidth() - 1, this.getHeight() - 1));
 		} catch (InvocationTargetException e) {
@@ -99,6 +120,11 @@ public class SwingScreen extends JPanel implements Screen {
 		// to force my system to refresh the window's display when something is 
 		// drawn by swing. It should be done automatically by the JVM!
 		Toolkit.getDefaultToolkit().sync();
+	}
+
+	@Override
+	public void addParts(Collection<? extends Part> parts) {
+		displayedParts.addAll(parts);
 	}
 	
 }

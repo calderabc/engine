@@ -9,12 +9,6 @@ package engine;
  *
  */
 public interface Movable {
-	
 	public Movable move(Coordinates offset);
-	
-	public Movable move(int offsetX, int offsetY);
-	
-	public Movable move(int offsetX, int offsetY, int offsetZ);
-	
 }
 

@@ -58,25 +58,13 @@ public class Coordinates implements Movable {
 	
 	@Override
 	public final Coordinates move(Coordinates offset) {
-		return move(offset.x, offset.y, offset.z);
+		x += offset.x;
+		y += offset.y;
+		z += offset.z;
+		return this;
 	}	
 	
-	@Override
-	public final Coordinates move(int offsetX, int offsetY) {
-		return move(offsetX, offsetY, 0);
-	}
-
-	@Override
-	public final Coordinates move(int offsetX, int offsetY, int offsetZ) {
-		x += offsetX;
-		y += offsetY;
-		z += offsetZ;
-		return this;
-	}
 }
-
-
-	
 
 	//*************** Override some methods from the Object class **************
 	

@@ -4,7 +4,7 @@ import java.util.concurrent.ScheduledFuture;
 
 public enum PieceAction {
 	WARP ("warp down", 0),
-	FALL ("fall", 2),
+	FALL ("fall", 10),
 	DOWN ("move down", 20),
 	LEFT ("move left", 6),
 	RIGHT ("move right", 6),
@@ -47,7 +47,6 @@ public enum PieceAction {
 	
 	public Long setReleaseTime() {
 		releaseTime = System.currentTimeMillis();
-		
 		return releaseTime;
 	}
 	

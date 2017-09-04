@@ -6,6 +6,7 @@ import engine.Coordinates;
 import engine.HasDimension;
 import engine.Movable;
 import engine.MovablePart;
+import engine.Part;
 import engine.Visual;
 import engine.puzzle.tetris.swing.TetrisSprite;
 
@@ -19,7 +20,7 @@ import java.util.List;
  *
  */
 
-public class Piece extends MovablePart implements HasDimension {
+public class Piece extends Part implements Movable {
 
 	private final int blockCount;
 	public final int getBlockCount() {
@@ -37,22 +38,18 @@ public class Piece extends MovablePart implements HasDimension {
 	public Coordinates currCenter = null;
 	public  Coordinates destCenter = null;
 
-	private int width;
-	private int height;
 	private List<Block> blocks;
 
 	/**
 	 * Default Constructor.  Will have better features when I get around to it.
 	 */
 	public Piece(int newID, PieceData newPieceData) {
-		super(newPieceData.pieceStartPos);
 
 		id = newID;
 		blockCount = newPieceData.pieceTemplate[id].length;
 		blocks = new Vector<Block>(blockCount);
 		
 		generatePiece(newPieceData, id);
-		generateDimensions();
 	}
 
 	public Piece(Piece other) {
@@ -68,8 +65,6 @@ public class Piece extends MovablePart implements HasDimension {
 
 		currCenter = new Coordinates(other.currCenter);
 		destCenter = new Coordinates(other.destCenter);
-
-		generateDimensions();
 	}
 
 	private final void generatePiece(PieceData newPieceData, int pieceID) {
@@ -80,35 +75,14 @@ public class Piece extends MovablePart implements HasDimension {
 
 		// Centers are represented multiplied by two, this is why the 'pos' 
 		// variables are doubled to match the already doubled 'pieceCenter'.
-		int posXDoubled = pos.x << 1, posYDoubled = pos.y << 1;
-		currCenter = newPieceData.getCurrCenter(pieceID).move(posXDoubled, posYDoubled);
-		destCenter = newPieceData.getDestCenter(pieceID).move(posXDoubled, posYDoubled);
+		Coordinates posDoubled = new Coordinates(newPieceData.pieceStartPos.x << 1, 
+		                                         newPieceData.pieceStartPos.y << 1);
+		currCenter = newPieceData.getCurrCenter(pieceID).move(posDoubled);
+		destCenter = newPieceData.getDestCenter(pieceID).move(posDoubled);
 
 		for (Block currBlock: blocks) {
-				currBlock.move(pos);
+				currBlock.move(newPieceData.pieceStartPos);
 		}
-	}
-
-	private final void generateDimensions() {
-
-		int currX, currY;
-		int minX = 100, minY = 100, maxX = 0, maxY = 0;
-
-		for(Block currBlock: blocks) {
-
-			currX = currBlock.pos.x;
-			if (currX > maxX) maxX = currX;
-			if (currX < minX) minX = currX;
-
-			currY = currBlock.pos.y;
-			if (currY > maxY) maxY = currY;
-			if (currY < minY) minY = currY;
-		}
-
-		pos = new Coordinates(minX, minY);
-		//dimensions = new Coordinates(maxX - minX + 1, maxY - minY + 1);
-		width = maxX - minX + 1;
-		height = maxY - minY + 1;
 	}
 
 	public List<Block> getBlocks() {
@@ -176,7 +150,6 @@ public class Piece extends MovablePart implements HasDimension {
 				currBlock.pos = new Coordinates( destCenter.x + flip * ((currBlock.pos.y << 1) - currCenter.y) >> 1,
 				                                 destCenter.y - flip * ((currBlock.pos.x << 1) - currCenter.x) >> 1 );
 		}
-		this.generateDimensions();
 
 		// swap values of current center and destination center
 		Coordinates dummy = destCenter;
@@ -188,10 +161,6 @@ public class Piece extends MovablePart implements HasDimension {
 
 	@Override
 	public Movable move(Coordinates offset) {
-		super.move(offset);
-
-		//System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
-
 		Coordinates offsetDoubled = new Coordinates(offset.x << 1, offset.y << 1);
 		currCenter.move(offsetDoubled);
 		destCenter.move(offsetDoubled);
@@ -199,38 +168,20 @@ public class Piece extends MovablePart implements HasDimension {
 		for (Block currBlock: blocks) {
 			currBlock.move(offset);
 		}
-		//this.printInfo();
 
 		return this;
 	}
 
-	@Override
-	public int getWidth() {
-		return width;
-	}
-
-	@Override
-	public int getHeight() {
-		return height;
-	}
-
-	@Override
-	public int getMaxX() {
-		return pos.x + width - 1;
-	}
-
-	@Override
-	public int getMaxY() {
-		return pos.y + height - 1;
-	}
-
-	
 	public void updateVisual() {
 		for (Block block : blocks) {
-			System.out.println("double visual");
-			Visual v = block.visual;
+			if (block.visual == null) {
+				System.out.println("Piece.updateVisual() before newVisual");
+				System.out.println(block);
+				block.visual = Game.me.engine.newVisual(block);
+			}
+			System.out.println("Piece.updateVisual() before update");
 			((TetrisSprite)block.visual).update(block);
-			System.out.println("after visual");
+			System.out.println("Piece.updateVisual() after update");
 		}
 	}
 	/*

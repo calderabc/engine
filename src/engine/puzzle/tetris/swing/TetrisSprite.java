@@ -1,6 +1,7 @@
 package engine.puzzle.tetris.swing;
 
 import engine.Coordinates;
+import engine.MovablePart;
 import engine.Part;
 import engine.puzzle.Block;
 import engine.swing.ImageList;
@@ -25,10 +26,10 @@ public class TetrisSprite extends Sprite {
 
 	// TODO: Figure out how to reproduce this functionality but all with data from a config file.	
 	public TetrisSprite(Part part) {
-		Block block = (Block)part;
 		String className = part.getClass().getSimpleName();
 		switch(className) {
 			case "Block" : 
+				Block block = (Block)part;
 				int id = 100 + block.getType()*10 + block.getState(); 
 				images = imageListMap.get(id);
 				position = new Coordinates(block.pos.x * 32, block.pos.y * 32);
@@ -39,9 +40,11 @@ public class TetrisSprite extends Sprite {
 	}
 	
 	@Override
-	public void update(Part part) {
+	public void update(MovablePart part) {
 		
-		System.out.println("made it here.");
+		System.out.println("TetrisSprite.update()");
+		System.out.println(part.pos.x);
+		System.out.println(part.pos.y);
 		position = new Coordinates(part.pos.x * 32, part.pos.y * 32);
 	}
 }

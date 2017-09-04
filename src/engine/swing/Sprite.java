@@ -18,8 +18,8 @@ public abstract class Sprite implements Visual {
 	
 	public void draw(Graphics2D canvas) {
 		System.out.println("DRAW");
-		System.out.println(javax.swing.SwingUtilities.isEventDispatchThread());
-		System.out.println(System.currentTimeMillis());
+		System.out.println(position.x);
+		System.out.println(position.y);
 		canvas.drawImage(images.get(currImage),  
 					     position.x, position.y, 
 					     dimensions.x, dimensions.y, null);

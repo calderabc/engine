@@ -1,16 +1,15 @@
 package engine;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 public abstract class GraphicsEngine {
 	protected Class<? extends Screen> screenClass;
 	protected Class<? extends Visual> visualClass; 
 	
-	public Screen newScreen(List<? extends Part> partList) {
+	public Screen newScreen() {
+		System.out.println("newScreen");
 		try {
-			return (Screen)screenClass.getConstructor(List.class).newInstance(partList);
+			return screenClass.getConstructor().newInstance();
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -34,8 +33,11 @@ public abstract class GraphicsEngine {
 	}
 
 	public Visual newVisual(Part part) {
+		System.out.println("newVisual");
 		try {
-			return visualClass.getConstructor(Part.class).newInstance(part);
+			Visual v = visualClass.getConstructor(Part.class).newInstance(part);
+			System.out.println(v);
+			return v;
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

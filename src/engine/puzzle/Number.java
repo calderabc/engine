@@ -14,7 +14,6 @@ public class Number extends Part {
 	private List<Digit> digits = new Vector<Digit>();
 	
 	public Number(int newX, int newY, int newSize, int newValue) {
-		super(newX, newY);
 		size = newSize;
 		value = newValue;
 		

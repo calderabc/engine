@@ -1,21 +1,13 @@
 package engine.puzzle;
 
-import java.time.Instant;
-import java.util.List;
-import java.util.Vector;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import javax.swing.JComponent;
 
+import engine.Coordinates;
 import engine.GraphicsEngine;
-import engine.Part;
 import engine.Screen;
 import engine.puzzle.tetris.ScoreCalculator;
-import engine.puzzle.tetris.swing.Keyboard;
-import engine.swing.SwingScreen;
-import engine.swing.Sprite;
 import engine.swing.Swing;
 
 public class Game {
@@ -28,7 +20,6 @@ public class Game {
 	private Board board;
 	private Piece piece;
 	private Score score;
-	public List<Part> displayedParts = new Vector<Part>();
 	
 	Level level;
 	 
@@ -53,15 +44,16 @@ public class Game {
 
 		//PieceAction.FALL.setSpeed(2 / 1.0e9);
 		
-		screen = engine.newScreen(displayedParts);
+		screen = engine.newScreen();
 
 		score = new Score(ScoreCalculator.NINTENDO, 10, 0);
 		level = new Level(1);
 		
 		
-		while (true) {		
-			piece = board.startNewPiece();
-			displayedParts.addAll(piece.getBlocks());
+		piece = board.startNewPiece();
+		while (board.doesPieceFit(piece)) {		
+			screen.addParts(piece.getBlocks());
+			screen.update();
 					System.out.println("*****asl;dkfja;lsdkf ending here ********** alkfl;askjdf;l");
 
 			isPieceLanded = false;
@@ -77,7 +69,9 @@ public class Game {
 				}
 			} while (!isPieceLanded);
 
-			//stopFalling();
+			stopFalling();
+
+			piece = board.startNewPiece();
 			/*
 				if (!board.doesPieceFit(piece)) {
 					board.landPiece();
@@ -103,16 +97,20 @@ public class Game {
 				
 	}
 	
-	private boolean tryToMovePiece(int offsetX, int offsetY) {
+	private boolean tryToMovePiece(Coordinates offset) {
+		System.out.println("tryToMovePiece");
 		if (!isPieceLanded) {
 			Piece testPiece = new Piece(piece);
 			
-			testPiece.move(offsetX, offsetY);
+			testPiece.move(offset);
 			
 			if (board.doesPieceFit(testPiece)) {
-				piece = testPiece; // Intentional copy by reference. 
+				piece.move(offset);
+				System.out.println("tryToMovePiece before piece.updateVisual");
 				piece.updateVisual();
+				System.out.println("tryToMovePiece after piece.updateVisual");
 				screen.update();
+				System.out.println("tryToMovePiece after screen.update()");
 				return true;
 			}
 		}
@@ -157,7 +155,6 @@ public class Game {
 	}
 	
 	private void landPiece() {
-		synchronized(piece) {
 			if (!isPieceLanded) {
 				board.landPiece(piece);
 				
@@ -165,40 +162,18 @@ public class Game {
 				
 				isPieceLanded = true;
 			}
-		}
 	}
 	
 	private void startFalling() {
+		System.out.println("startFalling");
 		if (!PieceAction.FALL.isMoving) {
+			System.out.println("startFalling if true");
 			PieceAction.FALL.future = 
 				scheduler.scheduleAtFixedRate(makePieceFall, 
 											  PieceAction.FALL.getDelay(), 
 											  PieceAction.FALL.getDelay(), 
 											  TimeUnit.NANOSECONDS);
 			PieceAction.FALL.isMoving = true;
-		}
-	}
-	
-	private void stopFalling() {
-		if (PieceAction.FALL.isMoving) {
-			PieceAction.FALL.future.cancel(true);
-			PieceAction.FALL.isMoving = false;
-		}
-	}
-	
-	private void warpDown() {
-		// this if prevents multiple warp downs 
-		// each warp would reset the falling delay so multiple warps
-		// would prevent the piece from landing allowing the piece
-		// to be moved left and right indefinitely
-		if (!PieceAction.WARP.isMoving) {
-			stopFalling();
-			
-			while (tryToMovePiece(0, 1)) { }
-		
-			startFalling();
-			
-			PieceAction.WARP.isMoving = true;
 		}
 	}
 	
@@ -218,6 +193,29 @@ public class Game {
 					PieceAction.DOWN.isMoving = true;
 				}
 			}
+		}
+	}
+
+	private void stopFalling() {
+		if (PieceAction.FALL.isMoving) {
+			PieceAction.FALL.future.cancel(true);
+			PieceAction.FALL.isMoving = false;
+		}
+	}
+	
+	private void warpDown() {
+		// this if prevents multiple warp downs 
+		// each warp would reset the falling delay so multiple warps
+		// would prevent the piece from landing allowing the piece
+		// to be moved left and right indefinitely
+		if (!PieceAction.WARP.isMoving) {
+			stopFalling();
+			
+			while (tryToMovePiece(new Coordinates(0, 1))) { }
+		
+			startFalling();
+			
+			PieceAction.WARP.isMoving = true;
 		}
 	}
 	
@@ -364,7 +362,9 @@ public class Game {
 	}
 
 	private final Runnable makePieceFall = () -> { 
-		if (!tryToMovePiece(0, 1)) {
+		System.out.println("Game.makePieceFall()");
+		if (!tryToMovePiece(new Coordinates(0, 1))) {
+			System.out.println("Before landing");
 			landPiece();
 		}
 	};
@@ -372,7 +372,7 @@ public class Game {
 	private final Runnable movePieceDown = () -> {
 		synchronized (PieceAction.DOWN) {
 			if (PieceAction.DOWN.isPressed) {
-				if (!tryToMovePiece(0, 1)) {
+				if (!tryToMovePiece(new Coordinates(0, 1))) {
 					// "false", I don't want to interrupt the thread 
 					// since it's the thread I'm now currently running.
 					PieceAction.DOWN.future.cancel(false);
@@ -385,7 +385,7 @@ public class Game {
 	private final Runnable movePieceRight = () -> { 
 		synchronized (PieceAction.RIGHT) {
 			if (PieceAction.RIGHT.isPressed) {
-				if (!tryToMovePiece(1, 0)) {
+				if (!tryToMovePiece(new Coordinates(1, 0))) {
 					PieceAction.RIGHT.future.cancel(false);
 					PieceAction.RIGHT.isMoving = false;
 				}
@@ -396,7 +396,7 @@ public class Game {
 	private final Runnable movePieceLeft = () -> { 
 		synchronized (PieceAction.LEFT) {
 			if (PieceAction.LEFT.isPressed) {
-				if (!tryToMovePiece(-1, 0)) {
+				if (!tryToMovePiece(new Coordinates(-1, 0))) {
 					PieceAction.LEFT.future.cancel(false);
 					PieceAction.LEFT.isMoving = false;
 				}
