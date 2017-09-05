@@ -1,15 +1,19 @@
 package engine;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+
+import engine.puzzle.Game;
 
 public abstract class GraphicsEngine {
 	protected Class<? extends Screen> screenClass;
 	protected Class<? extends Visual> visualClass; 
 	
-	public Screen newScreen() {
+	public Screen newScreen(Game game) {
 		System.out.println("newScreen");
 		try {
-			return screenClass.getConstructor().newInstance();
+			Constructor<? extends Screen> con = screenClass.getConstructor(Game.class);
+			return (Screen) con.newInstance(game);
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -20,6 +24,8 @@ public abstract class GraphicsEngine {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
+			System.out.println(e.getCause().toString());
+			System.out.println(e.getCause().toString());
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoSuchMethodException e) {

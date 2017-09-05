@@ -1,11 +1,12 @@
 package engine.swing;
 
 import engine.GraphicsEngine;
+import engine.puzzle.Game;
 import engine.puzzle.tetris.swing.TetrisSprite;
 
 public class Swing extends GraphicsEngine {
 
-	public Swing(engine.puzzle.Game game) {
+	public Swing(Game game) {
 		screenClass = SwingScreen.class;
 		
 		// TODO: Choose dynamically

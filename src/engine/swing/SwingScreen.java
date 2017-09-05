@@ -35,7 +35,10 @@ public class SwingScreen extends JPanel implements Screen {
 	private List<Part> displayedParts = new Vector<Part>();
 	
 
-	public SwingScreen() {
+	public SwingScreen(Game game) {
+		// TODO: Do this method call on another thread.
+		Keyboard.initInputActionMaps(game, getInputMap(), getActionMap());
+
 		System.out.println("SwingScreen constructor: " + SwingUtilities.isEventDispatchThread());
 		frame = new JFrame("Tetris");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -51,20 +54,7 @@ public class SwingScreen extends JPanel implements Screen {
 
 		// This method causes the event dispatch thread to paint.
 		frame.setVisible(true);
-		/*
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
-		
 
-		//RepaintManager.currentManager(this).setDoubleBufferingEnabled(false);
-
-		Keyboard.initInputMap(getInputMap());
-		Keyboard.initActionMap(getActionMap());
 	}
 	
 	public void changeColorFilter() {
@@ -103,7 +93,9 @@ public class SwingScreen extends JPanel implements Screen {
 		try {
 			System.out.println("SwingScreen.update()");
 			// Repaint right now!
-			javax.swing.SwingUtilities.invokeAndWait(() -> paintImmediately(0, 0, this.getWidth() - 1, this.getHeight() - 1));
+			javax.swing.SwingUtilities.invokeAndWait(
+				() -> paintImmediately(0, 0, this.getWidth() - 1, this.getHeight() - 1)
+			);
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) { }

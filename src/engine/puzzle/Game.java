@@ -44,7 +44,7 @@ public class Game {
 
 		//PieceAction.FALL.setSpeed(2 / 1.0e9);
 		
-		screen = engine.newScreen();
+		screen = engine.newScreen(this);
 
 		score = new Score(ScoreCalculator.NINTENDO, 10, 0);
 		level = new Level(1);
@@ -61,6 +61,9 @@ public class Game {
 			
 					System.out.println("****************************************");
 			
+			// TODO: Make this thread (main) stop and wait for an interrupt.
+			// Polling isPieceLanded wastes CPU processing time. Interrupt, or signal 
+			// of some sort from the thread which lands the piece would be better.
 			do {
 				try {
 					Thread.sleep(50);
@@ -72,27 +75,6 @@ public class Game {
 			stopFalling();
 
 			piece = board.startNewPiece();
-			/*
-				if (!board.doesPieceFit(piece)) {
-					board.landPiece();
-					
-					break;
-				}
-				*/
-			
-			//stopFalling();
-				//System.out.println("EventDispatchThread: " + javax.swing.SwingUtilities.isEventDispatchThread());
-				
-			// TODO: Fix!!
-			//int rowCount = 0;
-			//int rowCount = board.removeRows(board.getFullRows());
-			
-				/*
-			if (rowCount > 0) {
-				score.updateScore(level, rowCount);
-				
-			}
-			*/
 		}
 				
 	}
@@ -177,7 +159,7 @@ public class Game {
 		}
 	}
 	
-	private void startMovingDown() {
+	public void startMovingDown() {
 		synchronized(PieceAction.DOWN) {
 			if (!PieceAction.DOWN.isPressed) {
 				PieceAction.DOWN.isPressed = true;
@@ -203,7 +185,7 @@ public class Game {
 		}
 	}
 	
-	private void warpDown() {
+	public void warpDown() {
 		// this if prevents multiple warp downs 
 		// each warp would reset the falling delay so multiple warps
 		// would prevent the piece from landing allowing the piece
@@ -219,14 +201,14 @@ public class Game {
 		}
 	}
 	
-	private void stopMovingDown() {
+	public void stopMovingDown() {
 		synchronized(PieceAction.DOWN) {
 			PieceAction.DOWN.isPressed = false;
 			startFalling();
 		}
 	}
 	
-	private void startMovingLeft() {
+	public void startMovingLeft() {
 		synchronized(PieceAction.LEFT) {
 			if (!PieceAction.LEFT.isPressed) {
 				PieceAction.LEFT.isPressed = true;
@@ -251,7 +233,7 @@ public class Game {
 		}
 	}
 	
-	private void stopMovingLeft() {
+	public void stopMovingLeft() {
 		synchronized(PieceAction.LEFT) {
 			PieceAction.LEFT.isPressed = false;
 			
@@ -261,7 +243,7 @@ public class Game {
 		}
 	}
 	
-	private void startMovingRight() {
+	public void startMovingRight() {
 		synchronized(PieceAction.RIGHT) {
 			if (!PieceAction.RIGHT.isPressed) {
 				PieceAction.RIGHT.isPressed = true;
@@ -285,7 +267,7 @@ public class Game {
 		}
 	}
 	
-	private void stopMovingRight() {
+	public void stopMovingRight() {
 		synchronized(PieceAction.RIGHT) {
 			PieceAction.RIGHT.isPressed = false;
 			
@@ -295,7 +277,7 @@ public class Game {
 		}
 	}
 	
-	private void startRotatingClockwise() {
+	public void startRotatingClockwise() {
 		synchronized(PieceAction.CLOCKWISE) {
 			if (!PieceAction.CLOCKWISE.isPressed) {
 				PieceAction.CLOCKWISE.isPressed = true;
@@ -318,7 +300,7 @@ public class Game {
 		}
 	}
 	
-	private void stopRotatingClockwise() {
+	public void stopRotatingClockwise() {
 		synchronized(PieceAction.CLOCKWISE) {
 			PieceAction.CLOCKWISE.isPressed = false;
 			
@@ -328,7 +310,7 @@ public class Game {
 		}
 	}
 	
-	private void startRotatingCounterClockwise() {
+	public void startRotatingCounterClockwise() {
 		synchronized(PieceAction.COUNTERCLOCKWISE) {
 			if (!PieceAction.COUNTERCLOCKWISE.isPressed) {
 				PieceAction.COUNTERCLOCKWISE.isPressed = true;
@@ -351,7 +333,7 @@ public class Game {
 		}
 	}
 	
-	private void stopRotatingCounterClockwise() {
+	public void stopRotatingCounterClockwise() {
 		synchronized(PieceAction.COUNTERCLOCKWISE) {
 			PieceAction.COUNTERCLOCKWISE.isPressed = false;
 			
