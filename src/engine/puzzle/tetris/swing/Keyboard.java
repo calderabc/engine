@@ -64,6 +64,9 @@ public class Keyboard {
 				case "speed_down": 
 					pieceActionRunner = game::startMovingDown; 
 					break;
+				case "stop_speed_down": 
+					pieceActionRunner = game::stopMovingDown; 
+					break;
 				case "warp": 
 					pieceActionRunner = game::warpDown; 
 					break;
@@ -94,7 +97,7 @@ public class Keyboard {
 				case "quit": 
 					pieceActionRunner = () -> System.exit(0);
 					break;
-				default: pieceActionRunner = null; //TODO: Should throw exception/error here?
+				default: pieceActionRunner = () -> {}; //TODO: Should throw exception/error here?
 			}
 			
 			aMap.put(keyBinding, new PieceAbstractAction(pieceActionRunner));
