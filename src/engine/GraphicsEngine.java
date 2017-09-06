@@ -65,4 +65,32 @@ public abstract class GraphicsEngine {
 		}
 		return null;
 	}
+
+	public Visual newVisual(Visual visual) {
+		System.out.println("newVisual");
+		try {
+			Visual v = visualClass.getConstructor(Visual.class).newInstance(visual);
+			System.out.println(v);
+			return v;
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

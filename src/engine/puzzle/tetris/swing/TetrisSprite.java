@@ -3,12 +3,13 @@ package engine.puzzle.tetris.swing;
 import engine.Coordinates;
 import engine.MovablePart;
 import engine.Part;
+import engine.Visual;
 import engine.puzzle.Block;
+import engine.puzzle.PieceAction;
 import engine.swing.ImageList;
 import engine.swing.Sprite;
 
 public class TetrisSprite extends Sprite {
-
 	static {
 		int id;
 		int x = 0;
@@ -39,12 +40,28 @@ public class TetrisSprite extends Sprite {
 		}
 	}
 	
+	
+	// TODO: All this casting makes me nervous.
+	public TetrisSprite(Visual other) {
+		images = ((TetrisSprite)other).images; // Save memory by all using the same image lists.
+		position = new Coordinates(((TetrisSprite)other).position);
+		dimensions = new Coordinates(((TetrisSprite)other).dimensions);
+		currImage = ((TetrisSprite)other).currImage;
+	}
+	
 	@Override
 	public void update(MovablePart part) {
-		
-		System.out.println("TetrisSprite.update()");
-		System.out.println(part.pos.x);
-		System.out.println(part.pos.y);
 		position = new Coordinates(part.pos.x * 32, part.pos.y * 32);
+	}
+
+	@Override
+	public void rotate(int offset) {
+		currImage -= offset;
+
+		// TODO: A little cryptic.
+		int lastIndex = images.imageType.COUNT - 1;
+		
+		if (currImage < 0) currImage = lastIndex;
+		else if (currImage > lastIndex) currImage = 0;
 	}
 }

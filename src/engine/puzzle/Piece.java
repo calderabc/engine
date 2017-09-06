@@ -20,7 +20,7 @@ import java.util.List;
  *
  */
 
-public class Piece extends Part implements Movable {
+public class Piece extends Part {
 
 	private final int blockCount;
 	public final int getBlockCount() {
@@ -58,7 +58,7 @@ public class Piece extends Part implements Movable {
 		id = other.getID();
 		blockCount = other.getBlockCount();
 		blocks = new Vector<Block>(blockCount);
-
+		
 		for (Block currOtherBlock: other.getBlocks()) {
 			blocks.add(new Block(currOtherBlock));
 		}
@@ -139,9 +139,8 @@ public class Piece extends Part implements Movable {
 	 * then the results are divided by two to yield the correct position values.
 	 */
 
-	public final synchronized Piece rotate(PieceAction action) {
-		int flip = (action == PieceAction.CLOCKWISE) ? -1: 1;
-
+	private final synchronized Piece rotate(int flip) {
+		// flip: -1 Clockwise, 1 CounterClockwise.
 		// Move the Blocks in the piece to their new positions.
 		for(Block currBlock: blocks) {
 				/* Equivalent but slower:
@@ -149,6 +148,8 @@ public class Piece extends Part implements Movable {
 				                                 (destCenter[Y] - flip * (2 * currBlock.pos.x - currCenter[X])) / 2 ); */
 				currBlock.pos = new Coordinates( destCenter.x + flip * ((currBlock.pos.y << 1) - currCenter.y) >> 1,
 				                                 destCenter.y - flip * ((currBlock.pos.x << 1) - currCenter.x) >> 1 );
+				
+				currBlock.visual.rotate(flip);
 		}
 
 		// swap values of current center and destination center
@@ -158,9 +159,14 @@ public class Piece extends Part implements Movable {
 
 		return this;
 	}
+	
+	public Piece move(PieceAction action) {
+		return (action.type == PieceAction.Type.MOVE)
+			? move(action.offset)
+			: rotate(action.offset.x); // x designated as direction for rotate algorithm.
+	}
 
-	@Override
-	public Movable move(Coordinates offset) {
+	private Piece move(Coordinates offset) {
 		Coordinates offsetDoubled = new Coordinates(offset.x << 1, offset.y << 1);
 		currCenter.move(offsetDoubled);
 		destCenter.move(offsetDoubled);
@@ -175,13 +181,9 @@ public class Piece extends Part implements Movable {
 	public void updateVisual() {
 		for (Block block : blocks) {
 			if (block.visual == null) {
-				System.out.println("Piece.updateVisual() before newVisual");
-				System.out.println(block);
 				block.visual = Game.me.engine.newVisual(block);
 			}
-			System.out.println("Piece.updateVisual() before update");
 			((TetrisSprite)block.visual).update(block);
-			System.out.println("Piece.updateVisual() after update");
 		}
 	}
 	/*

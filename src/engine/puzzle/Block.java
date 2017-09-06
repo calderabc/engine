@@ -18,6 +18,7 @@ public class Block extends MovablePart {
 	public Block(Block other)
 	{
 		super(other);
+		visual = Game.me.engine.newVisual(other.visual);
 		type = other.getType();
 		state = other.getState();
 	}

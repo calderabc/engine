@@ -5,6 +5,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import engine.Visual;
+import engine.puzzle.PieceAction;
 import engine.Coordinates;
 
 public abstract class Sprite implements Visual {
@@ -16,15 +17,16 @@ public abstract class Sprite implements Visual {
 	protected Coordinates dimensions;
 	protected int currImage;
 	
+	
 	public void draw(Graphics2D canvas) {
-		System.out.println("DRAW");
-		System.out.println(position.x);
-		System.out.println(position.y);
 		canvas.drawImage(images.get(currImage),  
 					     position.x, position.y, 
 					     dimensions.x, dimensions.y, null);
 	}
+	
+	
 
+	public abstract void rotate(int offset);
 
 /*
 	@Override 

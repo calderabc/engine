@@ -2,6 +2,6 @@ warp w, up
 speed_down s, down
 move_right d, right
 move_left a, left
-rotate_clock k
-rotate_counter j
+rotate_clock k, alt
+rotate_count j, control
 quit escape

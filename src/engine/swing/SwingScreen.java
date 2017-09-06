@@ -39,7 +39,6 @@ public class SwingScreen extends JPanel implements Screen {
 		// TODO: Do this method call on another thread.
 		Keyboard.initInputActionMaps(game, getInputMap(), getActionMap());
 
-		System.out.println("SwingScreen constructor: " + SwingUtilities.isEventDispatchThread());
 		frame = new JFrame("Tetris");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(700, 670);
@@ -54,6 +53,8 @@ public class SwingScreen extends JPanel implements Screen {
 
 		// This method causes the event dispatch thread to paint.
 		frame.setVisible(true);
+		// TODO: There's got to be a better way to make sure this panel always has focus.
+		grabFocus();
 
 	}
 	
@@ -71,17 +72,12 @@ public class SwingScreen extends JPanel implements Screen {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D)g;
-		System.out.println("SwingScreen.paintComponent()");
-		System.out.println(displayedParts.size());
 		while (displayedParts.size() == 0) {
 			
 		}
 		for (Part displayPart: displayedParts) {
 			// If the sprite for the part doesn't exist create it.
-			System.out.println("SwingScreen.paintComponent() inside for loop");
-			System.out.println(displayPart);
 			if (displayPart.visual == null) {
-				System.out.println("SwingScreen.paintComponent() newVisual");
 				displayPart.visual = Game.me.engine.newVisual(displayPart);
 			}
 			((Sprite)displayPart.visual).draw(g2d);
@@ -91,7 +87,6 @@ public class SwingScreen extends JPanel implements Screen {
 	@Override
 	public void update() {
 		try {
-			System.out.println("SwingScreen.update()");
 			// Repaint right now!
 			javax.swing.SwingUtilities.invokeAndWait(
 				() -> paintImmediately(0, 0, this.getWidth() - 1, this.getHeight() - 1)
