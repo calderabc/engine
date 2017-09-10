@@ -10,7 +10,6 @@ public abstract class GraphicsEngine {
 	protected Class<? extends Visual> visualClass; 
 	
 	public Screen newScreen(Game game) {
-		System.out.println("newScreen");
 		try {
 			Constructor<? extends Screen> con = screenClass.getConstructor(Game.class);
 			return (Screen) con.newInstance(game);
@@ -25,7 +24,6 @@ public abstract class GraphicsEngine {
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
 			System.out.println(e.getCause().toString());
-			System.out.println(e.getCause().toString());
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoSuchMethodException e) {
@@ -39,10 +37,8 @@ public abstract class GraphicsEngine {
 	}
 
 	public Visual newVisual(Part part) {
-		System.out.println("newVisual");
 		try {
 			Visual v = visualClass.getConstructor(Part.class).newInstance(part);
-			System.out.println(v);
 			return v;
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block
@@ -67,10 +63,9 @@ public abstract class GraphicsEngine {
 	}
 
 	public Visual newVisual(Visual visual) {
-		System.out.println("newVisual");
 		try {
+			if (visual == null) return null;
 			Visual v = visualClass.getConstructor(Visual.class).newInstance(visual);
-			System.out.println(v);
 			return v;
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block

@@ -2,12 +2,10 @@ package engine.puzzle;
 
 import java.util.concurrent.ScheduledFuture;
 
-import javax.swing.SwingUtilities;
-
 import engine.Coordinates;
 
 public enum PieceAction {
-	WARP ("warp down", Type.MOVE, 0, new Coordinates(0, 1)),
+	WARP ("warp down", Type.MOVE, 100, new Coordinates(0, 1)),
 	FALL ("fall", Type.MOVE, 3, new Coordinates(0, 1)),
 	DOWN ("move down", Type.MOVE, 20, new Coordinates(0, 1)),
 	LEFT ("move left", Type.MOVE, 6, new Coordinates(-1, 0)),
@@ -61,12 +59,11 @@ public enum PieceAction {
 	public static void resetAll() {
 		for(PieceAction currAction: values()) {
 			if (currAction.future != null) {
-				currAction.future.cancel(true);
+				currAction.future.cancel(false);
 			}
 			currAction.isMoving = false;
 			currAction.isPressed = false;
 		}
-		
 	}
 
 	public long getDelay() {
@@ -88,7 +85,6 @@ public enum PieceAction {
 			action = newAction;
 		}
 		public void run() {
-			System.out.println(SwingUtilities.isEventDispatchThread());
 			if (action.isPressed) {
 				if (!Game.me.tryToMovePiece(action)) {
 					action.future.cancel(false);

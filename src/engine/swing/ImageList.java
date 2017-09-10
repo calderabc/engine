@@ -41,7 +41,6 @@ public class ImageList {
 	}
 	
 	public BufferedImage get(int index) {
-		System.out.println(index);
 		if (index < 0 || index >= imageType.COUNT) throw new IndexOutOfBoundsException();
 		return images[index];
 	}

@@ -1,9 +1,7 @@
 package engine;
 
-import engine.swing.Sprite;
+import engine.puzzle.Game;
 
-
-@SuppressWarnings("serial")
 public abstract class Part {
 	public Visual visual = null; 
 
@@ -14,4 +12,10 @@ public abstract class Part {
 		visual = other.visual;
 	}	
 	
+	public void terminate() {
+		if (visual != null) { 
+			Game.me.screen.removePart(this);
+		}
+		visual = null;
+	}
 }

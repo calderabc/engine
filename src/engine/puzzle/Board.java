@@ -29,7 +29,7 @@ public final class Board extends Part {
 	private final class Row {
 		public class PositionOccupiedException extends Exception { }
 
-		private Block[] blocks = new Block[DEFAULT_BOARD_WIDTH];
+		private Block[] blocks = newRow();
 		private int blockCount = 0;
 
 		public void set(int index, Block element) throws PositionOccupiedException {
@@ -50,6 +50,17 @@ public final class Board extends Part {
 		public boolean isFull() {
 			// TODO: Should I throw exception is blockCount > DEFAULT_BOARD_WIDTH ?
 			return blockCount >= DEFAULT_BOARD_WIDTH;
+		}
+		
+		public void terminate() {
+			for (Block terminalBlock : blocks) { 
+				terminalBlock.terminate();
+			}
+			//blocks = newRow();
+		}
+		
+		private Block[] newRow() {
+			return new Block[DEFAULT_BOARD_WIDTH];
 		}
 	}
 	
@@ -91,7 +102,6 @@ public final class Board extends Part {
 	/**
 	 * Add all the Blocks that compose the specified Piece to this Board.
 	 * @param landingPiece piece containing Blocks to be added to this Board
-	 * @return reference to the Board
 	 */
 	public final void landPiece(Piece landingPiece) {
 		for (Block landingBlock : landingPiece.getBlocks()) {
@@ -103,6 +113,17 @@ public final class Board extends Part {
 			}
 
 		}
+	}
+	
+	public final int tryRemoveBlocks() {
+		Collection<Row> terminalRows = getFullRows();
+		int count = terminalRows.size();
+		
+		for (Row terminalRow : terminalRows) {
+			terminalRow.terminate();
+		}
+
+		return count;
 	}
 	
 	private final Collection<Row> getFullRows() {

@@ -1,10 +1,7 @@
 package engine.puzzle;
 
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import javax.swing.SwingWorker;
 
 import engine.GraphicsEngine;
 import engine.Screen;
@@ -17,7 +14,7 @@ public class Game {
 	static public Game me;
 
 	public GraphicsEngine engine;
-	private Screen screen;
+	public Screen screen;
 	private Board board;
 	private Piece piece;
 	private Score score;
@@ -59,7 +56,6 @@ public class Game {
 		while (board.doesPieceFit(piece)) {		
 			screen.addParts(piece.getBlocks());
 			screen.update();
-					System.out.println("*****asl;dkfja;lsdkf ending here ********** alkfl;askjdf;l");
 
 			isPieceLanded = false;
 			startFalling();
@@ -114,24 +110,39 @@ public class Game {
 	private void landPiece() {
 		synchronized(piece) {
 			if (!isPieceLanded) {
-				board.landPiece(piece);
-				
 				PieceAction.resetAll();
+				board.landPiece(piece);
+				board.tryRemoveBlocks();
 				
 				isPieceLanded = true;
 			}
 		}
 	}
 	
+	private void scheduleFuture(PieceAction action, boolean startNow) {
+		action.isMoving = true;
+		action.future = 
+			scheduler.scheduleAtFixedRate(action.runner, 
+		                                  (startNow) ? 0 : action.getDelay(), 
+		                                  action.getDelay(), 
+		                                  TimeUnit.NANOSECONDS);
+	}
+	
+	private void cancelFuture(PieceAction action) {
+		action.future.cancel(false);
+		action.isMoving = false;
+	}
+
 	private void startFalling() {
 		synchronized(piece) {
 			if (!PieceAction.FALL.isMoving) {
-				PieceAction.FALL.future = 
-					scheduler.scheduleAtFixedRate(makePieceFall, 
-												  PieceAction.FALL.getDelay(), 
-												  PieceAction.FALL.getDelay(), 
-												  TimeUnit.NANOSECONDS);
-				PieceAction.FALL.isMoving = true;
+				PieceAction.FALL.runner = () -> {
+					if (!tryToMovePiece(PieceAction.FALL)) {
+						stopFalling();
+						landPiece();
+					}
+				};
+				scheduleFuture(PieceAction.FALL, false);
 			}
 		}
 	}
@@ -139,94 +150,70 @@ public class Game {
 	private void stopFalling() {
 		synchronized(piece) {
 			if (PieceAction.FALL.isMoving) {
-				PieceAction.FALL.future.cancel(false);
-				PieceAction.FALL.isMoving = false;
+				cancelFuture(PieceAction.FALL);
 			}
 		}
 	}
 	
 	public void warpDown() {
-		// TODO: Move the SwingWorker functionality out of this class. 
-		// Code in this class shouldn't have to worry about the swing event
-		// thread because it's not guaranteed the graphics will even be swing.
-		//
-		// Use a SwingWorker thread because this method is run by the swing 
-		// event dispatch thread.  "tryToMovePiece" calls "invokeAndWait" 
-		// which throws exception if called from the event dispatch thread.
-		new SwingWorker<Object, Object>() {
-			public Object doInBackground() {
-				synchronized(piece) {
-					// this if prevents multiple warp downs 
-					// each warp would reset the falling delay so multiple warps
-					// would prevent the piece from landing allowing the piece
-					// to be moved left and right indefinitely
-					if (!PieceAction.WARP.isMoving) {
-						stopFalling();
-						
-						while (tryToMovePiece(PieceAction.WARP)) { }
-					
+		synchronized(piece) {
+			if (!PieceAction.WARP.isMoving) {
+				stopFalling();
+
+				PieceAction.WARP.runner = () -> {
+					if (!tryToMovePiece(PieceAction.WARP)) {
+						PieceAction.WARP.isMoving = false;
 						startFalling();
+						PieceAction.WARP.future.cancel(true);
 					}
-				}
-				return null;
+				};
+				
+				scheduleFuture(PieceAction.WARP, true);
 			}
-		}.execute();
+		}
 	}
 
-	
-	private ScheduledFuture<?> seeTheFuture(PieceAction action) {
-		action.isMoving = true;
-		return scheduler.scheduleAtFixedRate(action.runner, 
-		                                     0, 
-		                                     action.getDelay(), 
-		                                     TimeUnit.NANOSECONDS);
-	}
-	
 	public void startPieceAction(PieceAction action) {
-		// This is run by the swing event dispatch thread.
 		synchronized(piece) {
-			if (action == PieceAction.DOWN) {
-			}
 			if (!action.isPressed) {
 				action.isPressed = true;
 				
 				if (action.opposite.isPressed) {
-					action.opposite.future.cancel(false);
-					action.opposite.isMoving = false;
+					cancelFuture(action.opposite);
 				}
 				
-				if (action.isMoving) {
-					action.future.cancel(false);
-				}
-
-				action.future = seeTheFuture(action);
+				scheduleFuture(action, true);
 			}			
 		}
 	}
 
 	public void stopPieceAction(PieceAction action) {
 		synchronized(piece) {
+			cancelFuture(action);
 			action.isPressed = false;
-			action.future.cancel(false);
-			action.isMoving = false;
 
-		}
 			if (action.opposite.isPressed) {
 				startPieceAction(action.opposite);
 			}
+		}
 	}
 
 	public void startMovingDown() {
-		// Run by swing event dispatch thread.
 		synchronized(piece) {
-			stopFalling();
 			if (!PieceAction.DOWN.isPressed) {
 				PieceAction.DOWN.isPressed = true;
 				
 				if (!PieceAction.DOWN.isMoving) {
 					stopFalling();
+					
+					PieceAction.DOWN.runner = () -> {
+						if (!Game.me.tryToMovePiece(PieceAction.DOWN)) {
+							landPiece();
+							cancelFuture(PieceAction.DOWN);
+						}
+					};
 			
-					PieceAction.DOWN.future = seeTheFuture(PieceAction.DOWN);
+					scheduleFuture(PieceAction.DOWN, true);
 				}
 			}
 		}
@@ -234,19 +221,10 @@ public class Game {
 
 	public void stopMovingDown() {
 		synchronized(piece) {
+			cancelFuture(PieceAction.DOWN);
 			PieceAction.DOWN.isPressed = false;
-			PieceAction.DOWN.future.cancel(false);
-			PieceAction.DOWN.isMoving = false;
 			startFalling();
 		}
 	}
-
-
-	private final Runnable makePieceFall = () -> { 
-		// Not run by the swing event dispatch thread.
-		if (!tryToMovePiece(PieceAction.FALL)) {
-			landPiece();
-		}
-	};
 
 }

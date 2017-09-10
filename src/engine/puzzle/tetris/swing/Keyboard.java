@@ -46,17 +46,6 @@ public class Keyboard {
 	public static void initInputActionMaps(Game game, InputMap inputMap, ActionMap aMap) {
 		initInputMap(inputMap);
 
-		// TODO:  This seems kludgey.  There's got to be a better way.
-		class PieceAbstractAction extends AbstractAction {
-			Runnable pieceActionRunner;
-			public PieceAbstractAction(Runnable newPieceActionRunner) {
-				pieceActionRunner = newPieceActionRunner;
-			}
-			public void actionPerformed(ActionEvent e) {
-				pieceActionRunner.run();
-			}
-		}
-
 		for(KeyStroke keyStroke : inputMap.allKeys()) {
 			Runnable pieceActionRunner;
 			String keyBinding  = (String)inputMap.get(keyStroke);
@@ -100,8 +89,19 @@ public class Keyboard {
 				default: pieceActionRunner = () -> {}; //TODO: Should throw exception/error here?
 			}
 			
-			aMap.put(keyBinding, new PieceAbstractAction(pieceActionRunner));
+			aMap.put(keyBinding, new AbstractAction() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// Use another thread because the action methods called will eventually
+					// call "tryToMovePiece" which calls "invokeAndWait", which if called
+					// from the swing event dispatch thread throws an exception.
+					//
+					// Plus the swing event dispatch thread shouldn't be used for doing
+					// game business logic anyway.
+					new Thread(pieceActionRunner).start();
+				}
+			});
 		}
-		
 	}	
+	
 }

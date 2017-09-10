@@ -43,6 +43,7 @@ public class TetrisSprite extends Sprite {
 	
 	// TODO: All this casting makes me nervous.
 	public TetrisSprite(Visual other) {
+		
 		images = ((TetrisSprite)other).images; // Save memory by all using the same image lists.
 		position = new Coordinates(((TetrisSprite)other).position);
 		dimensions = new Coordinates(((TetrisSprite)other).dimensions);
