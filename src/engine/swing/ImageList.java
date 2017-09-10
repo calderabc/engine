@@ -10,6 +10,7 @@ import engine.Coordinates;
 import engine.puzzle.tetris.swing.ImageType;
 
 public class ImageList {
+
 	final public ImageType imageType;
 	final private BufferedImage[] images;
 
@@ -29,7 +30,7 @@ public class ImageList {
 			for(int i = 0; i < imageType.COUNT; i++) {
 				images[i] = spriteImageSource.getSubimage(scanX, scanY, width, height);
 				
-				if (imageType.SCAN_DIRECTION == ScanDirection.VERTICAL)
+				if (imageType.SCAN_DIRECTION == ImageType.ScanDirection.VERTICAL)
 					scanY += height;
 				else
 					scanX += width;
