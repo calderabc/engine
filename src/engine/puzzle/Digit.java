@@ -18,7 +18,6 @@ public class Digit extends Part {
 		if (value != newValue) {
 			value = newValue;
 			
-			//getRenderer().update();
 		}
 		
 		return value;

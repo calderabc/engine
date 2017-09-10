@@ -5,7 +5,6 @@ import engine.MovablePart;
 import engine.Part;
 import engine.Visual;
 import engine.puzzle.Block;
-import engine.puzzle.PieceAction;
 import engine.swing.ImageList;
 import engine.swing.Sprite;
 

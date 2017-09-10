@@ -1,8 +1,8 @@
-package engine.puzzle;
+package engine.puzzle.tetris;
 
 import engine.Coordinates;
 
-public class PieceData {
+public class TetrisPieceData {
 	// TODO: Make this load from a file instead of hard coding.
 		@SuppressWarnings("unused")
 		public final int[][][] pieceTemplate =

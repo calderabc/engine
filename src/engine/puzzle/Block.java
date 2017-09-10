@@ -2,6 +2,7 @@ package engine.puzzle;
 
 import engine.Coordinates;
 import engine.MovablePart;
+import engine.puzzle.tetris.TetrisGame;
 import engine.swing.Sprite;
 
 public class Block extends MovablePart {	
@@ -18,7 +19,7 @@ public class Block extends MovablePart {
 	public Block(Block other)
 	{
 		super(other);
-		visual = Game.me.engine.newVisual(other.visual);
+		visual = TetrisGame.me.engine.newVisual(other.visual);
 		type = other.getType();
 		state = other.getState();
 	}

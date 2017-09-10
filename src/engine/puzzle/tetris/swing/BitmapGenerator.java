@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import engine.puzzle.Game;
+import engine.puzzle.tetris.TetrisGame;
 import engine.swing.BlockRenderer;
 //import engine.swing.ImageRenderer;
 
@@ -295,7 +295,7 @@ public class BitmapGenerator {
 	
 	public static void main(String argv[]) {
 		int maxSpriteSheetHeight = 0;
-		int[][][] pieceTemplate = Game.TETRIS_PIECE_DATA.pieceTemplate;
+		int[][][] pieceTemplate = TetrisGame.TETRIS_PIECE_DATA.pieceTemplate;
 		int numOfPieces = pieceTemplate.length;
 
 		BufferedImage[] spriteSheet = new BufferedImage[numOfPieces];

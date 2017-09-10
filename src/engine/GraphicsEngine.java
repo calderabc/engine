@@ -3,15 +3,15 @@ package engine;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import engine.puzzle.Game;
+import engine.puzzle.tetris.TetrisGame;
 
 public abstract class GraphicsEngine {
 	protected Class<? extends Screen> screenClass;
 	protected Class<? extends Visual> visualClass; 
 	
-	public Screen newScreen(Game game) {
+	public Screen newScreen(TetrisGame game) {
 		try {
-			Constructor<? extends Screen> con = screenClass.getConstructor(Game.class);
+			Constructor<? extends Screen> con = screenClass.getConstructor(TetrisGame.class);
 			return (Screen) con.newInstance(game);
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block

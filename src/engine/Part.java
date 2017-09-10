@@ -1,6 +1,6 @@
 package engine;
 
-import engine.puzzle.Game;
+import engine.puzzle.tetris.TetrisGame;
 
 public abstract class Part {
 	public Visual visual = null; 
@@ -14,7 +14,7 @@ public abstract class Part {
 	
 	public void terminate() {
 		if (visual != null) { 
-			Game.me.screen.removePart(this);
+			TetrisGame.me.screen.removePart(this);
 		}
 		visual = null;
 	}

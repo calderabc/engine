@@ -2,28 +2,31 @@ package engine.puzzle;
 
 import java.util.Random;
 
+import engine.puzzle.tetris.TetrisPiece;
+import engine.puzzle.tetris.TetrisPieceData;
+
 public final class PiecePool {
-	private final Piece[] pieces;
+	private final TetrisPiece[] pieces;
 	
-	private final PieceData pieceData;
+	private final TetrisPieceData pieceData;
 	
-	protected PiecePool(PieceData newPieceData) {
+	protected PiecePool(TetrisPieceData newPieceData) {
 		pieceData = newPieceData;
 		
 		int pieceCount = pieceData.pieceTemplate.length;
 
-		pieces = new Piece[pieceCount];
+		pieces = new TetrisPiece[pieceCount];
 		for (int i = 0; i < pieceCount; i++) {
-			pieces[i] = new Piece(i, pieceData);	
+			pieces[i] = new TetrisPiece(i, pieceData);	
 		}	
 	}
 	
-	public Piece getRandomPiece() {
+	public TetrisPiece getRandomPiece() {
 		// deep copy a random Piece from pieces and return
-		return new Piece(pieces[new Random().nextInt(pieces.length)]);
+		return new TetrisPiece(pieces[new Random().nextInt(pieces.length)]);
 	}
 	
-	public Piece getPiece(int pieceIndex) {
+	public TetrisPiece getPiece(int pieceIndex) {
 		return pieces[pieceIndex];
 	}
 				

@@ -20,7 +20,7 @@ import javax.swing.SwingUtilities;
 
 import engine.Part;
 import engine.Screen;
-import engine.puzzle.Game;
+import engine.puzzle.tetris.TetrisGame;
 import engine.puzzle.tetris.swing.Keyboard;
 
 
@@ -35,7 +35,7 @@ public class SwingScreen extends JPanel implements Screen {
 	private List<Part> displayedParts = new Vector<Part>();
 	
 
-	public SwingScreen(Game game) {
+	public SwingScreen(TetrisGame game) {
 		// TODO: Do this method call on another thread.
 		Keyboard.initInputActionMaps(game, getInputMap(), getActionMap());
 
@@ -78,7 +78,7 @@ public class SwingScreen extends JPanel implements Screen {
 		for (Part displayPart: displayedParts) {
 			// If the sprite for the part doesn't exist create it.
 			if (displayPart.visual == null) {
-				displayPart.visual = Game.me.engine.newVisual(displayPart);
+				displayPart.visual = TetrisGame.me.engine.newVisual(displayPart);
 			}
 			((Sprite)displayPart.visual).draw(g2d);
 		}

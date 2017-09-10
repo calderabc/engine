@@ -6,7 +6,6 @@ import java.util.Vector;
 
 import engine.Part;
 
-
 public class Number extends Part {
 	private long value;
 	private int size;
@@ -18,8 +17,6 @@ public class Number extends Part {
 		value = newValue;
 		
 		max = (long) Math.pow((double) size, 10) - 1;
-		
-		//children = new Vector<Part>();
 		
 		for (int i = 0; i < size; i++) {
 			digits.add(new Digit(i, 0, 0));
@@ -54,7 +51,6 @@ public class Number extends Part {
 			}
 		}
 	}
-	
 	
 	public long getValue() {
 		return value;
