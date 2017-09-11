@@ -188,14 +188,5 @@ public class TetrisPiece extends Piece {
 			((TetrisSprite)block.visual).update(block);
 		}
 	}
-	/*
-	@Override
-	public void printInfo() {
-		System.out.println("Piece - Start");
-		for(Block currBlock : this.getChildren()) {
-			currBlock.printInfo();
-		}
-		System.out.println("Piece - End");
-	}
-	*/
+
 }

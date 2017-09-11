@@ -1,5 +1,11 @@
 package engine.puzzle.tetris;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 import engine.Game;
 import engine.puzzle.Board;
 import engine.puzzle.PuzzleGame;
@@ -8,7 +14,22 @@ import engine.swing.Swing;
 
 public class TetrisGame extends PuzzleGame {
 	public static TetrisGame me = (TetrisGame)Game.me;
-	static public final TetrisPieceData TETRIS_PIECE_DATA = new TetrisPieceData();
+	static public final TetrisPieceData TETRIS_PIECE_DATA = setTetrisPieceData();
+
+	private static final TetrisPieceData setTetrisPieceData() { 
+		TetrisPieceData data = null;
+		try {
+			ObjectInputStream in;
+			in = new ObjectInputStream(
+				new FileInputStream(TetrisPieceData.FILE_NAME)
+			);
+			data = (TetrisPieceData)in.readObject();
+			in.close();
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return data;
+	}
 
 	public static void main(String argv[]) {
 		me = new TetrisGame(TETRIS_PIECE_DATA);

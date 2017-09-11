@@ -1,39 +1,25 @@
 package engine.puzzle.tetris;
 
+import java.io.Serializable;
+
 import engine.Coordinates;
 
-public class TetrisPieceData {
-	// TODO: Make this load from a file instead of hard coding.
-		@SuppressWarnings("unused")
-		public final int[][][] pieceTemplate =
-			{{{0, 0}, {1, 0}, {0, 1}, {1, 1}},  //  ##
-												//  ##
-			 {{0, 0}, {1, 0}, {2, 0}, {1, 1}},  //     ###
-												//      #
-			 {{0, 0}, {1, 0}, {2, 0}, {2, 1}},  //  ###
-												//    #
-			 {{0, 0}, {1, 0}, {2, 0}, {0, 1}},  //      ###
-												//      #
-			 {{0, 0}, {1, 0}, {2, 0}, {3, 0}},  // ####
-												//
-			 {{0, 0}, {1, 0}, {2, 1}, {1, 1}},  //    ##
-												//     ##
-			 {{0, 1}, {1, 0}, {2, 0}, {1, 1}}}; //  ##
-												// ##
-		
-		/* These values are twice their intended values so that floating point half
-		 * fractions can be represented as integers. */
-		@SuppressWarnings("unused")
-		public final int[][] pieceCenter = {{1, 1, 1, 1},
-		                                    {2, 0, 2, 0},
-		                                    {2, 0, 2, 0}, 
-		                                    {2, 0, 2, 0}, 
-		                                    {3, 0, 4,-1},
-		                                    {2, 1, 3, 0},
-		                                    {2, 1, 3, 0}};
+public class TetrisPieceData implements Serializable {
+	private static final long serialVersionUID = -9105193668883492424L;
 
-		public final Coordinates pieceStartPos = new Coordinates(3, 0);
+	public static final String FILE_NAME = "tetris_piece.dat";
+
+	public final int[][][] pieceTemplate;
+	public final int[][] pieceCenter;
+	public final Coordinates pieceStartPos;
+
 	
+	public TetrisPieceData(int[][][] newPieceTemplate, int[][] newPieceCenter, Coordinates newPieceStartPos) {
+		pieceTemplate = newPieceTemplate;
+		pieceCenter = newPieceCenter;
+		pieceStartPos = newPieceStartPos;
+	}
+
 	public final Coordinates getCurrCenter(int pieceID) {
 		return new Coordinates(pieceCenter[pieceID][0], pieceCenter[pieceID][1]);
 	}

@@ -1,5 +1,7 @@
 package engine;
 
+import java.io.Serializable;
+
 /**
  * Generic three dimensional Cartesian coordinates.  Represents integer X, Y, and Z coordinates.  
  * 
@@ -9,8 +11,9 @@ package engine;
 // TODO: Not sure if I need to make this class implement Comparable.  Do more research. 
 /* public class Coordinates implements Comparable<Object>{ */
 
-public class Coordinates implements Movable {
-	
+public class Coordinates implements Movable, Serializable {
+	private static final long serialVersionUID = -3811798543403117929L;
+
 	static public final Coordinates ORIGIN = new Coordinates(0, 0, 0);
 
 	public int x;

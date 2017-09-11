@@ -15,7 +15,6 @@ public enum PieceAction {
 	CLOCKWISE (Type.ROTATE, 6, new Coordinates(-1, 0)),
 	COUNTERCLOCKWISE (Type.ROTATE, 6, new Coordinates(1, 0), PieceAction.CLOCKWISE);
 
-	private static final Object sync = new Object();
 	// Delay between actions (moving/rotating the piece) in milliseconds.(?) 
 	// TODO: Figure the apparent discord between milliseconds and 1.0e9 (nanosecond)
 	// Why does setting the delay to "1.0e9 / newFrequency" work if things are 

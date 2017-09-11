@@ -1,8 +1,8 @@
 package engine.puzzle;
 
-import java.util.AbstractList;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -19,6 +19,9 @@ import engine.puzzle.tetris.TetrisPieceData;
  *
  */
 public final class Board extends Part {
+	public final int width;
+	public final int height;
+
 	private static final int DEFAULT_BOARD_HEIGHT = 20;
 	private static final int DEFAULT_BOARD_WIDTH = 10;
 	private static final Coordinates MAX_POSITION = 
@@ -26,9 +29,10 @@ public final class Board extends Part {
 	
 	private final PiecePool pieces;
 	private List<Row> blockMatrix = new Vector<Row>(DEFAULT_BOARD_HEIGHT);
+
 	
 	@SuppressWarnings("serial")
-	private final class Row {
+	private final class Row implements Iterable<Block> {
 		public class PositionOccupiedException extends Exception { }
 
 		private Block[] blocks = newRow();
@@ -58,19 +62,20 @@ public final class Board extends Part {
 			for (Block terminalBlock : blocks) { 
 				terminalBlock.terminate();
 			}
-			//blocks = newRow();
+			blocks = newRow();
 		}
 		
 		private Block[] newRow() {
+			blockCount = 0;
 			return new Block[DEFAULT_BOARD_WIDTH];
+		}
+		
+		@Override
+		public Iterator<Block> iterator() {
+			return Arrays.asList(blocks).iterator();
 		}
 	}
 	
-	private final int width;
-	public int getWidth() { return width; }
-	
-	private final int height;
-	public int getHeight() { return height; }
 	
 	/**
 	 * Default Constructor
@@ -123,6 +128,18 @@ public final class Board extends Part {
 		
 		for (Row terminalRow : terminalRows) {
 			terminalRow.terminate();
+			
+			for (int i = 0; i < blockMatrix.indexOf(terminalRow); i++) {
+				for (Block block : blockMatrix.get(i)) {
+					if (block != null) {
+						block.move(new Coordinates(0, 1));
+						block.visual.update(block);
+					}
+				}
+			}
+
+			blockMatrix.remove(terminalRow);
+			blockMatrix.add(0, new Row());
 		}
 
 		return count;
@@ -138,7 +155,6 @@ public final class Board extends Part {
 		
 		return fullRows;
 	}
-	
 
 	/**
 	 * Tests to see if the specified piece fits somewhere on the board.
@@ -169,19 +185,4 @@ public final class Board extends Part {
 		return true;
 	}
 
-	/**
-	 * Removes the Blocks from the Board on all the rows specified in 
-	 * the Collection of integers.
-	 * @param fullRows Collection of integers each representing the y position
-	 * 		  of a row to remove all the Blocks from
-	 */
-	public final void removeRows() {
-	}
-	
-	/**
-	 * Removes all the Blocks on the specified row of the Board.
-	 * @param rowY the y position of the row to remove
-	 */
-	private final void removeRow(int rowY) {
-	}
 }

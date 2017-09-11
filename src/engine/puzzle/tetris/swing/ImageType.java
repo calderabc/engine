@@ -1,8 +1,10 @@
 package engine.puzzle.tetris.swing;
 
+import java.io.Serializable;
+
 import engine.Coordinates;
 
-public enum ImageType {
+public enum ImageType implements Serializable {
 	// TODO: Convert these into a serialized objects which populate from a data file.
 	// Why? These are data (specifically meta-data). They should not be hard-coded.
 	BLOCK ("piece_image_sheet.png", new Coordinates(32, 32), 4, ScanDirection.HORIZONTAL),
@@ -12,6 +14,11 @@ public enum ImageType {
 		VERTICAL,
 		HORIZONTAL
 	}
+
+	public final String IMAGE_FILE_NAME;
+	public final Coordinates DIMENSIONS;
+	public final int COUNT;
+	public final ScanDirection SCAN_DIRECTION;
 	
 	private ImageType(String newImageFileName, Coordinates newDimensions, int newImageCount, ScanDirection newScanDirection) {
 		IMAGE_FILE_NAME = newImageFileName;
@@ -19,10 +26,4 @@ public enum ImageType {
 		COUNT = newImageCount;
 		SCAN_DIRECTION = newScanDirection;
 	}
-
-
-	public final String IMAGE_FILE_NAME;
-	public final Coordinates DIMENSIONS;
-	public final int COUNT;
-	public final ScanDirection SCAN_DIRECTION;
 }

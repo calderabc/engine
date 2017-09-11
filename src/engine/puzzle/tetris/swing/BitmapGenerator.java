@@ -10,9 +10,8 @@ import javax.imageio.ImageIO;
 
 import engine.puzzle.tetris.TetrisGame;
 import engine.swing.BlockRenderer;
-//import engine.swing.ImageRenderer;
 
-public class BitmapGenerator {
+public final class BitmapGenerator {
 	private static final int X=0;
 	private static final int Y=1;
 	
