@@ -6,7 +6,6 @@ import engine.Game;
 import engine.puzzle.tetris.ScoreCalculator;
 import engine.puzzle.tetris.TetrisPiece;
 import engine.puzzle.tetris.swing.PieceAction;
-import engine.swing.Swing;
 
 public abstract class PuzzleGame extends Game {
 	public static PuzzleGame me = (PuzzleGame)Game.me;
@@ -33,7 +32,7 @@ public abstract class PuzzleGame extends Game {
 			screen.update();
 
 			isPieceLanded = false;
-			PieceAction.startFalling();
+			PieceAction.FALL.startPieceAction();
 			
 			// TODO: Make this thread (main) stop and wait for an interrupt.
 			// Polling isPieceLanded wastes CPU processing time. Interrupt, or signal 
@@ -46,7 +45,7 @@ public abstract class PuzzleGame extends Game {
 				}
 			} while (!isPieceLanded);
 
-			PieceAction.stopFalling();
+			PieceAction.FALL.stopPieceAction();
 
 			piece = board.startNewPiece();
 		}

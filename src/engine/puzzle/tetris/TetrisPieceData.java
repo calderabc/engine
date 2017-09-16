@@ -9,12 +9,12 @@ public class TetrisPieceData implements Serializable {
 
 	public static final String FILE_NAME = "tetris_piece.dat";
 
-	public final int[][][] pieceTemplate;
-	public final int[][] pieceCenter;
+	public final byte[][][] pieceTemplate;
+	public final byte[][] pieceCenter;
 	public final Coordinates pieceStartPos;
 
 	
-	public TetrisPieceData(int[][][] newPieceTemplate, int[][] newPieceCenter, Coordinates newPieceStartPos) {
+	public TetrisPieceData(byte[][][] newPieceTemplate, byte[][] newPieceCenter, Coordinates newPieceStartPos) {
 		pieceTemplate = newPieceTemplate;
 		pieceCenter = newPieceCenter;
 		pieceStartPos = newPieceStartPos;

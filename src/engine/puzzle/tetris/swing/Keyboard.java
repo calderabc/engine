@@ -11,12 +11,14 @@ import java.util.Properties;
 import javax.swing.InputMap;
 import javax.swing.KeyStroke;
 
-import engine.puzzle.tetris.TetrisGame;
+import engine.puzzle.PuzzleGame;
 
 import javax.swing.ActionMap;
 import javax.swing.AbstractAction;
 
 public class Keyboard {
+	private static final String STOP_PREFIX = "stop_";
+	
 	private static void initInputMap(InputMap inputMap) {
 		Properties inputToAction = new Properties();
 		try {
@@ -32,60 +34,43 @@ public class Keyboard {
 			
 			for(String keyStroke : keyStrokes) {
 				inputMap.put(KeyStroke.getKeyStroke(keyStroke.trim()), action);
-				inputMap.put(KeyStroke.getKeyStroke("released " + keyStroke.trim()), "stop_" + action);
+				inputMap.put(KeyStroke.getKeyStroke("released " + keyStroke.trim()), STOP_PREFIX + action);
 			}
 		}
 
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_CONTROL, KeyEvent.CTRL_DOWN_MASK), "rotate_count");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ALT, KeyEvent.ALT_DOWN_MASK), "rotate_clock");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_CONTROL, KeyEvent.CTRL_DOWN_MASK), "counter");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ALT, KeyEvent.ALT_DOWN_MASK), "clock");
 	}
 	
 	@SuppressWarnings("serial")
-	public static void initInputActionMaps(TetrisGame game, InputMap inputMap, ActionMap aMap) {
+	public static void initInputActionMaps(PuzzleGame game, 
+	                                       InputMap inputMap, 
+	                                       ActionMap aMap) {
 		initInputMap(inputMap);
 
 		for(KeyStroke keyStroke : inputMap.allKeys()) {
-			Runnable pieceActionRunner;
-			String keyBinding  = (String)inputMap.get(keyStroke);
-			switch(keyBinding) {
-				case "speed_down": 
-					pieceActionRunner = PieceAction::startMovingDown; 
-					break;
-				case "stop_speed_down": 
-					pieceActionRunner = PieceAction::stopMovingDown; 
-					break;
-				case "warp": 
-					pieceActionRunner = PieceAction::warpDown; 
-					break;
-				case "move_right": 
-					pieceActionRunner = () -> PieceAction.startPieceAction(PieceAction.RIGHT); 
-					break;
-				case "stop_move_right": 
-					pieceActionRunner = () -> PieceAction.stopPieceAction(PieceAction.RIGHT); 
-					break;
-				case "move_left": 
-					pieceActionRunner = () -> PieceAction.startPieceAction(PieceAction.LEFT); 
-					break;
-				case "stop_move_left": 
-					pieceActionRunner = () -> PieceAction.stopPieceAction(PieceAction.LEFT); 
-					break;
-				case "rotate_clock": 
-					pieceActionRunner = () -> PieceAction.startPieceAction(PieceAction.CLOCKWISE); 
-					break;
-				case "stop_rotate_clock": 
-					pieceActionRunner = () -> PieceAction.stopPieceAction(PieceAction.CLOCKWISE); 
-					break;
-				case "rotate_count": 
-					pieceActionRunner = () -> PieceAction.startPieceAction(PieceAction.COUNTERCLOCKWISE); 
-					break;
-				case "stop_rotate_count": 
-					pieceActionRunner = () -> PieceAction.stopPieceAction(PieceAction.COUNTERCLOCKWISE); 
-					break;
-				case "quit": 
-					pieceActionRunner = () -> System.exit(0);
-					break;
-				default: pieceActionRunner = () -> {}; //TODO: Should throw exception/error here?
+			final Runnable pieceActionRunner;
+			String keyBinding  = ((String)inputMap.get(keyStroke));
+			
+			if (keyBinding.contains("quit")) {
+				pieceActionRunner = () -> System.exit(0);
 			}
+			else {
+				try {
+					pieceActionRunner = (keyBinding.startsWith(STOP_PREFIX))
+						? PieceAction.valueOf(
+							  keyBinding.substring(STOP_PREFIX.length()).toUpperCase()
+						  )::stopPieceAction
+						: PieceAction.valueOf(
+							  keyBinding.toUpperCase()
+						  )::startPieceAction;
+				} catch (NullPointerException e) {
+					// The value in the input map does not correspond with anything
+					// in the PieceActionMap so don't add an action to the ActionMap.
+					break;
+				}
+			}
+			
 			
 			aMap.put(keyBinding, new AbstractAction() {
 				@Override
@@ -100,6 +85,7 @@ public class Keyboard {
 				}
 			});
 		}
+		
 	}	
-	
+		
 }

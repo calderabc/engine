@@ -1,7 +1,7 @@
 warp w, up
-speed_down s, down
-move_right d, right
-move_left a, left
-rotate_clock k, alt
-rotate_count j, control
+speed s, down
+right d, right
+left a, left
+clock k, alt
+counter j, control
 quit escape

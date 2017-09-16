@@ -278,11 +278,11 @@ public final class BitmapGenerator {
 	}
 	
 	// Rotate piece coordinates 90 degrees clockwise
-	private static void rotatePiece(int[][] pieceCoords, int[] max) {
-		int dummy;
-		for (int[] blockCoords: pieceCoords) {
+	private static void rotatePiece(byte[][] pieceCoords, byte[] max) {
+		byte dummy;
+		for (byte[] blockCoords: pieceCoords) {
 			dummy = blockCoords[X];
-			blockCoords[X] = max[Y] - blockCoords[Y];
+			blockCoords[X] = (byte) (max[Y] - blockCoords[Y]);
 			blockCoords[Y] = dummy;
 		}
 		
@@ -294,13 +294,13 @@ public final class BitmapGenerator {
 	
 	public static void main(String argv[]) {
 		int maxSpriteSheetHeight = 0;
-		int[][][] pieceTemplate = TetrisGame.TETRIS_PIECE_DATA.pieceTemplate;
+		byte[][][] pieceTemplate = TetrisGame.TETRIS_PIECE_DATA.pieceTemplate;
 		int numOfPieces = pieceTemplate.length;
 
 		BufferedImage[] spriteSheet = new BufferedImage[numOfPieces];
 
 		int pieceID = 0;
-		for (int[][] pieceCoords: pieceTemplate) {
+		for (byte[][] pieceCoords: pieceTemplate) {
 			BufferedImage[] pieceImages = new BufferedImage[BlockRenderer.NUM_OF_ORIENTATIONS];
 				
 			int spriteSheetHeight = pieceCoords.length * BLOCK_DISPLAY_HEIGHT;
@@ -313,8 +313,8 @@ public final class BitmapGenerator {
 			                                         BlockRenderer.BUFF_IMAGE_TYPE);
 			Graphics spriteSheetGraphics = spriteSheet[pieceID].createGraphics();
 			
-			int[] max = new int[2];
-			for (int[] blockCoords: pieceCoords) {
+			byte[] max = new byte[2];
+			for (byte[] blockCoords: pieceCoords) {
 				if (blockCoords[X] > max[X]) max[X] = blockCoords[X];
 				if (blockCoords[Y] > max[Y]) max[Y] = blockCoords[Y];
 			}
@@ -324,7 +324,7 @@ public final class BitmapGenerator {
 				int mapHeight = max[Y] + 1;
 
 				boolean[][] pieceMap = new boolean[mapHeight][mapWidth];
-				for (int[] blockCoords: pieceCoords) {
+				for (byte[] blockCoords: pieceCoords) {
 					pieceMap[blockCoords[Y]][blockCoords[X]] = true;
 				}
 				
@@ -346,7 +346,7 @@ public final class BitmapGenerator {
 				decoratePiece(pieceImages[orient], pieceID);
 				
 				int yDrawPos = 0;
-				for (int[] blockCoords: pieceCoords) {
+				for (byte[] blockCoords: pieceCoords) {
 					spriteSheetGraphics.drawImage(
 						pieceImages[orient].getSubimage(
 							blockCoords[X] * BLOCK_DISPLAY_WIDTH, 

@@ -12,6 +12,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -38,7 +40,8 @@ public class SwingScreen extends JPanel implements Screen {
 	public SwingScreen(TetrisGame game) {
 		// TODO: Do this method call on another thread.
 		Keyboard.initInputActionMaps(game, getInputMap(), getActionMap());
-
+		ActionMap am = getActionMap();
+		InputMap im = getInputMap();
 		frame = new JFrame("Tetris");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(700, 670);

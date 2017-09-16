@@ -1,19 +1,98 @@
 package engine.puzzle.tetris.swing;
 
+import java.io.Serializable;
+import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import engine.Coordinates;
+import engine.puzzle.PuzzleGame;
 import engine.puzzle.tetris.TetrisGame;
 
-public enum PieceAction {
-	WARP (Type.MOVE, 100, new Coordinates(0, 1)),
-	FALL (Type.MOVE, 3, new Coordinates(0, 1)),
-	DOWN (Type.MOVE, 20, new Coordinates(0, 1)),
+//Map<String, PieceAction> pieceActionMap = new HashMap<String, PieceAction>(20);
+public enum PieceAction implements Serializable {
+	// TODO: Could reduce data file size by saving values instead of whole objects.
+	WARP(PieceAction.Type.MOVE, 100, new Coordinates(0, 1)) {
+		@Override 
+		public synchronized void startPieceAction() {
+			if (!isMoving) {
+				FALL.stopPieceAction();
+
+				runner = () -> {
+					if (!TetrisGame.me.tryToMovePiece(this)) {
+						isMoving = false;
+						FALL.startPieceAction();
+						future.cancel(true);
+					}
+				};
+				
+				scheduleFuture(true);
+			}
+		}
+		
+		@Override
+		public synchronized void stopPieceAction() { }
+	},
+	FALL (Type.MOVE, 3, new Coordinates(0, 1)) {
+		@Override
+		public synchronized void startPieceAction() {
+			if (!isMoving) {
+				runner = () -> {
+					if (!TetrisGame.me.tryToMovePiece(this)) {
+						stopPieceAction();
+						TetrisGame.me.landPiece();
+					}
+				};
+				scheduleFuture(false);
+			}
+		}
+
+		@Override
+		public synchronized void stopPieceAction() {
+			if (isMoving) {
+				cancelFuture();
+			}
+		}	
+	},
+	SPEED (Type.MOVE, 20, new Coordinates(0, 1)) {
+		@Override
+		public synchronized void startPieceAction() {
+			if (!isPressed) {
+				isPressed = true;
+				
+				if (!isMoving) {
+					FALL.stopPieceAction();
+					
+					runner = () -> {
+						if (!TetrisGame.me.tryToMovePiece(this)) {
+							TetrisGame.me.landPiece();
+							cancelFuture();
+						}
+					};
+			
+					scheduleFuture(true);
+				}
+			}
+		}
+
+		@Override
+		public synchronized void stopPieceAction() {
+			cancelFuture();
+			isPressed = false;
+			FALL.stopPieceAction();
+		}	
+	},
 	LEFT (Type.MOVE, 6, new Coordinates(-1, 0)),
-	RIGHT (Type.MOVE, 6, new Coordinates(1, 0), PieceAction.LEFT),
-	CLOCKWISE (Type.ROTATE, 6, new Coordinates(-1, 0)),
-	COUNTERCLOCKWISE (Type.ROTATE, 6, new Coordinates(1, 0), PieceAction.CLOCKWISE);
+	RIGHT (Type.MOVE, 6, new Coordinates(1, 0), LEFT),
+	CLOCK (Type.ROTATE, 6, new Coordinates(-1, 0)),
+	COUNTER (Type.ROTATE, 6, new Coordinates(1, 0), CLOCK);
+
+	public static ScheduledThreadPoolExecutor scheduler = new ScheduledThreadPoolExecutor(2);
+
+	static {
+		scheduler.setRemoveOnCancelPolicy(true);
+	}
 
 	// Delay between actions (moving/rotating the piece) in milliseconds.(?) 
 	// TODO: Figure the apparent discord between milliseconds and 1.0e9 (nanosecond)
@@ -22,10 +101,12 @@ public enum PieceAction {
 	private long delay; 
 
 	private PieceAction opposite;
-	private ScheduledFuture<?> future;
-	private Runnable runner;
-	private boolean isMoving = false;  
-	private boolean isPressed = false;
+	protected ScheduledFuture<?> future;
+
+	protected boolean isMoving = false;  
+	protected boolean isPressed = false;
+	
+	protected Runnable runner; 
 
 	public enum Type {
 		MOVE,
@@ -47,8 +128,16 @@ public enum PieceAction {
 		if (opposite != null) {
 			opposite.opposite = this;
 		}
-		
-		runner = new ActionRunner(this);
+
+		runner = () -> {
+			if (isPressed) {
+				if (!TetrisGame.me.tryToMovePiece(this)) {
+					future.cancel(false);
+					isMoving = false;
+				}
+			}
+		};
+
 	}
 	
 	public static void resetAll() {
@@ -61,113 +150,36 @@ public enum PieceAction {
 		}
 	}
 
-	private class ActionRunner implements Runnable {
-		private PieceAction action;
-		public ActionRunner(PieceAction newAction) {
-			action = newAction;
-		}
-		public void run() {
-			if (action.isPressed) {
-				if (!TetrisGame.me.tryToMovePiece(action)) {
-					action.future.cancel(false);
-					action.isMoving = false;
-				}
-			}
-		}
-	}
-
-	private static void scheduleFuture(PieceAction action, boolean startNow) {
-		action.isMoving = true;
-		action.future = 
-			TetrisGame.me.scheduler.scheduleAtFixedRate(action.runner, 
-		                                  (startNow) ? 0 : action.delay, 
-		                                  action.delay, 
-		                                  TimeUnit.NANOSECONDS);
+	protected void scheduleFuture(boolean startNow) {
+		isMoving = true;
+		future = scheduler.scheduleAtFixedRate(runner, 
+		                                       (startNow) ? 0 : delay,
+		                                       delay, 
+		                                       TimeUnit.NANOSECONDS);
 	}
 	
-	private static void cancelFuture(PieceAction action) {
-		action.future.cancel(false);
-		action.isMoving = false;
+	protected void cancelFuture() {
+		future.cancel(false);
+		isMoving = false;
 	}
 
-	public static synchronized void startFalling() {
-		if (!PieceAction.FALL.isMoving) {
-			PieceAction.FALL.runner = () -> {
-				if (!TetrisGame.me.tryToMovePiece(PieceAction.FALL)) {
-					stopFalling();
-					TetrisGame.me.landPiece();
-				}
-			};
-			scheduleFuture(PieceAction.FALL, false);
-		}
-	}
-
-	public static synchronized void stopFalling() {
-		if (PieceAction.FALL.isMoving) {
-			cancelFuture(PieceAction.FALL);
-		}
-	}
-	
-	public static synchronized void warpDown() {
-		if (!PieceAction.WARP.isMoving) {
-			stopFalling();
-
-			PieceAction.WARP.runner = () -> {
-				if (!TetrisGame.me.tryToMovePiece(PieceAction.WARP)) {
-					PieceAction.WARP.isMoving = false;
-					startFalling();
-					PieceAction.WARP.future.cancel(true);
-				}
-			};
-			
-			scheduleFuture(PieceAction.WARP, true);
-		}
-	}
-
-	public static synchronized void startPieceAction(PieceAction action) {
-		if (!action.isPressed) {
-			action.isPressed = true;
-			
-			if (action.opposite.isPressed) {
-				cancelFuture(action.opposite);
+	public synchronized void startPieceAction() {
+		if (!isPressed) {
+			isPressed = true;
+			if (opposite.isPressed) {
+				opposite.cancelFuture();
 			}
 			
-			scheduleFuture(action, true);
+			scheduleFuture(true);
 		}			
 	}
 
-	public static synchronized void stopPieceAction(PieceAction action) {
-		cancelFuture(action);
-		action.isPressed = false;
+	public synchronized void stopPieceAction() {
+		cancelFuture();
+		isPressed = false;
 
-		if (action.opposite.isPressed) {
-			startPieceAction(action.opposite);
+		if (opposite.isPressed) {
+			opposite.startPieceAction();
 		}
 	}
-
-	public static synchronized void startMovingDown() {
-		if (!PieceAction.DOWN.isPressed) {
-			PieceAction.DOWN.isPressed = true;
-			
-			if (!PieceAction.DOWN.isMoving) {
-				stopFalling();
-				
-				PieceAction.DOWN.runner = () -> {
-					if (!TetrisGame.me.tryToMovePiece(PieceAction.DOWN)) {
-						TetrisGame.me.landPiece();
-						cancelFuture(PieceAction.DOWN);
-					}
-				};
-		
-				scheduleFuture(PieceAction.DOWN, true);
-			}
-		}
-	}
-
-	public static synchronized void stopMovingDown() {
-		cancelFuture(PieceAction.DOWN);
-		PieceAction.DOWN.isPressed = false;
-		startFalling();
-	}
-
 }

@@ -71,7 +71,7 @@ public class TetrisPiece extends Piece {
 
 	private final void generatePiece(TetrisPieceData newPieceData, int pieceID) {
 		int state = 0;
-		for (int[] blockXY: newPieceData.pieceTemplate[pieceID]) {
+		for (byte[] blockXY: newPieceData.pieceTemplate[pieceID]) {
 			blocks.add(new Block(new Coordinates(blockXY[0], blockXY[1]), id, state++));
 		}
 

@@ -1,15 +1,17 @@
 package engine.puzzle.tetris.util;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 
 import engine.Coordinates;
+import engine.FileIO;
+import engine.puzzle.Board;
+import engine.puzzle.PuzzleGame;
+import engine.puzzle.tetris.TetrisPiece;
 import engine.puzzle.tetris.TetrisPieceData;
+import engine.puzzle.tetris.swing.PieceAction;
 
-public class TetrisPieceDataGenerator {
+public class TetrisDataGenerator {
 
-	public static final int[][][] pieceTemplate =
+	public static final byte[][][] pieceTemplate =
 		{{{0, 0}, {1, 0}, {0, 1}, {1, 1}},  //  ##
 											//  ##
 		 {{0, 0}, {1, 0}, {2, 0}, {1, 1}},  //     ###
@@ -27,7 +29,7 @@ public class TetrisPieceDataGenerator {
 	
 	/* These values are twice their intended values so that floating point half
 	 * fractions can be represented as integers. */
-	public static final int[][] pieceCenter = {{1, 1, 1, 1},
+	public static final byte[][] pieceCenter = {{1, 1, 1, 1},
 	                                           {2, 0, 2, 0},
 	                                           {2, 0, 2, 0}, 
 	                                           {2, 0, 2, 0}, 
@@ -37,17 +39,12 @@ public class TetrisPieceDataGenerator {
 
 	public static final Coordinates pieceStartPos = new Coordinates(3, 0);
 
+
 	public static void main(String argv[]) {
-		TetrisPieceData data = new TetrisPieceData(pieceTemplate, pieceCenter, pieceStartPos);
+		TetrisPieceData pieceData = new TetrisPieceData(pieceTemplate, pieceCenter, pieceStartPos);
+
 		
-		try {
-			ObjectOutputStream out = new ObjectOutputStream(
-				new FileOutputStream(TetrisPieceData.FILE_NAME)
-			);
-			out.writeObject(data);
-			out.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		FileIO.save(TetrisPieceData.FILE_NAME, pieceData);
+		
 	}
 }
