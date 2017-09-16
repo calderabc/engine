@@ -1,13 +1,11 @@
 package engine.puzzle.tetris.swing;
 
 import java.io.Serializable;
-import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import engine.Coordinates;
-import engine.puzzle.PuzzleGame;
 import engine.puzzle.tetris.TetrisGame;
 
 //Map<String, PieceAction> pieceActionMap = new HashMap<String, PieceAction>(20);

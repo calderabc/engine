@@ -1,24 +1,16 @@
 package engine.swing;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.RepaintManager;
-import javax.swing.SwingUtilities;
 
 import engine.Part;
 import engine.Screen;
@@ -40,8 +32,6 @@ public class SwingScreen extends JPanel implements Screen {
 	public SwingScreen(TetrisGame game) {
 		// TODO: Do this method call on another thread.
 		Keyboard.initInputActionMaps(game, getInputMap(), getActionMap());
-		ActionMap am = getActionMap();
-		InputMap im = getInputMap();
 		frame = new JFrame("Tetris");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(700, 670);

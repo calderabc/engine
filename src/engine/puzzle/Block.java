@@ -3,7 +3,6 @@ package engine.puzzle;
 import engine.Coordinates;
 import engine.MovablePart;
 import engine.puzzle.tetris.TetrisGame;
-import engine.swing.Sprite;
 
 public class Block extends MovablePart {	
 	private final int type;

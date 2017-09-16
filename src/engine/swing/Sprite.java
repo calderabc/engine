@@ -5,7 +5,6 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import engine.Visual;
-import engine.puzzle.tetris.swing.PieceAction;
 import engine.Coordinates;
 
 public abstract class Sprite implements Visual {

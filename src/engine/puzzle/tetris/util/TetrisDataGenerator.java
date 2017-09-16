@@ -3,11 +3,7 @@ package engine.puzzle.tetris.util;
 
 import engine.Coordinates;
 import engine.FileIO;
-import engine.puzzle.Board;
-import engine.puzzle.PuzzleGame;
-import engine.puzzle.tetris.TetrisPiece;
 import engine.puzzle.tetris.TetrisPieceData;
-import engine.puzzle.tetris.swing.PieceAction;
 
 public class TetrisDataGenerator {
 

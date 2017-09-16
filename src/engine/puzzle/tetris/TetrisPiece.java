@@ -3,17 +3,11 @@ package engine.puzzle.tetris;
 import java.util.Vector;
 
 import engine.Coordinates;
-import engine.HasDimension;
-import engine.Movable;
-import engine.MovablePart;
-import engine.Part;
-import engine.Visual;
 import engine.puzzle.Block;
 import engine.puzzle.Piece;
 import engine.puzzle.tetris.swing.PieceAction;
 import engine.puzzle.tetris.swing.TetrisSprite;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
