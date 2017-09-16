@@ -9,28 +9,26 @@ import engine.swing.Swing;
 
 public class TetrisGame extends PuzzleGame {
 	public static TetrisGame me = (TetrisGame)Game.me;
-	static public final TetrisPieceData TETRIS_PIECE_DATA = setTetrisPieceData();
-
-	private static final TetrisPieceData setTetrisPieceData() { 
-		return (TetrisPieceData)FileIO.load(TetrisPieceData.FILE_NAME);
-	}
+	static public final TetrisPieceData TETRIS_PIECE_DATA =
+		(TetrisPieceData)FileIO.load(TetrisPieceData.FILE_NAME);
 
 	public static void main(String argv[]) {
-		me = new TetrisGame(TETRIS_PIECE_DATA);
-		// TODO: Here I would choose between graphical engines.
-		me.engine = new Swing((TetrisGame)me);
-
+		// Engine must be initialized before game parts because visuals
+		// need to be created before they can be assigned to the parts.
+		// TODO: Make more elegant.
+		// TODO: Dynamically choose between graphical engines.
+		// TODO: Tell engine what type of game to generate visuals for
+		// right now defaults to Tetris visuals.
+		me = new TetrisGame();
+		me.engine = new Swing();
+		me.board = new Board(TETRIS_PIECE_DATA);
 		me.screen = me.engine.newScreen((TetrisGame)me);
 		((PuzzleGame)me).run();
 
 		System.exit(0);
 	}
 	
-	public TetrisGame(TetrisPieceData pieceData) {
-		board = new Board(pieceData);
-	}
-	
-	
+	@Override
 	public boolean tryToMovePiece(PieceAction action) {
 		synchronized(piece) {
 			if (!isPieceLanded) {
@@ -60,6 +58,7 @@ public class TetrisGame extends PuzzleGame {
 		return false;
 	}
 	
+	@Override
 	public void landPiece() {
 		synchronized(piece) {
 			if (!isPieceLanded) {

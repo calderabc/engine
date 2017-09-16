@@ -4,17 +4,16 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 
-import engine.Part;
-
-public class Number extends Part {
+public class Number {
 	private long value;
 	private int size;
 	private final long max;
-	private List<Digit> digits = new Vector<Digit>();
+	private List<Digit> digits;
 	
 	public Number(int newX, int newY, int newSize, int newValue) {
 		size = newSize;
 		value = newValue;
+		digits = new Vector<>(newSize);
 		
 		max = (long) Math.pow((double) size, 10) - 1;
 		

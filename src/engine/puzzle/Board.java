@@ -33,9 +33,9 @@ public final class Board extends Part {
 	private List<Row> blockMatrix = new Vector<Row>(DEFAULT_BOARD_HEIGHT);
 
 	
-	@SuppressWarnings("serial")
 	private final class Row implements Iterable<Block> {
-		public class PositionOccupiedException extends Exception { }
+		public class PositionOccupiedException extends Exception {
+			private static final long serialVersionUID = 1L; }
 
 		private Block[] blocks = newRow();
 		private int blockCount = 0;

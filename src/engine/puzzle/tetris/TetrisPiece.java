@@ -3,6 +3,7 @@ package engine.puzzle.tetris;
 import java.util.Vector;
 
 import engine.Coordinates;
+import engine.Visual;
 import engine.puzzle.Block;
 import engine.puzzle.Piece;
 import engine.puzzle.tetris.swing.PieceAction;
@@ -26,12 +27,6 @@ public class TetrisPiece extends Piece {
 
 //*****************************************************************************
 
-
-	private final int id;
-	public int getID() {
-		return id;
-	}
-
 	public Coordinates currCenter = null;
 	public  Coordinates destCenter = null;
 
@@ -39,19 +34,16 @@ public class TetrisPiece extends Piece {
 	/**
 	 * Default Constructor.  Will have better features when I get around to it.
 	 */
-	public TetrisPiece(int newID, TetrisPieceData newPieceData) {
-
-		id = newID;
-		blockCount = newPieceData.pieceTemplate[id].length;
+	public TetrisPiece(byte newId, TetrisPieceData newPieceData) {
+		blockCount = newPieceData.pieceTemplate[newId].length;
 		blocks = new Vector<Block>(blockCount);
 		
-		generatePiece(newPieceData, id);
+		generatePiece(newPieceData, newId);
 	}
 
 	public TetrisPiece(TetrisPiece other) {
 		super(other);
 
-		id = other.getID();
 		blockCount = other.getBlockCount();
 		blocks = new Vector<Block>(blockCount);
 		
@@ -63,21 +55,23 @@ public class TetrisPiece extends Piece {
 		destCenter = new Coordinates(other.destCenter);
 	}
 
-	private final void generatePiece(TetrisPieceData newPieceData, int pieceID) {
-		int state = 0;
-		for (byte[] blockXY: newPieceData.pieceTemplate[pieceID]) {
-			blocks.add(new Block(new Coordinates(blockXY[0], blockXY[1]), id, state++));
+	private final void generatePiece(TetrisPieceData newPieceData, byte pieceId) {
+		byte state = 0;
+		for (byte[] blockXY: newPieceData.pieceTemplate[pieceId]) {
+			blocks.add(new Block(new Coordinates(blockXY[0], blockXY[1]), 
+			                     new Visual.Id((byte)1, pieceId, state++)));
 		}
 
 		// Centers are represented multiplied by two, this is why the 'pos' 
 		// variables are doubled to match the already doubled 'pieceCenter'.
 		Coordinates posDoubled = new Coordinates(newPieceData.pieceStartPos.x << 1, 
 		                                         newPieceData.pieceStartPos.y << 1);
-		currCenter = newPieceData.getCurrCenter(pieceID).move(posDoubled);
-		destCenter = newPieceData.getDestCenter(pieceID).move(posDoubled);
+		currCenter = newPieceData.getCurrCenter(pieceId).move(posDoubled);
+		destCenter = newPieceData.getDestCenter(pieceId).move(posDoubled);
 
 		for (Block currBlock: blocks) {
 				currBlock.move(newPieceData.pieceStartPos);
+				currBlock.visual.update(currBlock);
 		}
 	}
 
@@ -176,9 +170,6 @@ public class TetrisPiece extends Piece {
 
 	public void updateVisual() {
 		for (Block block : blocks) {
-			if (block.visual == null) {
-				block.visual = TetrisGame.me.engine.newVisual(block);
-			}
 			((TetrisSprite)block.visual).update(block);
 		}
 	}

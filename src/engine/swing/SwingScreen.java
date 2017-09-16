@@ -69,10 +69,6 @@ public class SwingScreen extends JPanel implements Screen {
 			
 		}
 		for (Part displayPart: displayedParts) {
-			// If the sprite for the part doesn't exist create it.
-			if (displayPart.visual == null) {
-				displayPart.visual = TetrisGame.me.engine.newVisual(displayPart);
-			}
 			((Sprite)displayPart.visual).draw(g2d);
 		}
 	}

@@ -36,9 +36,9 @@ public abstract class GraphicsEngine {
 		return null;
 	}
 
-	public Visual newVisual(Part part) {
+	public Visual newVisual(Part part, Visual.Id id) {
 		try {
-			Visual v = visualClass.getConstructor(Part.class).newInstance(part);
+			Visual v = visualClass.getConstructor(Part.class, id.getClass()).newInstance(part, id);
 			return v;
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block

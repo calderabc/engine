@@ -2,16 +2,14 @@ package engine.puzzle;
 
 import engine.Coordinates;
 import engine.MovablePart;
+import engine.Visual;
 import engine.puzzle.tetris.TetrisGame;
 
 public class Block extends MovablePart {	
-	private final int type;
-	private int state;
 
-	public Block(Coordinates newCoords, int newType, int newState) {
+	public Block(Coordinates newCoords, Visual.Id newId) {
 		super(newCoords);
-		type = newType;
-		state = newState;
+		visual = TetrisGame.me.engine.newVisual(this, newId);
 
 	}
 
@@ -19,24 +17,9 @@ public class Block extends MovablePart {
 	{
 		super(other);
 		visual = TetrisGame.me.engine.newVisual(other.visual);
-		type = other.getType();
-		state = other.getState();
-	}
-	
-	public final int getType() {
-		return type;
-	}
-	
-	public final void setState(int newState) {
-		state = newState;
-	}
-
-	public final int getState() {
-		return state;
 	}
 	
 	// TODO: Review the following.  Make sure they have purpose.
-
 	public int getHeight() {
 		return 1;
 	}

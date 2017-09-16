@@ -16,7 +16,7 @@ public final class PiecePool {
 		int pieceCount = pieceData.pieceTemplate.length;
 
 		pieces = new TetrisPiece[pieceCount];
-		for (int i = 0; i < pieceCount; i++) {
+		for (byte i = 0; i < pieceCount; i++) {
 			pieces[i] = new TetrisPiece(i, pieceData);	
 		}	
 	}

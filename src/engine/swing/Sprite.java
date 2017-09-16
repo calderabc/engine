@@ -7,9 +7,9 @@ import java.util.Map;
 import engine.Visual;
 import engine.Coordinates;
 
-public abstract class Sprite implements Visual {
-	static protected Map<Integer, ImageList> imageListMap = 
-		new Hashtable<Integer, ImageList>(30);
+public abstract class Sprite extends Visual {
+	static protected Map<Id, ImageList> imageListMap = 
+		new Hashtable<>(30);
 
 	protected ImageList images;
 	protected Coordinates position;

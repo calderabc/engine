@@ -51,4 +51,6 @@ public abstract class PuzzleGame extends Game {
 		}
 	}
 	 
+	public abstract boolean tryToMovePiece(PieceAction action);
+	public abstract void landPiece();
 }
