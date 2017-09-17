@@ -2,28 +2,38 @@ package engine.puzzle;
 
 import engine.Coordinates;
 import engine.MovablePart;
+import engine.Visual.Id;
+import engine.puzzle.tetris.TetrisGame;
 
 public class Digit extends MovablePart {
-	private int value;
+	private byte value;
 	
-	public Digit(Coordinates newPosition, int newValue) {
+	public Digit(Coordinates newPosition, byte newValue) {
 		super(newPosition);
-
-		setValue(newValue);
+		set(newValue);
+		
+		visual = TetrisGame.me.engine.newVisual(this, new Id((byte)2));
 	}
 	
-	public int getValue() {
+	public Digit(Coordinates newPosition) {
+		this(newPosition, (byte)0);
+	}
+	
+	public byte get() {
 		return value;
 	}
 	
-	public int setValue(int newValue) {
+	public Digit set(byte newValue) {
 		if (value > 9 || value < 0) {
 			throw new IllegalArgumentException();
 		}
-			value = newValue;
+		byte oldValue = value;
+		value = newValue;
+		if (value != oldValue) {
+			// If the value has changed update the visual.
+			visual.update(this);
+		}
 		
-		return value;
+		return this;
 	}
-	
-	
 }

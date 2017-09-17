@@ -1,60 +1,41 @@
 package engine.puzzle;
 
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Vector;
-
 import engine.Coordinates;
 
+// This is only meant to work for positive numbers.
+// Negative values have no meaning, won't work.
 public class Number {
 	private long value;
-	private int size;
-	private final long max;
-	private List<Digit> digits;
+	private Digit[] digits;
 	
-	public Number(int newX, int newY, int newSize, int newValue) {
-		size = newSize;
-		value = newValue;
-		digits = new Vector<>(newSize);
-		
-		max = (long) Math.pow((double) size, 10) - 1;
-		
-		for (int i = 0; i < size; i++) {
-			digits.add(new Digit(new Coordinates(i), 0));
+	public Number(long newValue, byte newLength) {
+		digits = new Digit[newLength];
+		for (int i = 0; i < newLength; i++) {
+			digits[i] =  new Digit(new Coordinates(i));
 		}
-		
-		assignDigits();
+		set(newValue);
 	}
 	
-	public final long add(long offset) {
+	public final Number add(long offset) {
 		value += offset;
-		
-		assignDigits();
-		
-		return value;
+		set(value);
+		return this;
 	}
 	
-	private final void assignDigits() {
-		if (value <= max && value >= 0 && !digits.isEmpty() ) {
-			
-			ListIterator<Digit> iterator = 
-				digits.listIterator(digits.size());
-			
-			int lastDigitValue;
-			for (long quotient = value; 
-				 quotient > 0; 
-				 quotient = (quotient - lastDigitValue) / 10
-			) {
-				
-				lastDigitValue = (int) quotient % 10;
-				
-				((Digit) iterator.previous()).setValue(lastDigitValue);
-			}
+	public final Number add(Number other) {
+		return add(other.value);
+	}
+	
+	public final Number set(long value) {
+		for (int i = digits.length - 1; i >= 0; i--) {
+			digits[i].set((byte)(value % 10));
+			value = value % 10; 
 		}
+		
+		return this;
 	}
 	
-	public long getValue() {
+	public final long get() {
 		return value;
 	}
-	
 }

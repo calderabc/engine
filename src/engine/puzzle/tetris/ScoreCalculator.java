@@ -1,29 +1,27 @@
 package engine.puzzle.tetris;
 
-import engine.puzzle.Level;
+import engine.puzzle.Number;
 
 public enum ScoreCalculator {
+	// TODO: For testing.  Switch to 10 for actual thing.
 	NINTENDO (2) {
-			
-		public long calculate(Level level, int rowCount) {
-			long score = 0;
-			
+		public long calculate(Number level, int rowCount) {
+			long multiplier = 0;
 			switch(rowCount) {
 				case 1: 
-					score = 40 * level.getValue();
+					multiplier = 40;
 					break;
 				case 2: 
-					score = 100 * level.getValue();
+					multiplier = 100;
 					break;
 				case 3: 
-					score = 300 * level.getValue();
+					multiplier = 300;
 					break;
 				case 4: 
-					score = 1200 * level.getValue();
+					multiplier = 1200;
 					break;
 			}
-			
-			return score;
+			return multiplier * level.get();
 		}
 	};
 	
@@ -33,5 +31,5 @@ public enum ScoreCalculator {
 		rowsPerLevel = newRowsPerLevel;
 	}
 	
-	public abstract long calculate(Level level, int rowcount); 
+	public abstract long calculate(Number level, int rowcount); 
 }

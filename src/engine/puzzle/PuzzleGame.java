@@ -14,17 +14,19 @@ public abstract class PuzzleGame extends Game {
 	protected Board board;
 	protected TetrisPiece piece;
 	protected Score score;
+	protected Number level;
+	protected Number rowsCleared;
 	protected boolean isPieceLanded;
-	protected Level level;
 
 	public ScheduledThreadPoolExecutor scheduler = new ScheduledThreadPoolExecutor(2);
 	 
 	public void run() {
 		scheduler.setRemoveOnCancelPolicy(true);
-		
 
-		score = new Score(ScoreCalculator.NINTENDO, 10, 0);
-		level = new Level(1);
+		score = new Score(ScoreCalculator.NINTENDO, (byte)5);
+		level = new Number(1, (byte)2);
+		rowsCleared = new Number(0, (byte)3);
+
 		
 		piece = board.startNewPiece();
 		while (board.doesPieceFit(piece)) {		
