@@ -7,7 +7,6 @@ import engine.puzzle.tetris.TetrisGame;
 
 public abstract class GraphicsEngine {
 	protected Class<? extends Screen> screenClass;
-	protected Class<? extends Visual> visualClass; 
 	
 	public Screen newScreen(TetrisGame game) {
 		try {
@@ -35,11 +34,14 @@ public abstract class GraphicsEngine {
 		}
 		return null;
 	}
+	
+	protected abstract Class<? extends Visual> getVisualClass(MovablePart part);
 
-	public Visual newVisual(Part part, Visual.Id id) {
+	public Visual newVisual(MovablePart part, Visual.Id id) {
 		try {
-			Visual v = visualClass.getConstructor(Part.class, id.getClass()).newInstance(part, id);
-			return v;
+			return getVisualClass(part)
+				.getConstructor(MovablePart.class, Visual.Id.class)
+				.newInstance(part, id);
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -65,8 +67,7 @@ public abstract class GraphicsEngine {
 	public Visual newVisual(Visual visual) {
 		try {
 			if (visual == null) return null;
-			Visual v = visualClass.getConstructor(Visual.class).newInstance(visual);
-			return v;
+			return visual.getClass().getConstructor(Visual.class).newInstance(visual);
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

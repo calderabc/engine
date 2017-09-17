@@ -1,14 +1,20 @@
 package engine.swing;
 
 import engine.GraphicsEngine;
-import engine.puzzle.tetris.swing.TetrisSprite;
+import engine.MovablePart;
+import engine.puzzle.tetris.swing.ImageType;
 
 public class Swing extends GraphicsEngine {
 
 	public Swing() {
 		screenClass = SwingScreen.class;
-		
-		// TODO: Choose dynamically
-		visualClass = TetrisSprite.class;
+	}
+
+	@Override
+	protected Class<? extends Sprite> getVisualClass(MovablePart part) {
+		// Holy reflection Batman!
+		return ImageType.valueOf(part.getClass()
+		                             .getSimpleName()
+		                             .toUpperCase()).SPRITE_CLASS;
 	}
 }

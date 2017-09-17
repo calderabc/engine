@@ -69,4 +69,12 @@ public final class Coordinates implements Movable, Serializable {
 		}
 	}
 	
+	// TODO: This is basically a scale transform.  Maybe I can reuse some standard java code.
+	public Coordinates scale(Coordinates scaleFactor) {
+		Coordinates scaledCoordinates = new Coordinates(this);
+		for (int i = 0; i < scaleFactor.numOfDimensions; i++) {
+			scaledCoordinates.values[i] *= scaleFactor.get(i);
+		}
+		return scaledCoordinates;
+	}
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import engine.Visual;
 import engine.Coordinates;
+import engine.MovablePart;
 
 public abstract class Sprite extends Visual {
 	static protected Map<Id, ImageList> imageListMap = 
@@ -14,26 +15,39 @@ public abstract class Sprite extends Visual {
 	protected ImageList images;
 	protected Coordinates position;
 	protected Coordinates dimensions;
+	protected Coordinates positionScaleFactor;
 	protected int currImage;
 	
+	protected Sprite(MovablePart newPart, Id newId) {
+		images = imageListMap.get(newId); // Save memory by always using the same images.
+		positionScaleFactor = images.imageType.POSITION_SCALE_FACTOR;
+		position = new Coordinates(newPart.pos.scale(positionScaleFactor));
+		dimensions = images.imageType.DIMENSIONS;
+		currImage = 0;
+	}
+
+	protected Sprite(Visual other) {
+		images = ((Sprite)other).images;
+		position = ((Sprite)other).position;
+		dimensions = ((Sprite)other).dimensions;
+		positionScaleFactor = ((Sprite)other).positionScaleFactor;
+		currImage = ((Sprite)other).currImage;
+	}
 	
 	public void draw(Graphics2D canvas) {
 		canvas.drawImage(images.get(currImage),  
 					     position.x(), position.y(), 
 					     dimensions.x(), dimensions.y(), null);
 	}
-	
-	
 
-	public abstract void rotate(int offset);
-
-/*
-	@Override 
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		
-		Graphics2D g2d = (Graphics2D)g;
-		g2d.drawImage(images.get(currImage), 0, 0, getWidth(), getHeight(), null);
+	@Override
+	public void update(MovablePart part) {
+		position = new Coordinates(part.pos.scale(positionScaleFactor));
 	}
-*/
+
+	@Override
+	public void rotate(int offset) {
+		// TODO: For now the default sprite rotation does nothing.
+		// Eventually add rotation by degrees functionality.
+	}
 }

@@ -7,7 +7,7 @@ import engine.Visual;
 import engine.puzzle.Block;
 import engine.puzzle.Piece;
 import engine.puzzle.tetris.swing.PieceAction;
-import engine.puzzle.tetris.swing.TetrisSprite;
+import engine.swing.puzzle.BlockSprite;
 
 import java.util.List;
 
@@ -170,7 +170,7 @@ public class TetrisPiece extends Piece {
 
 	public void updateVisual() {
 		for (Block block : blocks) {
-			((TetrisSprite)block.visual).update(block);
+			((BlockSprite)block.visual).update(block);
 		}
 	}
 
