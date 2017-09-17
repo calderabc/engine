@@ -64,8 +64,8 @@ public class TetrisPiece extends Piece {
 
 		// Centers are represented multiplied by two, this is why the 'pos' 
 		// variables are doubled to match the already doubled 'pieceCenter'.
-		Coordinates posDoubled = new Coordinates(newPieceData.pieceStartPos.x << 1, 
-		                                         newPieceData.pieceStartPos.y << 1);
+		Coordinates posDoubled = new Coordinates(newPieceData.pieceStartPos.x() << 1, 
+		                                         newPieceData.pieceStartPos.y() << 1);
 		currCenter = newPieceData.getCurrCenter(pieceId).move(posDoubled);
 		destCenter = newPieceData.getDestCenter(pieceId).move(posDoubled);
 
@@ -136,8 +136,8 @@ public class TetrisPiece extends Piece {
 				/* Equivalent but slower:
 				currBlock.pos = new Coordinates( (destCenter[X] + flip * (2 * currBlock.pos.y - currCenter[Y])) / 2,
 				                                 (destCenter[Y] - flip * (2 * currBlock.pos.x - currCenter[X])) / 2 ); */
-				currBlock.pos = new Coordinates( destCenter.x + flip * ((currBlock.pos.y << 1) - currCenter.y) >> 1,
-				                                 destCenter.y - flip * ((currBlock.pos.x << 1) - currCenter.x) >> 1 );
+				currBlock.pos = new Coordinates( destCenter.x() + flip * ((currBlock.pos.y() << 1) - currCenter.y()) >> 1,
+				                                 destCenter.y() - flip * ((currBlock.pos.x() << 1) - currCenter.x()) >> 1 );
 				
 				currBlock.visual.rotate(flip);
 		}
@@ -153,11 +153,11 @@ public class TetrisPiece extends Piece {
 	public TetrisPiece move(PieceAction action) {
 		return (action.type == PieceAction.Type.MOVE)
 			? move(action.offset)
-			: rotate(action.offset.x); // x designated as direction for rotate algorithm.
+			: rotate(action.offset.x()); // x designated as direction for rotate algorithm.
 	}
 
 	private TetrisPiece move(Coordinates offset) {
-		Coordinates offsetDoubled = new Coordinates(offset.x << 1, offset.y << 1);
+		Coordinates offsetDoubled = new Coordinates(offset.x() << 1, offset.y() << 1);
 		currCenter.move(offsetDoubled);
 		destCenter.move(offsetDoubled);
 

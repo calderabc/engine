@@ -18,9 +18,9 @@ public class TetrisSprite extends Sprite {
 				imageListMap.put(new Id((byte)1, i, j), 
 				                 new ImageList(ImageType.BLOCK, new Coordinates(x, y))
 				);
-				y += ImageType.BLOCK.DIMENSIONS.y;
+				y += ImageType.BLOCK.DIMENSIONS.y();
 			}
-			x += ImageType.BLOCK.DIMENSIONS.x * 4;
+			x += ImageType.BLOCK.DIMENSIONS.x() * 4;
 		}
 	}
 
@@ -31,7 +31,7 @@ public class TetrisSprite extends Sprite {
 			case "Block" : 
 				Block block = (Block)part;
 				images = imageListMap.get(newId);
-				position = new Coordinates(block.pos.x * 32, block.pos.y * 32);
+				position = new Coordinates(block.pos.x() * 32, block.pos.y() * 32);
 				dimensions = images.imageType.DIMENSIONS;
 				currImage = 0;
 			case "Digit" :
@@ -50,7 +50,7 @@ public class TetrisSprite extends Sprite {
 	
 	@Override
 	public void update(MovablePart part) {
-		position = new Coordinates(part.pos.x * 32, part.pos.y * 32);
+		position = new Coordinates(part.pos.x() * 32, part.pos.y() * 32);
 	}
 
 	@Override

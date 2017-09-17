@@ -11,124 +11,62 @@ import java.io.Serializable;
 // TODO: Not sure if I need to make this class implement Comparable.  Do more research. 
 /* public class Coordinates implements Comparable<Object>{ */
 
-public class Coordinates implements Movable, Serializable {
+public final class Coordinates implements Movable, Serializable {
 	private static final long serialVersionUID = -3811798543403117929L;
 
-	static public final Coordinates ORIGIN = new Coordinates(0, 0, 0);
+	public static final Coordinates ORIGIN = new Coordinates(0, 0, 0);
 
-	public int x;
-	public int y;
-	public int z;
+	private final byte numOfDimensions;
+	private int[] values;
+
+	// I'm not going to add exceptions here.  I'll just assume the developer
+	// Is smart enough to figure out that if they are getting an
+	// ArrayIndexOutOfBounds exception it's because they're calling a 
+	// function they shouldn't.
+	public int x() { return values[0]; } 
+	public int x(int newX) { return values[0] = newX; }
+	public int y() { return values[1]; }
+	public int y(int newY) { return values[1] = newY; }
+	public int z() { return values[2]; }
+	public int z(int newZ) { return values[2] = newZ; }
 	
-	/**
-	 * Constructs Coordinates from the specified X and Y values, setting Z to default 0.
-	 * @param newX initial x coordinate value
-	 * @param newY initial y coordinate value
-	 */
-	public Coordinates(int newX, int newY) {
-		this(newX, newY, 0);
+	public int get(int ordinal) {
+		if (ordinal > numOfDimensions) {
+			throw new IllegalArgumentException();
+		}
+		return values[ordinal];
+	}
+
+	public Coordinates(int... newValues) {
+		numOfDimensions = (byte)newValues.length;
+		if (numOfDimensions == 0) {
+			throw new IllegalArgumentException();
+		}
+		setValues(newValues);
 	}
 	
-	/**
-	 * Constructs Coordinates from the specified X, Y, and Z values.
-	 * @param newX initial x coordinate value.
-	 * @param newY initial y coordinate value.
-	 * @param newZ initial z coordinate value.
-	 */
-	public Coordinates(int newX, int newY, int newZ) {
-		x = newX;
-		y = newY;
-		z = newZ;
-	}
-	
-	/**
-	 * Constructs Coordinates based on the values in the specified Coordinates. 
-	 * @param other Coordinates object containing values to be assigned to 
-	 * 				the new Coordinates object.
-	 */
 	public Coordinates(Coordinates other) {
-		this(other.x, other.y, other.z);
-	}
-	
-	private boolean isBetween(int a, int b, int c) {
-		return !(a < b && a < c || a > c && a > b);
-	}
-
-	// Determine if this point is within rectangle formed by two points.
-	public boolean isWithin(Coordinates a, Coordinates b) {
-		return isBetween(x, a.x, b.x) && isBetween(y, a.y, b.y);
+		numOfDimensions = other.numOfDimensions;
+		setValues(other.values);
 	}
 	
 	@Override
 	public final Coordinates move(Coordinates offset) {
-		x += offset.x;
-		y += offset.y;
-		z += offset.z;
+		if (offset.numOfDimensions > numOfDimensions) {
+			throw new IllegalArgumentException();
+		}
+		for (int i = 0; i < offset.numOfDimensions; i++) {
+			values[i] += offset.values[i];
+		}
+
 		return this;
 	}	
+
+	private void setValues(int[] newValues)	 {
+		values = new int[numOfDimensions];
+		for (int i = 0; i < numOfDimensions; i++) {
+			values[i] = newValues[i];
+		}
+	}
 	
 }
-
-	//*************** Override some methods from the Object class **************
-	
-	/**
-	 *  a.equals(b) is true if the x, y, and z coordinates in 'a' equal 
-	 *  the the corresponding x, y and z, coordinates in 'b'.
-	 */
-	/*
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Coordinates)) 
-			return false;
-		Coordinates other = (Coordinates) obj;
-		
-		synchronized(this) {
-			if (x != other.x || y != other.y || z != other.z)
-				return false;
-		}
-		
-		return true;
-	}
-	*/
-	
-	
-	// Overridden to fulfill hashCode's general contract since equals was also overridden.
-	/*
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 13;
-		
-		synchronized(this) {
-			result = prime * result + x;
-			result = prime * result + y;
-			result = prime * result + z;
-		}
-		
-		return result;
-	}
-	*/
-
-	
-	// TODO: I need to better define what it means to be less than or greater than for a coordinate.
-	/*
-	@Override
-	public int compareTo(Object o) throws ClassCastException {
-		if (!(o instanceof Coordinates))
-			throw new ClassCastException();
-		
-		Coordinates other = (Coordinates) o;
-		int result = 0;
-		
-		synchronized(this) {
-			if (x != other.x) 
-				result = (x > other.x) ? 1 : -1;
-			else if (y != other.y)
-				result = (y > other.y) ? 1 : -1;
-			else if (z != other.z)
-				result = (y > other.y) ? 1 : -1;
-		}
-		
-		return result; 
-	}
-	*/

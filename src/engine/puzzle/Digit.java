@@ -1,13 +1,15 @@
 package engine.puzzle;
 
-import engine.Part;
+import engine.Coordinates;
+import engine.MovablePart;
 
-public class Digit extends Part {
+public class Digit extends MovablePart {
 	private int value;
 	
-	public Digit(int newX, int newY, int newValue) {
-		
-		value = newValue;
+	public Digit(Coordinates newPosition, int newValue) {
+		super(newPosition);
+
+		setValue(newValue);
 	}
 	
 	public int getValue() {
@@ -15,10 +17,10 @@ public class Digit extends Part {
 	}
 	
 	public int setValue(int newValue) {
-		if (value != newValue) {
-			value = newValue;
-			
+		if (value > 9 || value < 0) {
+			throw new IllegalArgumentException();
 		}
+			value = newValue;
 		
 		return value;
 	}

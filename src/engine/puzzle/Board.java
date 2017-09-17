@@ -115,8 +115,8 @@ public final class Board extends Part {
 	public final void landPiece(TetrisPiece landingPiece) {
 		for (Block landingBlock : landingPiece.getBlocks()) {
 			try {
-				blockMatrix.get(landingBlock.pos.y)
-						   .set(landingBlock.pos.x, landingBlock);
+				blockMatrix.get(landingBlock.pos.y())
+						   .set(landingBlock.pos.x(), landingBlock);
 			} catch (engine.puzzle.Board.Row.PositionOccupiedException e) {
 				e.printStackTrace();
 			}
@@ -170,7 +170,7 @@ public final class Board extends Part {
 	public final boolean doesPieceFit(TetrisPiece testPiece) {
 		for (Block testBlock : testPiece.getBlocks()) {
 			try {
-				if (blockMatrix.get(testBlock.pos.y).get(testBlock.pos.x) != null)
+				if (blockMatrix.get(testBlock.pos.y()).get(testBlock.pos.x()) != null)
 					return false;
 			}
 			catch (IndexOutOfBoundsException e) {

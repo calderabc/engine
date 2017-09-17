@@ -39,8 +39,6 @@ public class TetrisDataGenerator {
 	public static void main(String argv[]) {
 		TetrisPieceData pieceData = new TetrisPieceData(pieceTemplate, pieceCenter, pieceStartPos);
 
-		
 		FileIO.save(TetrisPieceData.FILE_NAME, pieceData);
-		
 	}
 }

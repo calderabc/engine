@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 
+import engine.Coordinates;
+
 public class Number {
 	private long value;
 	private int size;
@@ -18,7 +20,7 @@ public class Number {
 		max = (long) Math.pow((double) size, 10) - 1;
 		
 		for (int i = 0; i < size; i++) {
-			digits.add(new Digit(i, 0, 0));
+			digits.add(new Digit(new Coordinates(i), 0));
 		}
 		
 		assignDigits();

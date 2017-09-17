@@ -19,21 +19,4 @@ public class Block extends MovablePart {
 		visual = TetrisGame.me.engine.newVisual(other.visual);
 	}
 	
-	// TODO: Review the following.  Make sure they have purpose.
-	public int getHeight() {
-		return 1;
-	}
-	
-	public int getWidth() {
-		return 1;
-	}
-
-	public int getMaxX() {
-		return pos.x;
-	}
-
-	public int getMaxY() {
-		return pos.y;
-	}
-
 }

@@ -19,8 +19,8 @@ public abstract class Sprite extends Visual {
 	
 	public void draw(Graphics2D canvas) {
 		canvas.drawImage(images.get(currImage),  
-					     position.x, position.y, 
-					     dimensions.x, dimensions.y, null);
+					     position.x(), position.y(), 
+					     dimensions.x(), dimensions.y(), null);
 	}
 	
 	

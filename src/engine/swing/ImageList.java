@@ -23,10 +23,10 @@ public class ImageList {
 			BufferedImage spriteImageSource = 
 				ImageIO.read(new File(imageType.IMAGE_FILE_NAME));
 		
-			int scanX = scanStart.x;
-			int scanY = scanStart.y;
-			int width = imageType.DIMENSIONS.x;
-			int height = imageType.DIMENSIONS.y;
+			int scanX = scanStart.x();
+			int scanY = scanStart.y();
+			int width = imageType.DIMENSIONS.x();
+			int height = imageType.DIMENSIONS.y();
 			for(int i = 0; i < imageType.COUNT; i++) {
 				images[i] = spriteImageSource.getSubimage(scanX, scanY, width, height);
 				
