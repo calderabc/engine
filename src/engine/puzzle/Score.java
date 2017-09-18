@@ -8,7 +8,7 @@ public class Score extends Number {
 	private final ScoreCalculator calculator;
 	
 	public Score(ScoreCalculator newCalculator, byte newLength, int newValue) {
-		super(newValue, newLength);
+		super(Number.Type.SCORE, newValue, newLength);
 		calculator = newCalculator; 
 	}
 

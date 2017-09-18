@@ -25,8 +25,8 @@ public abstract class PuzzleGame extends Game {
 		scheduler.setRemoveOnCancelPolicy(true);
 
 		score = new Score(ScoreCalculator.NINTENDO, (byte)5);
-		level = new Number(1, (byte)2);
-		rowsCleared = new Number(0, (byte)3);
+		level = new Number(Number.Type.LEVEL, 1, (byte)2);
+		rowsCleared = new Number(Number.Type.ROWS, 0, (byte)3);
 
 		
 		piece = board.startNewPiece();

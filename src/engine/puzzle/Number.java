@@ -5,13 +5,21 @@ import engine.Coordinates;
 // This is only meant to work for positive numbers.
 // Negative values have no meaning, won't work.
 public class Number {
+	public static enum Type {
+		SCORE,
+		LEVEL,
+		ROWS,
+		MISC
+	}
+	
+	
 	private long value;
 	private Digit[] digits;
 	
-	public Number(long newValue, byte newLength) {
+	public Number(Type newType, long newValue, byte newLength) {
 		digits = new Digit[newLength];
 		for (int i = 0; i < newLength; i++) {
-			digits[i] =  new Digit(new Coordinates(i));
+			digits[i] =  new Digit(newType, new Coordinates(i));
 		}
 		set(newValue);
 	}
@@ -29,7 +37,7 @@ public class Number {
 	public final Number set(long value) {
 		for (int i = digits.length - 1; i >= 0; i--) {
 			digits[i].set((byte)(value % 10));
-			value = value % 10; 
+			value = value / 10; 
 		}
 		
 		return this;

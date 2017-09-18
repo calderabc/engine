@@ -1,13 +1,10 @@
 package engine;
 
-import engine.puzzle.PuzzleGame;
-
 public class MovablePart extends Part implements Movable {
 	public Coordinates pos;
 
-	public MovablePart(Coordinates newPosition, Visual.Id newId) {
+	public MovablePart(Coordinates newPosition) {
 		pos = new Coordinates(newPosition);
-		visual = PuzzleGame.me.engine.newVisual(this, newId);
 	}
 	
 	public MovablePart(MovablePart other) {

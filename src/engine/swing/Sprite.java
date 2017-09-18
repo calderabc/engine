@@ -16,6 +16,7 @@ public abstract class Sprite extends Visual {
 	protected Coordinates position;
 	protected Coordinates dimensions;
 	protected Coordinates positionScaleFactor;
+	protected Coordinates origin = Coordinates.ORIGIN;
 	protected int currImage;
 	
 	protected Sprite(MovablePart newPart, Id newId) {
@@ -31,6 +32,7 @@ public abstract class Sprite extends Visual {
 		position = ((Sprite)other).position;
 		dimensions = ((Sprite)other).dimensions;
 		positionScaleFactor = ((Sprite)other).positionScaleFactor;
+		origin = ((Sprite)other).origin;
 		currImage = ((Sprite)other).currImage;
 	}
 	
@@ -42,7 +44,7 @@ public abstract class Sprite extends Visual {
 
 	@Override
 	public void update(MovablePart part) {
-		position = new Coordinates(part.pos.scale(positionScaleFactor));
+		position = part.pos.scale(positionScaleFactor).move(origin);
 	}
 
 	@Override

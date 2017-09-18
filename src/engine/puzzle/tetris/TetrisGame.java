@@ -61,7 +61,12 @@ public class TetrisGame extends PuzzleGame {
 			if (!isPieceLanded) {
 				PieceAction.resetAll();
 				board.landPiece(piece);
-				board.tryRemoveBlocks();
+				int numRowsRemoved = board.tryRemoveBlocks();
+				if (numRowsRemoved > 0) {
+					rowsCleared.add(numRowsRemoved);
+					
+					score.update(level, numRowsRemoved);
+				}
 				
 				isPieceLanded = true;
 			}

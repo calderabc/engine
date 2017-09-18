@@ -6,15 +6,20 @@ import engine.Visual.Id;
 
 public class Digit extends MovablePart {
 	private byte value;
+	public final Number.Type type;
 	
-	public Digit(Coordinates newPosition, byte newValue) {
-		super(newPosition, new Id((byte)2));
+	public Digit(Number.Type newType, Coordinates newPosition, byte newValue) {
+		super(newPosition);
+		type = newType;
+		visual = PuzzleGame.me.engine.newVisual(this, new Id((byte)2));
+		visual.update(this);
 		set(newValue);
 		PuzzleGame.me.screen.addPart(this);
+
 	}
 	
-	public Digit(Coordinates newPosition) {
-		this(newPosition, (byte)0);
+	public Digit(Number.Type newType, Coordinates newPosition) {
+		this(newType, newPosition, (byte)0);
 	}
 	
 	public byte get() {

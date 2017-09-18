@@ -14,9 +14,9 @@ import java.io.Serializable;
 public final class Coordinates implements Movable, Serializable {
 	private static final long serialVersionUID = -3811798543403117929L;
 
-	public static final Coordinates ORIGIN = new Coordinates(0, 0, 0);
+	//public static final Coordinates ORIGIN = new Coordinates(0, 0, 0);
+	public static final Coordinates ORIGIN = new Coordinates(0);
 
-	private final byte numOfDimensions;
 	private int[] values;
 
 	// I'm not going to add exceptions here.  I'll just assume the developer
@@ -26,14 +26,14 @@ public final class Coordinates implements Movable, Serializable {
 	public int x() { return values[0]; } 
 	public int x(int newX) { return values[0] = newX; }
 	public int y() { 
-		if (numOfDimensions < 2) {
+		if (values.length < 2) {
 			return 0;
 		}
 		return values[1]; 
 	}
 	public int y(int newY) { return values[1] = newY; }
 	public int z() {
-		if (numOfDimensions < 3) {
+		if (values.length < 3) {
 			return 0;
 		}
 		return values[2]; 
@@ -41,31 +41,34 @@ public final class Coordinates implements Movable, Serializable {
 	public int z(int newZ) { return values[2] = newZ; }
 	
 	public int get(int ordinal) {
-		if (ordinal > numOfDimensions) {
-			throw new IllegalArgumentException();
+		if (ordinal >= values.length) {
+			return 0;
 		}
 		return values[ordinal];
 	}
 
 	public Coordinates(int... newValues) {
-		numOfDimensions = (byte)newValues.length;
-		if (numOfDimensions == 0) {
+		if (newValues.length == 0) {
 			throw new IllegalArgumentException();
 		}
 		setValues(newValues);
 	}
 	
 	public Coordinates(Coordinates other) {
-		numOfDimensions = other.numOfDimensions;
 		setValues(other.values);
 	}
 	
 	@Override
 	public final Coordinates move(Coordinates offset) {
-		if (offset.numOfDimensions > numOfDimensions) {
-			throw new IllegalArgumentException();
+		if (offset.values.length > values.length) {
+			int[] oldValues = values;
+			values = new int[offset.values.length];
+			for (int i = 0; i < values.length; i++) {
+				values[i] = (i < oldValues.length) ? oldValues[i]
+				                                   : 0;
+			}
 		}
-		for (int i = 0; i < offset.numOfDimensions; i++) {
+		for (int i = 0; i < offset.values.length; i++) {
 			values[i] += offset.values[i];
 		}
 
@@ -73,16 +76,25 @@ public final class Coordinates implements Movable, Serializable {
 	}	
 
 	private void setValues(int[] newValues)	 {
-		values = new int[numOfDimensions];
-		for (int i = 0; i < numOfDimensions; i++) {
+		values = new int[newValues.length];
+		for (int i = 0; i < newValues.length; i++) {
 			values[i] = newValues[i];
 		}
 	}
 	
 	// TODO: This is basically a scale transform.  Maybe I can reuse some standard java code.
 	public Coordinates scale(Coordinates scaleFactor) {
+		if (scaleFactor.values.length > values.length) {
+			int[] oldValues = values;
+			values = new int[scaleFactor.values.length];
+			for (int i = 0; i < values.length; i++) {
+				values[i] = (i < oldValues.length) ? oldValues[i]
+				                                   : 0;
+			}
+		}
+
 		Coordinates scaledCoordinates = new Coordinates(this);
-		for (int i = 0; i < scaleFactor.numOfDimensions; i++) {
+		for (int i = 0; i < scaleFactor.values.length; i++) {
 			scaledCoordinates.values[i] *= scaleFactor.get(i);
 		}
 		return scaledCoordinates;

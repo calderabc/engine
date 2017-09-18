@@ -91,7 +91,7 @@ public class SwingScreen extends JPanel implements Screen {
 		// noticeably inconsistent rate even though swing painting happened 
 		// correctly at constant intervals. The piece would fall at a constant 
 		// rate when the mouse was moving around in front of the window (I'm 
-		// assuming because the moving mouse graphic forced buffer. 
+		// assuming because the moving mouse graphic forced buffer refresh. 
 		//
 		// Oracle/Sun, you suck. I should not have to call some cryptic method 
 		// to force my system to refresh the window's display when something is 
