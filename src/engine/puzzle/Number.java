@@ -34,10 +34,11 @@ public class Number {
 		return add(other.value);
 	}
 	
-	public final Number set(long value) {
+	public final Number set(long newValue) {
+		value = newValue;
 		for (int i = digits.length - 1; i >= 0; i--) {
-			digits[i].set((byte)(value % 10));
-			value = value / 10; 
+			digits[i].set((byte)(newValue % 10));
+			newValue = newValue / 10; 
 		}
 		
 		return this;

@@ -5,7 +5,7 @@ import engine.puzzle.tetris.ScoreCalculator;
 import engine.puzzle.Number;
 
 public class Score extends Number {
-	private final ScoreCalculator calculator;
+	public final ScoreCalculator calculator;
 	
 	public Score(ScoreCalculator newCalculator, byte newLength, int newValue) {
 		super(Number.Type.SCORE, newValue, newLength);

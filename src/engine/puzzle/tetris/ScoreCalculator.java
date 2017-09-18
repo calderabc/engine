@@ -31,5 +31,12 @@ public enum ScoreCalculator {
 		rowsPerLevel = newRowsPerLevel;
 	}
 	
-	public abstract long calculate(Number level, int rowcount); 
+	public Number checkLevel(Number level, Number rowsCleared) {
+		while (level.get() * rowsPerLevel < rowsCleared.get()) {
+			level.add(1);
+		}
+		return level;
+	}
+	
+	public abstract long calculate(Number level, int rowCount); 
 }
