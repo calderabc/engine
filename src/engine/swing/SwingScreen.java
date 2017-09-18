@@ -65,11 +65,12 @@ public class SwingScreen extends JPanel implements Screen {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D)g;
-		while (displayedParts.size() == 0) {
-			
-		}
-		for (Part displayPart: displayedParts) {
-			((Sprite)displayPart.visual).draw(g2d);
+		// Synchronized to avoid exception where another thread alters 
+		// displayedParts' structure while this thread is iterating through it. 
+		synchronized (displayedParts) {
+			for (Part displayPart: displayedParts) {
+				((Sprite)displayPart.visual).draw(g2d);
+			}
 		}
 	}
 
@@ -100,17 +101,23 @@ public class SwingScreen extends JPanel implements Screen {
 
 	@Override
 	public void addParts(Collection<? extends Part> parts) {
-		displayedParts.addAll(parts);
+		synchronized(displayedParts) {
+			displayedParts.addAll(parts);
+		}
 	}
 	
 	@Override
 	public void addPart(Part part) {
-		displayedParts.add(part);
+		synchronized(displayedParts) {
+			displayedParts.add(part);
+		}
 	}
 
 	@Override
 	public void removePart(Part terminalPart) {
-		displayedParts.remove(terminalPart);
+		synchronized(displayedParts) {
+			displayedParts.remove(terminalPart);
+		}
 	}
 	
 }
