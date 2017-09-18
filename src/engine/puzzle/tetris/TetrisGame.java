@@ -1,14 +1,12 @@
 package engine.puzzle.tetris;
 
 import engine.FileIO;
-import engine.Game;
 import engine.puzzle.Board;
 import engine.puzzle.PuzzleGame;
 import engine.puzzle.tetris.swing.PieceAction;
 import engine.swing.Swing;
 
 public class TetrisGame extends PuzzleGame {
-	public static TetrisGame me = (TetrisGame)Game.me;
 	static public final TetrisPieceData TETRIS_PIECE_DATA =
 		(TetrisPieceData)FileIO.load(TetrisPieceData.FILE_NAME);
 
@@ -22,8 +20,7 @@ public class TetrisGame extends PuzzleGame {
 		me = new TetrisGame();
 		me.engine = new Swing();
 		me.board = new Board(TETRIS_PIECE_DATA);
-		me.screen = me.engine.newScreen((TetrisGame)me);
-		((PuzzleGame)me).run();
+		me.run();
 
 		System.exit(0);
 	}

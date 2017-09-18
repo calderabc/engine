@@ -8,10 +8,10 @@ import engine.puzzle.tetris.TetrisPiece;
 import engine.puzzle.tetris.swing.PieceAction;
 
 public abstract class PuzzleGame extends Game {
-	public static PuzzleGame me = (PuzzleGame)Game.me;
+	public static PuzzleGame me;
 	
 	
-	protected Board board;
+	public Board board;
 	protected TetrisPiece piece;
 	protected Score score;
 	protected Number level;
@@ -21,6 +21,7 @@ public abstract class PuzzleGame extends Game {
 	public ScheduledThreadPoolExecutor scheduler = new ScheduledThreadPoolExecutor(2);
 	 
 	public void run() {
+		screen = engine.newScreen(me);
 		scheduler.setRemoveOnCancelPolicy(true);
 
 		score = new Score(ScoreCalculator.NINTENDO, (byte)5);

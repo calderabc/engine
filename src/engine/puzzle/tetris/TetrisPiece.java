@@ -1,15 +1,11 @@
 package engine.puzzle.tetris;
 
-import java.util.Vector;
-
 import engine.Coordinates;
 import engine.Visual;
 import engine.puzzle.Block;
 import engine.puzzle.Piece;
 import engine.puzzle.tetris.swing.PieceAction;
 import engine.swing.puzzle.BlockSprite;
-
-import java.util.List;
 
 /**
  * This Piece class represents a Tetris piece.  It is composed of Blocks.  It has
@@ -19,38 +15,17 @@ import java.util.List;
  */
 
 public class TetrisPiece extends Piece {
-
-	private final int blockCount;
-	public final int getBlockCount() {
-		return blockCount;
-	}
-
-//*****************************************************************************
-
 	public Coordinates currCenter = null;
-	public  Coordinates destCenter = null;
+	public Coordinates destCenter = null;
 
 
-	/**
-	 * Default Constructor.  Will have better features when I get around to it.
-	 */
 	public TetrisPiece(byte newId, TetrisPieceData newPieceData) {
-		blockCount = newPieceData.pieceTemplate[newId].length;
-		blocks = new Vector<Block>(blockCount);
-		
+		super(newPieceData.pieceTemplate[newId].length);	
 		generatePiece(newPieceData, newId);
 	}
 
 	public TetrisPiece(TetrisPiece other) {
 		super(other);
-
-		blockCount = other.getBlockCount();
-		blocks = new Vector<Block>(blockCount);
-		
-		for (Block currOtherBlock: other.getBlocks()) {
-			blocks.add(new Block(currOtherBlock));
-		}
-
 		currCenter = new Coordinates(other.currCenter);
 		destCenter = new Coordinates(other.destCenter);
 	}
@@ -75,9 +50,6 @@ public class TetrisPiece extends Piece {
 		}
 	}
 
-	public List<Block> getBlocks() {
-		return blocks;
-	}
 
 	/**
 	 * Rotate the blocks in a piece. 

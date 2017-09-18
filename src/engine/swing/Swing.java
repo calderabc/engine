@@ -2,7 +2,6 @@ package engine.swing;
 
 import engine.GraphicsEngine;
 import engine.MovablePart;
-import engine.puzzle.tetris.swing.ImageType;
 
 public class Swing extends GraphicsEngine {
 

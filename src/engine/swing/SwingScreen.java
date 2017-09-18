@@ -102,6 +102,11 @@ public class SwingScreen extends JPanel implements Screen {
 	public void addParts(Collection<? extends Part> parts) {
 		displayedParts.addAll(parts);
 	}
+	
+	@Override
+	public void addPart(Part part) {
+		displayedParts.add(part);
+	}
 
 	@Override
 	public void removePart(Part terminalPart) {

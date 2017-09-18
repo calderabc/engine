@@ -3,16 +3,14 @@ package engine.puzzle;
 import engine.Coordinates;
 import engine.MovablePart;
 import engine.Visual.Id;
-import engine.puzzle.tetris.TetrisGame;
 
 public class Digit extends MovablePart {
 	private byte value;
 	
 	public Digit(Coordinates newPosition, byte newValue) {
-		super(newPosition);
+		super(newPosition, new Id((byte)2));
 		set(newValue);
-		
-		visual = TetrisGame.me.engine.newVisual(this, new Id((byte)2));
+		PuzzleGame.me.screen.addPart(this);
 	}
 	
 	public Digit(Coordinates newPosition) {

@@ -1,19 +1,29 @@
 package engine.puzzle;
 
 import java.util.List;
+import java.util.Vector;
 
-import engine.Part;
 
-public abstract class Piece extends Part {
+public abstract class Piece {
 	protected List<Block> blocks;
 	
-	public Piece() {
-		
-	}
-
-	public Piece(Piece other) {
-		super(other);
+	protected Piece(int newBlockCount) {
+		blocks = new Vector<Block>(newBlockCount);	
 	}
 	
+	public Piece(Piece other) {
+		List<Block> otherBlocks = other.getBlocks();
+		blocks = new Vector<Block>(otherBlocks.size());
+		for (Block currOtherBlock: other.getBlocks()) {
+			blocks.add(new Block(currOtherBlock));
+		}
+	}
+	
+	public List<Block> getBlocks() {
+		return blocks;
+	}
 
+	public final int getBlockCount() {
+		return blocks.size();
+	}
 }

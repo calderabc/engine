@@ -25,9 +25,19 @@ public final class Coordinates implements Movable, Serializable {
 	// function they shouldn't.
 	public int x() { return values[0]; } 
 	public int x(int newX) { return values[0] = newX; }
-	public int y() { return values[1]; }
+	public int y() { 
+		if (numOfDimensions < 2) {
+			return 0;
+		}
+		return values[1]; 
+	}
 	public int y(int newY) { return values[1] = newY; }
-	public int z() { return values[2]; }
+	public int z() {
+		if (numOfDimensions < 3) {
+			return 0;
+		}
+		return values[2]; 
+	}
 	public int z(int newZ) { return values[2] = newZ; }
 	
 	public int get(int ordinal) {

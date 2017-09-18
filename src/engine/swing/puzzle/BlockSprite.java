@@ -1,10 +1,10 @@
 package engine.swing.puzzle;
 
 import engine.Coordinates;
-import engine.MovablePart;
 import engine.Visual;
-import engine.puzzle.tetris.swing.ImageType;
+import engine.puzzle.Block;
 import engine.swing.ImageList;
+import engine.swing.ImageType;
 import engine.swing.Sprite;
 
 public class BlockSprite extends Sprite {
@@ -23,7 +23,7 @@ public class BlockSprite extends Sprite {
 		}
 	}
 
-	public BlockSprite(MovablePart block, Id newId) {
+	public BlockSprite(Block block, Id newId) {
 		super(block, newId);
 	}
 	

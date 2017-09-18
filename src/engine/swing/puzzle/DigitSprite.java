@@ -4,8 +4,8 @@ import engine.Coordinates;
 import engine.MovablePart;
 import engine.Visual;
 import engine.puzzle.Digit;
-import engine.puzzle.tetris.swing.ImageType;
 import engine.swing.ImageList;
+import engine.swing.ImageType;
 import engine.swing.Sprite;
 
 public class DigitSprite extends Sprite {
@@ -14,7 +14,7 @@ public class DigitSprite extends Sprite {
 						 new ImageList(ImageType.DIGIT, Coordinates.ORIGIN));
 	}
 
-	public DigitSprite(MovablePart digit, Id newId) {
+	public DigitSprite(Digit digit, Id newId) {
 		super(digit, newId);
 	}
 	
@@ -24,6 +24,7 @@ public class DigitSprite extends Sprite {
 
 	@Override
 	public void update(MovablePart part) {
+		System.out.println(part.pos.x());
 		super.update(part);
 		currImage = ((Digit)part).get();
 	}

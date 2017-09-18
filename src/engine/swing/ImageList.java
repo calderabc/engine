@@ -7,7 +7,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import engine.Coordinates;
-import engine.puzzle.tetris.swing.ImageType;
 
 public class ImageList {
 

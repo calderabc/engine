@@ -3,14 +3,12 @@ package engine;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import engine.puzzle.tetris.TetrisGame;
-
 public abstract class GraphicsEngine {
 	protected Class<? extends Screen> screenClass;
 	
-	public Screen newScreen(TetrisGame game) {
+	public Screen newScreen(Game game) {
 		try {
-			Constructor<? extends Screen> con = screenClass.getConstructor(TetrisGame.class);
+			Constructor<? extends Screen> con = screenClass.getConstructor(game.getClass());
 			return (Screen) con.newInstance(game);
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
@@ -40,7 +38,7 @@ public abstract class GraphicsEngine {
 	public Visual newVisual(MovablePart part, Visual.Id id) {
 		try {
 			return getVisualClass(part)
-				.getConstructor(MovablePart.class, Visual.Id.class)
+				.getConstructor(part.getClass(), Visual.Id.class)
 				.newInstance(part, id);
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block

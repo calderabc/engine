@@ -1,9 +1,8 @@
-package engine.puzzle.tetris.swing;
+package engine.swing;
 
 import java.io.Serializable;
 
 import engine.Coordinates;
-import engine.swing.Sprite;
 import engine.swing.puzzle.BlockSprite;
 import engine.swing.puzzle.DigitSprite;
 

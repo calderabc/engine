@@ -5,11 +5,11 @@ import engine.puzzle.tetris.TetrisGame;
 public abstract class Part {
 	public Visual visual = null; 
 
-	public Part() {
-	}
+	protected Part() { }
 
 	public Part(Part other) {
-		visual = other.visual;
+		visual = TetrisGame.me.engine.newVisual(other.visual);
+		//visual = other.visual;
 	}	
 	
 	public void terminate() {

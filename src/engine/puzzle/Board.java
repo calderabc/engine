@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Vector;
 
 import engine.Coordinates;
-import engine.Part;
 import engine.puzzle.tetris.TetrisPiece;
 import engine.puzzle.tetris.TetrisPieceData;
 
@@ -18,7 +17,7 @@ import engine.puzzle.tetris.TetrisPieceData;
  * @author Aaron Calder
  *
  */
-public final class Board extends Part {
+public final class Board {
 	public final int width;
 	public final int height;
 

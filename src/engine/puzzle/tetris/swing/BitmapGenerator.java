@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 
 import engine.puzzle.tetris.TetrisGame;
 import engine.swing.BlockRenderer;
+import engine.swing.ImageType;
 
 public final class BitmapGenerator {
 	private static final int X=0;
