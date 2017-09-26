@@ -1,7 +1,7 @@
 package engine.swing.puzzle;
 
 import engine.Coordinates;
-import engine.MovablePart;
+import engine.Part;
 import engine.Visual;
 import engine.puzzle.Digit;
 import engine.swing.ImageList;
@@ -38,7 +38,7 @@ public class DigitSprite extends Sprite {
 	}
 
 	@Override
-	public void update(MovablePart part) {
+	public void update(Part part) {
 		System.out.println(part);
 		super.update(part);
 		currImage = ((Digit)part).get();

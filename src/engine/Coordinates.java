@@ -8,9 +8,12 @@ import java.io.Serializable;
  * @author Aaron Calder
  *
  */
-// TODO: Not sure if I need to make this class implement Comparable.  Do more research. 
-/* public class Coordinates implements Comparable<Object>{ */
 
+// TODO: I've over-designed this class.  There is far too much code required to
+// do simple tasks.  Seriously! Sacrifice a little wasted memory to streamline
+// simple operations.  It's no good saving wasted space in an array if many
+// operations, and lots of code are required to maintain it!
+// Use a fixed length array or risk looking silly!  A couple extra array.
 public final class Coordinates implements Movable, Serializable {
 	private static final long serialVersionUID = -3811798543403117929L;
 

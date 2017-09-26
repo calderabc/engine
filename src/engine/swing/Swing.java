@@ -1,7 +1,7 @@
 package engine.swing;
 
 import engine.GraphicsEngine;
-import engine.MovablePart;
+import engine.Part;
 
 public class Swing extends GraphicsEngine {
 
@@ -10,7 +10,7 @@ public class Swing extends GraphicsEngine {
 	}
 
 	@Override
-	protected Class<? extends Sprite> getVisualClass(MovablePart part) {
+	protected Class<? extends Sprite> getVisualClass(Part part) {
 		// Holy reflection Batman!
 		return ImageType.valueOf(part.getClass()
 		                             .getSimpleName()

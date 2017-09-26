@@ -6,7 +6,7 @@ import java.util.Map;
 
 import engine.Visual;
 import engine.Coordinates;
-import engine.MovablePart;
+import engine.Part;
 
 public abstract class Sprite extends Visual {
 	static protected Map<Id, ImageList> imageListMap = 
@@ -19,10 +19,10 @@ public abstract class Sprite extends Visual {
 	protected Coordinates origin = Coordinates.ORIGIN;
 	protected int currImage;
 	
-	protected Sprite(MovablePart newPart, Id newId) {
+	protected Sprite(Part newPart, Id newId) {
 		images = imageListMap.get(newId); // Save memory by always using the same images.
 		positionScaleFactor = images.imageType.POSITION_SCALE_FACTOR;
-		position = new Coordinates(newPart.pos.scale(positionScaleFactor));
+		//position = new Coordinates(newPart.pos.scale(positionScaleFactor));
 		dimensions = images.imageType.DIMENSIONS;
 		currImage = 0;
 	}
@@ -43,7 +43,7 @@ public abstract class Sprite extends Visual {
 	}
 
 	@Override
-	public void update(MovablePart part) {
+	public void update(Part part) {
 		position = part.pos.scale(positionScaleFactor).move(origin);
 	}
 

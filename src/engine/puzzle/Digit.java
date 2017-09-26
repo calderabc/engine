@@ -1,18 +1,17 @@
 package engine.puzzle;
 
 import engine.Coordinates;
-import engine.MovablePart;
+import engine.Part;
 import engine.Visual.Id;
 
-public class Digit extends MovablePart {
+public class Digit extends Part {
 	private byte value;
 	public final Number.Type type;
 	
 	public Digit(Number.Type newType, Coordinates newPosition, byte newValue) {
 		super(newPosition);
 		type = newType;
-		visual = PuzzleGame.me.engine.newVisual(this, new Id((byte)2));
-		visual.update(this);
+		initVisual(new Id((byte)2));
 		set(newValue);
 		PuzzleGame.me.screen.addPart(this);
 

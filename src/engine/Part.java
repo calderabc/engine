@@ -1,21 +1,38 @@
 package engine;
 
-import engine.puzzle.tetris.TetrisGame;
+import engine.puzzle.PuzzleGame;
 
-public abstract class Part {
+public abstract class Part implements Movable {
 	public Visual visual = null; 
+	public Coordinates pos = null;
 
-	protected Part() { }
+	public Part(Coordinates newPosition) {
+		pos = new Coordinates(newPosition);
+	}
 
 	public Part(Part other) {
-		visual = TetrisGame.me.engine.newVisual(other.visual);
+		pos = new Coordinates(other.pos);
+		visual = PuzzleGame.me.engine.newVisual(other.visual);
 		//visual = other.visual;
 	}	
+
+	protected void initVisual(Visual.Id newId) {
+		visual = PuzzleGame.me.engine.newVisual(this, newId);
+		visual.update(this);
+	}
 	
 	public void terminate() {
 		if (visual != null) { 
-			TetrisGame.me.screen.removePart(this);
+			PuzzleGame.me.screen.removePart(this);
 		}
 		visual = null;
+	}
+
+	// Implement the Movable interface.
+	@Override
+	public final Movable move(Coordinates offset) {
+		pos.move(offset);
+		
+		return this;
 	}
 }

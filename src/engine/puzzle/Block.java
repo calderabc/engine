@@ -1,14 +1,14 @@
 package engine.puzzle;
 
 import engine.Coordinates;
-import engine.MovablePart;
+import engine.Part;
 import engine.Visual;
 
-public class Block extends MovablePart {	
+public class Block extends Part {	
 
 	public Block(Coordinates newCoords, Visual.Id newId) {
 		super(newCoords);
-		visual = PuzzleGame.me.engine.newVisual(this, newId);
+		initVisual(newId);
 	}
 
 	public Block(Block other)

@@ -33,9 +33,9 @@ public abstract class GraphicsEngine {
 		return null;
 	}
 	
-	protected abstract Class<? extends Visual> getVisualClass(MovablePart part);
+	protected abstract Class<? extends Visual> getVisualClass(Part part);
 
-	public Visual newVisual(MovablePart part, Visual.Id id) {
+	public Visual newVisual(Part part, Visual.Id id) {
 		try {
 			return getVisualClass(part)
 				.getConstructor(part.getClass(), Visual.Id.class)

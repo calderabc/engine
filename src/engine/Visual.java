@@ -22,6 +22,6 @@ public abstract class Visual {
 		}
 	}
 
-	public abstract void update(MovablePart part);
+	public abstract void update(Part part);
 	public abstract void rotate(int offset);
 }

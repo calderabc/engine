@@ -5,13 +5,13 @@ import engine.Coordinates;
 // This is only meant to work for positive numbers.
 // Negative values have no meaning, won't work.
 public class Number {
+
 	public static enum Type {
 		SCORE,
 		LEVEL,
 		ROWS,
 		MISC
 	}
-	
 	
 	private long value;
 	private Digit[] digits;
