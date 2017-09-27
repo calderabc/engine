@@ -5,7 +5,6 @@ import engine.Visual;
 import engine.puzzle.Block;
 import engine.puzzle.Piece;
 import engine.puzzle.tetris.swing.PieceAction;
-import engine.swing.puzzle.BlockSprite;
 
 /**
  * This Piece class represents a Tetris piece.  It is composed of Blocks.  It has
@@ -140,10 +139,5 @@ public class TetrisPiece extends Piece {
 		return this;
 	}
 
-	public void updateVisual() {
-		for (Block block : blocks) {
-			((BlockSprite)block.visual).update(block);
-		}
-	}
-
+	
 }

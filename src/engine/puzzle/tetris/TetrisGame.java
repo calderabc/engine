@@ -19,6 +19,7 @@ public class TetrisGame extends PuzzleGame {
 		// right now defaults to Tetris visuals.
 		me = new TetrisGame();
 		me.engine = new Swing();
+		me.screen = me.engine.newScreen(me);
 		me.board = new Board(TETRIS_PIECE_DATA);
 		me.run();
 
@@ -40,7 +41,7 @@ public class TetrisGame extends PuzzleGame {
 				 * the piece to its original position.  Perhaps add as an optional feature
 				 * if not present in games people are used to playing.
 				 */
-				TetrisPiece testPiece =  new TetrisPiece(piece).move(action);
+				TetrisPiece testPiece =  new TetrisPiece((TetrisPiece)piece).move(action);
 
 				if (board.doesPieceFit(testPiece)) {
 					piece.move(action);

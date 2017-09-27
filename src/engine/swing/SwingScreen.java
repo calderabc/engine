@@ -24,9 +24,9 @@ public class SwingScreen extends JPanel implements Screen {
 	public JFrame frame;
 	
 	private int colorFilterIndex = 0;
-	private int[] colorMasks = {0x40FFB0B0, 0x40B0FFB0, 0x40B0B0FF, 0x40FFFFB0, 0x40FFB0FF, 0x40B0FFFF};
+	private static final int[] colorMasks = {0x40FFB0B0, 0x40B0FFB0, 0x40B0B0FF, 0x40FFFFB0, 0x40FFB0FF, 0x40B0FFFF};
 	
-	private List<Part> displayedParts = new Vector<Part>();
+	private final List<Part> displayedParts = new Vector<Part>();
 	
 
 	public SwingScreen(TetrisGame game) {
@@ -119,5 +119,4 @@ public class SwingScreen extends JPanel implements Screen {
 			displayedParts.remove(terminalPart);
 		}
 	}
-	
 }

@@ -11,10 +11,9 @@ public class Digit extends Part {
 	public Digit(Number.Type newType, Coordinates newPosition, byte newValue) {
 		super(newPosition);
 		type = newType;
-		initVisual(new Id((byte)2));
 		set(newValue);
+		initVisual(new Id((byte)2));
 		PuzzleGame.me.screen.addPart(this);
-
 	}
 	
 	public Digit(Number.Type newType, Coordinates newPosition) {

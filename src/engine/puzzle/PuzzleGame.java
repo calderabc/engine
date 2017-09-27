@@ -4,15 +4,14 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import engine.Game;
 import engine.puzzle.tetris.ScoreCalculator;
-import engine.puzzle.tetris.TetrisPiece;
 import engine.puzzle.tetris.swing.PieceAction;
 
 public abstract class PuzzleGame extends Game {
 	public static PuzzleGame me;
 	
-	
 	public Board board;
-	protected TetrisPiece piece;
+	protected PiecePool pieces;
+	protected Piece piece;
 	protected Score score;
 	protected Number level;
 	protected Number rowsCleared;
@@ -21,7 +20,6 @@ public abstract class PuzzleGame extends Game {
 	public ScheduledThreadPoolExecutor scheduler = new ScheduledThreadPoolExecutor(2);
 	 
 	public void run() {
-		screen = engine.newScreen(me);
 		scheduler.setRemoveOnCancelPolicy(true);
 
 		score = new Score(ScoreCalculator.NINTENDO, (byte)7);

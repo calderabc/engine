@@ -3,6 +3,8 @@ package engine.puzzle;
 import java.util.List;
 import java.util.Vector;
 
+import engine.puzzle.tetris.swing.PieceAction;
+
 
 public abstract class Piece {
 	protected List<Block> blocks;
@@ -26,4 +28,12 @@ public abstract class Piece {
 	public final int getBlockCount() {
 		return blocks.size();
 	}
+
+	public void updateVisual() {
+		for (Block block : blocks) {
+			block.visual.update(block);
+		}
+	}
+
+	public abstract Piece move(PieceAction action);
 }

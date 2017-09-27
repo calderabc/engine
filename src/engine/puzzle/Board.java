@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Vector;
 
 import engine.Coordinates;
-import engine.puzzle.tetris.TetrisPiece;
-import engine.puzzle.tetris.TetrisPieceData;
 
 /**
  * A Board represents the game element that Blocks collect on after Pieces 
@@ -81,7 +79,7 @@ public final class Board {
 	/**
 	 * Default Constructor
 	 */
-	public Board(TetrisPieceData newPieceData) {
+	public Board(PieceData newPieceData) {
 		this(DEFAULT_BOARD_WIDTH, DEFAULT_BOARD_HEIGHT, newPieceData);
 	}
 	
@@ -91,7 +89,7 @@ public final class Board {
 	 * @param newWidth how many Blocks wide to make the Board
 	 * @param newHeight how many Blocks high to make the Board
 	 */
-	private Board(int newWidth, int newHeight, TetrisPieceData newPieceData) {
+	private Board(int newWidth, int newHeight, PieceData newPieceData) {
 		pieces = new PiecePool(newPieceData);
 
 		for (int i = 0; i < DEFAULT_BOARD_HEIGHT; i++) {
@@ -102,7 +100,7 @@ public final class Board {
 		height = newHeight;
 	}
 	
-	public TetrisPiece startNewPiece() {
+	public Piece startNewPiece() {
 		return pieces.getRandomPiece();
 	}
 	
@@ -111,7 +109,7 @@ public final class Board {
 	 * Add all the Blocks that compose the specified Piece to this Board.
 	 * @param landingPiece piece containing Blocks to be added to this Board
 	 */
-	public final void landPiece(TetrisPiece landingPiece) {
+	public final void landPiece(Piece landingPiece) {
 		for (Block landingBlock : landingPiece.getBlocks()) {
 			try {
 				blockMatrix.get(landingBlock.pos.y())
@@ -166,7 +164,7 @@ public final class Board {
 	 * @param testPiece Piece to be tested
 	 * @return true if the Piece fits somewhere on the board, and false if it does not.
 	 */
-	public final boolean doesPieceFit(TetrisPiece testPiece) {
+	public final boolean doesPieceFit(Piece testPiece) {
 		for (Block testBlock : testPiece.getBlocks()) {
 			try {
 				if (blockMatrix.get(testBlock.pos.y()).get(testBlock.pos.x()) != null)

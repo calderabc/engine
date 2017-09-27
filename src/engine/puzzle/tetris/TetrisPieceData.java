@@ -3,8 +3,9 @@ package engine.puzzle.tetris;
 import java.io.Serializable;
 
 import engine.Coordinates;
+import engine.puzzle.PieceData;
 
-public class TetrisPieceData implements Serializable {
+public class TetrisPieceData extends PieceData implements Serializable {
 	private static final long serialVersionUID = -9105193668883492424L;
 
 	public static final String FILE_NAME = "tetris_piece.dat";
