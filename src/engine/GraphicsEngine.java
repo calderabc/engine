@@ -5,7 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public abstract class GraphicsEngine {
 	public final Screen screen;
-	protected Class<? extends Screen> screenClass;
+	protected final Class<? extends Screen> screenClass;
 	
 	protected GraphicsEngine(Game game, Class<? extends Screen> newScreenClass) {
 		screenClass = newScreenClass;

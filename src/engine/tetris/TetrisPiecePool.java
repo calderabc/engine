@@ -1,16 +1,16 @@
-package engine.puzzle;
+package engine.tetris;
 
 import java.util.Random;
 
-import engine.puzzle.tetris.TetrisPiece;
-import engine.puzzle.tetris.TetrisPieceData;
+import engine.puzzle.Piece;
+import engine.puzzle.PieceData;
 
-public final class PiecePool {
+public final class TetrisPiecePool {
 	private final Piece[] pieces;
 	
 	private final PieceData pieceData;
 	
-	protected PiecePool(PieceData newPieceData) {
+	public TetrisPiecePool(PieceData newPieceData) {
 		pieceData = newPieceData;
 		
 		int pieceCount = ((TetrisPieceData)pieceData).pieceTemplate.length;

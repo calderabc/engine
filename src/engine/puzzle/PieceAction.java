@@ -81,10 +81,10 @@ public enum PieceAction implements Serializable {
 			FALL.stopPieceAction();
 		}	
 	},
-	LEFT (Type.MOVE, 6, new Coordinates(-1, 0)),
-	RIGHT (Type.MOVE, 6, new Coordinates(1, 0), LEFT),
-	CLOCK (Type.ROTATE, 6, new Coordinates(-1, 0)),
-	COUNTER (Type.ROTATE, 6, new Coordinates(1, 0), CLOCK);
+	LEFT (Type.MOVE, 6, new Coordinates(-1)),
+	RIGHT (Type.MOVE, 6, new Coordinates(1), LEFT),
+	CLOCK (Type.ROTATE, 6, new Coordinates(-1)),
+	COUNTER (Type.ROTATE, 6, new Coordinates(1), CLOCK);
 
 	public static ScheduledThreadPoolExecutor scheduler = new ScheduledThreadPoolExecutor(2);
 

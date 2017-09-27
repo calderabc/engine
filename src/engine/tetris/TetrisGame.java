@@ -1,25 +1,21 @@
-package engine.puzzle.tetris;
+package engine.tetris;
 
 import engine.FileIO;
-import engine.puzzle.Board;
 import engine.puzzle.PieceAction;
 import engine.puzzle.PuzzleGame;
+import engine.puzzle.Score;
 import engine.swing.Swing;
 
-public class TetrisGame extends PuzzleGame {
-	static public final TetrisPieceData TETRIS_PIECE_DATA =
+public final class TetrisGame extends PuzzleGame {
+	public static final TetrisPieceData TETRIS_PIECE_DATA =
 		(TetrisPieceData)FileIO.load(TetrisPieceData.FILE_NAME);
 	
 	public static void main(String argv[]) {
-		// Engine must be initialized before game parts because visuals
-		// need to be created before they can be assigned to the parts.
-		// TODO: Make more elegant.
-		// TODO: Dynamically choose between graphical engines.
-		// TODO: Tell engine what type of game to generate visuals for
-		// right now defaults to Tetris visuals.
 		me = new TetrisGame();
 		me.engine = new Swing(me);
-		((PuzzleGame)me).board = new Board(TETRIS_PIECE_DATA);
+		((PuzzleGame)me).board = new TetrisBoard(TETRIS_PIECE_DATA);
+		// TODO: For testing.  Switch to 10 for actual thing.
+		((PuzzleGame)me).score = new Score(getScoreCalculator(ScoreType.NES), 2, (byte)7);
 		((PuzzleGame)me).run();
 
 		System.exit(0);
@@ -68,7 +64,7 @@ public class TetrisGame extends PuzzleGame {
 					// Here score is compounded according the the level
 					// being switched to.  Probably a way to
 					// score part on old level, and part on new level.
-					level = score.calculator.checkLevel(level, rowsCleared);
+					level = score.checkLevel(level, rowsCleared);
 
 					score.update(level, numRowsRemoved);
 				}
@@ -78,6 +74,20 @@ public class TetrisGame extends PuzzleGame {
 			}
 		}
 	}
-
+	
+	
+	// TODO: Serialize the score mechanism to file.  Not sure if it would benefit.
+	
+	enum ScoreType { NES }
+	private static Score.Calculator getScoreCalculator(ScoreType type) {
+		switch (type) {
+			case NES : 
+				return (level, rowCount) -> {
+					int[] multipliers = {40, 100, 300, 1200};
+					return multipliers[rowCount - 1] * level.get();
+				}; 
+			default: return null;
+		} 
+	}
 
 }

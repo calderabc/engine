@@ -6,14 +6,14 @@ import engine.Coordinates;
 // Negative values have no meaning, won't work.
 public class Number {
 
-	public static enum Type {
+	public enum Type {
 		SCORE,
 		LEVEL,
 		ROWS,
 		MISC
 	}
 	
-	private long value;
+	private volatile long value;
 	private Digit[] digits;
 	
 	public Number(Type newType, long newValue, byte newLength) {

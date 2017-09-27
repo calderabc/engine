@@ -1,9 +1,9 @@
-package engine.puzzle.tetris.util;
+package engine.tetris.util;
 
 
 import engine.Coordinates;
 import engine.FileIO;
-import engine.puzzle.tetris.TetrisPieceData;
+import engine.tetris.TetrisPieceData;
 
 public class TetrisDataGenerator {
 

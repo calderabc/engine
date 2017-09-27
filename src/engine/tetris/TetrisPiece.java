@@ -1,4 +1,4 @@
-package engine.puzzle.tetris;
+package engine.tetris;
 
 import engine.Coordinates;
 import engine.Visual;

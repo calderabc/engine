@@ -16,8 +16,6 @@ public class DigitSprite extends Sprite {
 	public static final Coordinates SCORE = new Coordinates(400);
 	public static final Coordinates LEVEL = new Coordinates(400, 100);
 	public static final Coordinates ROWS = new Coordinates(400, 200);
-	
-	
 
 	
 	public DigitSprite(Digit digit, Id newId) {
@@ -38,7 +36,6 @@ public class DigitSprite extends Sprite {
 
 	@Override
 	public void update(Part part) {
-		System.out.println(part);
 		super.update(part);
 		currImage = ((Digit)part).get();
 	}

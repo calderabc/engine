@@ -1,4 +1,4 @@
-package engine.puzzle.tetris.util;
+package engine.tetris.util;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -8,8 +8,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import engine.puzzle.tetris.TetrisGame;
 import engine.swing.puzzle.ImageType;
+import engine.tetris.TetrisGame;
 
 public final class BitmapGenerator {
 	private static final int IMAGES_PER_BLOCK = 8;

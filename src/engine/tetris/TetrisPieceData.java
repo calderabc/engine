@@ -1,4 +1,4 @@
-package engine.puzzle.tetris;
+package engine.tetris;
 
 import java.io.Serializable;
 

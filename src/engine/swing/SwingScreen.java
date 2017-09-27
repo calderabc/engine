@@ -14,8 +14,8 @@ import javax.swing.JPanel;
 
 import engine.Part;
 import engine.Screen;
-import engine.puzzle.tetris.TetrisGame;
 import engine.swing.puzzle.Keyboard;
+import engine.tetris.TetrisGame;
 
 
 @SuppressWarnings("serial")

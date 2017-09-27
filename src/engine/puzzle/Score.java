@@ -1,26 +1,37 @@
 package engine.puzzle;
 
-
-import engine.puzzle.tetris.ScoreCalculator;
-import engine.puzzle.Number;
-
 public class Score extends Number {
-	public final ScoreCalculator calculator;
+	public final Calculator calculator;
+	public final int clearCountPerLevel;
+
+	@FunctionalInterface
+	public interface Calculator {
+		long calculate(Number level, int clearCount);
+	}
 	
-	public Score(ScoreCalculator newCalculator, byte newLength, int newValue) {
+	public Score(Calculator newCalculator, 
+	             int newClearCountPerLevel, 
+	             byte newLength, 
+	             int newValue) {
 		super(Number.Type.SCORE, newValue, newLength);
 		calculator = newCalculator; 
+		clearCountPerLevel = newClearCountPerLevel;
 	}
 
-	public Score(ScoreCalculator newCalculator, byte newLength) {
-		this(newCalculator, newLength, 0);
+	public Score(Calculator newCalculator, 
+	             int newClearCountPerLevel, 
+	             byte newLength) {
+		this(newCalculator, newClearCountPerLevel, newLength, 0);
 	}
 	
-	public void update(Number level, int rowCount) {
-		add(calculator.calculate(level, rowCount));
+	public void update(Number level, int clearCount) {
+		add(calculator.calculate(level, clearCount));
 	}
 	
-	public int getRowsPerLevel() {
-		return calculator.rowsPerLevel;
+	public Number checkLevel(Number level, Number clearCount) {
+		while (level.get() * clearCountPerLevel < clearCount.get()) {
+			level.add(1);
+		}
+		return level;
 	}
 }
