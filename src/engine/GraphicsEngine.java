@@ -4,12 +4,15 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 public abstract class GraphicsEngine {
+	public final Screen screen;
 	protected Class<? extends Screen> screenClass;
 	
-	public Screen newScreen(Game game) {
+	protected GraphicsEngine(Game game, Class<? extends Screen> newScreenClass) {
+		screenClass = newScreenClass;
+		Screen temp = null;
 		try {
 			Constructor<? extends Screen> con = screenClass.getConstructor(game.getClass());
-			return (Screen) con.newInstance(game);
+			temp = (Screen) con.newInstance(game);
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -30,7 +33,7 @@ public abstract class GraphicsEngine {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		screen = temp;
 	}
 	
 	protected abstract Class<? extends Visual> getVisualClass(Part part);

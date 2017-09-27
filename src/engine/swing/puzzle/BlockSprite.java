@@ -4,7 +4,6 @@ import engine.Coordinates;
 import engine.Visual;
 import engine.puzzle.Block;
 import engine.swing.ImageList;
-import engine.swing.ImageType;
 import engine.swing.Sprite;
 
 public class BlockSprite extends Sprite {

@@ -4,7 +4,7 @@ import engine.Coordinates;
 import engine.Visual;
 import engine.puzzle.Block;
 import engine.puzzle.Piece;
-import engine.puzzle.tetris.swing.PieceAction;
+import engine.puzzle.PieceAction;
 
 /**
  * This Piece class represents a Tetris piece.  It is composed of Blocks.  It has

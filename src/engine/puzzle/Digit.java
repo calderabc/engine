@@ -13,7 +13,7 @@ public class Digit extends Part {
 		type = newType;
 		set(newValue);
 		initVisual(new Id((byte)2));
-		PuzzleGame.me.screen.addPart(this);
+		PuzzleGame.me.engine.screen.addPart(this);
 	}
 	
 	public Digit(Number.Type newType, Coordinates newPosition) {

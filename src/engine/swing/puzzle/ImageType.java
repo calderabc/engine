@@ -1,10 +1,9 @@
-package engine.swing;
+package engine.swing.puzzle;
 
 import java.io.Serializable;
 
 import engine.Coordinates;
-import engine.swing.puzzle.BlockSprite;
-import engine.swing.puzzle.DigitSprite;
+import engine.swing.Sprite;
 
 public enum ImageType implements Serializable {
 	// TODO: Convert these into a serialized objects which populate from a data file.

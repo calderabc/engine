@@ -3,8 +3,6 @@ package engine.puzzle;
 import java.util.List;
 import java.util.Vector;
 
-import engine.puzzle.tetris.swing.PieceAction;
-
 
 public abstract class Piece {
 	protected List<Block> blocks;

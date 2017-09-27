@@ -1,4 +1,4 @@
-package engine.puzzle.tetris.swing;
+package engine.puzzle.tetris.util;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -9,10 +9,14 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import engine.puzzle.tetris.TetrisGame;
-import engine.swing.BlockRenderer;
-import engine.swing.ImageType;
+import engine.swing.puzzle.ImageType;
 
 public final class BitmapGenerator {
+	private static final int IMAGES_PER_BLOCK = 8;
+	private static final int NUM_OF_ORIENTATIONS = 4;
+	private static final int BUFF_IMAGE_TYPE = BufferedImage.TYPE_4BYTE_ABGR;
+	private static String blockImageFile = "piece_image_sheet.png";
+
 	private static final int X=0;
 	private static final int Y=1;
 	
@@ -43,11 +47,11 @@ public final class BitmapGenerator {
 	private static final int IBL = ITL + 3;
 
 	private static final int BLOCK_DISPLAY_WIDTH = 
-			BlockRenderer.IMAGES_PER_BLOCK * 4;
+			IMAGES_PER_BLOCK * 4;
 	private static final int BLOCK_DISPLAY_HEIGHT = 
-			BlockRenderer.IMAGES_PER_BLOCK * 4;
+			IMAGES_PER_BLOCK * 4;
 	private static final int SHEET_DISPLAY_WIDTH = 
-			BlockRenderer.NUM_OF_ORIENTATIONS * BLOCK_DISPLAY_WIDTH;
+			NUM_OF_ORIENTATIONS * BLOCK_DISPLAY_WIDTH;
 
 	private static final BufferedImage spritesImage;
 
@@ -120,16 +124,16 @@ public final class BitmapGenerator {
 		boolean[][] returnExpandedPieceMap = new boolean[expandedMapHeight][expandedMapWidth];
 		for (int mapY = 0; mapY < mapHeight; mapY++) {
 			for (int mapX = 0; mapX < mapWidth; mapX++) {
-				int originY = mapY * BlockRenderer.IMAGES_PER_BLOCK;
-				int originX = mapX * BlockRenderer.IMAGES_PER_BLOCK; 
+				int originY = mapY * IMAGES_PER_BLOCK;
+				int originX = mapX * IMAGES_PER_BLOCK; 
 				
 				if (pieceMap[mapY][mapX]) {
 					for (int fillY = originY; 
-					     fillY < (originY + BlockRenderer.IMAGES_PER_BLOCK); 
+					     fillY < (originY + IMAGES_PER_BLOCK); 
 					     fillY++) {
 
 						for (int fillX = originX; 
-						     fillX < (originX + BlockRenderer.IMAGES_PER_BLOCK); 
+						     fillX < (originX + IMAGES_PER_BLOCK); 
 						     fillX++) {
 
 							returnExpandedPieceMap[fillY][fillX] = true;
@@ -185,7 +189,7 @@ public final class BitmapGenerator {
 				
 		BufferedImage returnPieceImage = new BufferedImage(pieceDisplayWidth, 
 		                                                   pieceDisplayHeight, 
-		                                                   BlockRenderer.BUFF_IMAGE_TYPE);
+		                                                   BUFF_IMAGE_TYPE);
 		Graphics pieceGraphics = returnPieceImage.createGraphics();
 		
 		for (int expandedMapY = 0, drawY = 0; 
@@ -302,7 +306,7 @@ public final class BitmapGenerator {
 
 		int pieceID = 0;
 		for (byte[][] pieceCoords: pieceTemplate) {
-			BufferedImage[] pieceImages = new BufferedImage[BlockRenderer.NUM_OF_ORIENTATIONS];
+			BufferedImage[] pieceImages = new BufferedImage[NUM_OF_ORIENTATIONS];
 				
 			int spriteSheetHeight = pieceCoords.length * BLOCK_DISPLAY_HEIGHT;
 			if (spriteSheetHeight > maxSpriteSheetHeight) {
@@ -311,7 +315,7 @@ public final class BitmapGenerator {
 
 			spriteSheet[pieceID] = new BufferedImage(SHEET_DISPLAY_WIDTH, 
 			                                         spriteSheetHeight, 
-			                                         BlockRenderer.BUFF_IMAGE_TYPE);
+			                                         BUFF_IMAGE_TYPE);
 			Graphics spriteSheetGraphics = spriteSheet[pieceID].createGraphics();
 			
 			byte[] max = new byte[2];
@@ -320,7 +324,7 @@ public final class BitmapGenerator {
 				if (blockCoords[Y] > max[Y]) max[Y] = blockCoords[Y];
 			}
 
-			for (int orient = 0; orient < BlockRenderer.NUM_OF_ORIENTATIONS; orient++) {
+			for (int orient = 0; orient < NUM_OF_ORIENTATIONS; orient++) {
 				int mapWidth = max[X] + 1;
 				int mapHeight = max[Y] + 1;
 
@@ -329,8 +333,8 @@ public final class BitmapGenerator {
 					pieceMap[blockCoords[Y]][blockCoords[X]] = true;
 				}
 				
-				int expandedMapHeight = mapHeight * BlockRenderer.IMAGES_PER_BLOCK; 
-				int expandedMapWidth = mapWidth * BlockRenderer.IMAGES_PER_BLOCK;
+				int expandedMapHeight = mapHeight * IMAGES_PER_BLOCK; 
+				int expandedMapWidth = mapWidth * IMAGES_PER_BLOCK;
 
 				boolean[][] expandedPieceMap = getExpandedPieceMap(pieceMap, 
 				                                                   expandedMapWidth, 
@@ -371,7 +375,7 @@ public final class BitmapGenerator {
 		
 		BufferedImage imageToFile = new BufferedImage(pieceID * SHEET_DISPLAY_WIDTH, 
 		                                              maxSpriteSheetHeight,
-		                                              BlockRenderer.BUFF_IMAGE_TYPE);
+		                                              BUFF_IMAGE_TYPE);
 		Graphics imageToFileGraphics = imageToFile.createGraphics();
 		for (int i = 0; i < numOfPieces; i++) {
 			imageToFileGraphics.drawImage(spriteSheet[i], 
@@ -381,7 +385,7 @@ public final class BitmapGenerator {
 		}
 
 		try {
-			ImageIO.write(imageToFile, "png", new File(BlockRenderer.blockImageFile));
+			ImageIO.write(imageToFile, "png", new File(blockImageFile));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

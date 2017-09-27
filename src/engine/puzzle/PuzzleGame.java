@@ -4,10 +4,8 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import engine.Game;
 import engine.puzzle.tetris.ScoreCalculator;
-import engine.puzzle.tetris.swing.PieceAction;
 
 public abstract class PuzzleGame extends Game {
-	public static PuzzleGame me;
 	
 	public Board board;
 	protected PiecePool pieces;
@@ -29,8 +27,8 @@ public abstract class PuzzleGame extends Game {
 		
 		piece = board.startNewPiece();
 		while (board.doesPieceFit(piece)) {		
-			screen.addParts(piece.getBlocks());
-			screen.update();
+			engine.screen.addParts(piece.getBlocks());
+			engine.screen.update();
 
 			isPieceLanded = false;
 			PieceAction.FALL.startPieceAction();

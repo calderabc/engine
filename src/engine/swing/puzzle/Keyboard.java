@@ -1,4 +1,4 @@
-package engine.puzzle.tetris.swing;
+package engine.swing.puzzle;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -11,6 +11,7 @@ import java.util.Properties;
 import javax.swing.InputMap;
 import javax.swing.KeyStroke;
 
+import engine.puzzle.PieceAction;
 import engine.puzzle.PuzzleGame;
 
 import javax.swing.ActionMap;

@@ -5,7 +5,6 @@ import engine.Part;
 import engine.Visual;
 import engine.puzzle.Digit;
 import engine.swing.ImageList;
-import engine.swing.ImageType;
 import engine.swing.Sprite;
 
 public class DigitSprite extends Sprite {

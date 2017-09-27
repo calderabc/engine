@@ -1,4 +1,4 @@
-package engine.puzzle.tetris.swing;
+package engine.puzzle;
 
 import java.io.Serializable;
 import java.util.concurrent.ScheduledFuture;
@@ -6,7 +6,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import engine.Coordinates;
-import engine.puzzle.tetris.TetrisGame;
+import engine.Game;
 
 //Map<String, PieceAction> pieceActionMap = new HashMap<String, PieceAction>(20);
 public enum PieceAction implements Serializable {
@@ -18,7 +18,7 @@ public enum PieceAction implements Serializable {
 				FALL.stopPieceAction();
 
 				runner = () -> {
-					if (!TetrisGame.me.tryToMovePiece(this)) {
+					if (!((PuzzleGame)Game.me).tryToMovePiece(this)) {
 						isMoving = false;
 						FALL.startPieceAction();
 						future.cancel(true);
@@ -37,9 +37,9 @@ public enum PieceAction implements Serializable {
 		public synchronized void startPieceAction() {
 			if (!isMoving) {
 				runner = () -> {
-					if (!TetrisGame.me.tryToMovePiece(this)) {
+					if (!((PuzzleGame)Game.me).tryToMovePiece(this)) {
 						stopPieceAction();
-						TetrisGame.me.landPiece();
+						((PuzzleGame)Game.me).landPiece();
 					}
 				};
 				scheduleFuture(false);
@@ -63,8 +63,8 @@ public enum PieceAction implements Serializable {
 					FALL.stopPieceAction();
 					
 					runner = () -> {
-						if (!TetrisGame.me.tryToMovePiece(this)) {
-							TetrisGame.me.landPiece();
+						if (!((PuzzleGame)Game.me).tryToMovePiece(this)) {
+							((PuzzleGame)Game.me).landPiece();
 							cancelFuture();
 						}
 					};
@@ -129,7 +129,7 @@ public enum PieceAction implements Serializable {
 
 		runner = () -> {
 			if (isPressed) {
-				if (!TetrisGame.me.tryToMovePiece(this)) {
+				if (!((PuzzleGame)Game.me).tryToMovePiece(this)) {
 					future.cancel(false);
 					isMoving = false;
 				}

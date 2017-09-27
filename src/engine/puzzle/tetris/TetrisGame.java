@@ -2,14 +2,14 @@ package engine.puzzle.tetris;
 
 import engine.FileIO;
 import engine.puzzle.Board;
+import engine.puzzle.PieceAction;
 import engine.puzzle.PuzzleGame;
-import engine.puzzle.tetris.swing.PieceAction;
 import engine.swing.Swing;
 
 public class TetrisGame extends PuzzleGame {
 	static public final TetrisPieceData TETRIS_PIECE_DATA =
 		(TetrisPieceData)FileIO.load(TetrisPieceData.FILE_NAME);
-
+	
 	public static void main(String argv[]) {
 		// Engine must be initialized before game parts because visuals
 		// need to be created before they can be assigned to the parts.
@@ -18,10 +18,9 @@ public class TetrisGame extends PuzzleGame {
 		// TODO: Tell engine what type of game to generate visuals for
 		// right now defaults to Tetris visuals.
 		me = new TetrisGame();
-		me.engine = new Swing();
-		me.screen = me.engine.newScreen(me);
-		me.board = new Board(TETRIS_PIECE_DATA);
-		me.run();
+		me.engine = new Swing(me);
+		((PuzzleGame)me).board = new Board(TETRIS_PIECE_DATA);
+		((PuzzleGame)me).run();
 
 		System.exit(0);
 	}
@@ -47,7 +46,7 @@ public class TetrisGame extends PuzzleGame {
 					piece.move(action);
 
 					piece.updateVisual();
-					screen.update();
+					engine.screen.update();
 
 					return true;
 				}
