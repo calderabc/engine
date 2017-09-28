@@ -1,10 +1,14 @@
 package engine.tetris;
 
+import java.util.Random;
+
 import engine.Coordinates;
+import engine.FileIO;
 import engine.Visual;
 import engine.puzzle.Block;
 import engine.puzzle.Piece;
 import engine.puzzle.PieceAction;
+import engine.puzzle.PieceData;
 
 /**
  * This Piece class represents a Tetris piece.  It is composed of Blocks.  It has
@@ -13,23 +17,32 @@ import engine.puzzle.PieceAction;
  *
  */
 
-public class TetrisPiece extends Piece {
+public final class TetrisPiece extends Piece {
+	private static final Piece[] pieces = tetrisPiecePool(
+		(TetrisPieceData)FileIO.load(TetrisPieceData.FILE_NAME)
+	);
+
+	private static Piece[] tetrisPiecePool(PieceData pieceData) {
+		int pieceCount = ((TetrisPieceData)pieceData).pieceTemplate.length;
+
+		Piece[] newPieces = new TetrisPiece[pieceCount];
+		for (byte i = 0; i < pieceCount; i++) {
+			newPieces[i] = new TetrisPiece(i, (TetrisPieceData)pieceData);	
+		}	
+		return newPieces;
+	}
+
+					
 	public Coordinates currCenter = null;
 	public Coordinates destCenter = null;
 
-
-	public TetrisPiece(byte newId, TetrisPieceData newPieceData) {
-		super(newPieceData.pieceTemplate[newId].length);	
-		generatePiece(newPieceData, newId);
+	public TetrisPiece() {
+		this((TetrisPiece)pieces[new Random().nextInt(pieces.length)]);
 	}
 
-	public TetrisPiece(TetrisPiece other) {
-		super(other);
-		currCenter = new Coordinates(other.currCenter);
-		destCenter = new Coordinates(other.destCenter);
-	}
+	private TetrisPiece(byte pieceId, TetrisPieceData newPieceData) {
+		super(newPieceData.pieceTemplate[pieceId].length);	
 
-	private final void generatePiece(TetrisPieceData newPieceData, byte pieceId) {
 		byte state = 0;
 		for (byte[] blockXY: newPieceData.pieceTemplate[pieceId]) {
 			blocks.add(new Block(new Coordinates(blockXY[0], blockXY[1]), 
@@ -47,6 +60,12 @@ public class TetrisPiece extends Piece {
 				currBlock.move(newPieceData.pieceStartPos);
 				currBlock.visual.update(currBlock);
 		}
+	}
+
+	public TetrisPiece(TetrisPiece other) {
+		super(other);
+		currCenter = new Coordinates(other.currCenter);
+		destCenter = new Coordinates(other.destCenter);
 	}
 
 
@@ -121,6 +140,7 @@ public class TetrisPiece extends Piece {
 		return this;
 	}
 	
+	@Override
 	public TetrisPiece move(PieceAction action) {
 		return (action.type == PieceAction.Type.MOVE)
 			? move(action.offset)
@@ -138,6 +158,8 @@ public class TetrisPiece extends Piece {
 
 		return this;
 	}
-
 	
+	public static Piece getPiece(int pieceIndex) {
+		return pieces[pieceIndex];
+	}
 }

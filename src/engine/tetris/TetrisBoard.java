@@ -10,7 +10,6 @@ import engine.Coordinates;
 import engine.puzzle.Block;
 import engine.puzzle.Board;
 import engine.puzzle.Piece;
-import engine.puzzle.PieceData;
 
 /**
  * A Board represents the game element that Blocks collect on after Pieces 
@@ -30,7 +29,6 @@ public final class TetrisBoard extends Board {
 		new Coordinates(DEFAULT_BOARD_WIDTH - 1, DEFAULT_BOARD_HEIGHT - 1);
 	*/
 	
-	private final TetrisPiecePool pieces;
 	private List<Row> blockMatrix = new Vector<Row>(DEFAULT_BOARD_HEIGHT);
 
 	
@@ -83,8 +81,8 @@ public final class TetrisBoard extends Board {
 	/**
 	 * Default Constructor
 	 */
-	public TetrisBoard(PieceData newPieceData) {
-		this(DEFAULT_BOARD_WIDTH, DEFAULT_BOARD_HEIGHT, newPieceData);
+	public TetrisBoard() {
+		this(DEFAULT_BOARD_WIDTH, DEFAULT_BOARD_HEIGHT);
 	}
 	
 	/**
@@ -93,8 +91,7 @@ public final class TetrisBoard extends Board {
 	 * @param newWidth how many Blocks wide to make the Board
 	 * @param newHeight how many Blocks high to make the Board
 	 */
-	private TetrisBoard(int newWidth, int newHeight, PieceData newPieceData) {
-		pieces = new TetrisPiecePool(newPieceData);
+	private TetrisBoard(int newWidth, int newHeight) {
 
 		for (int i = 0; i < DEFAULT_BOARD_HEIGHT; i++) {
 			blockMatrix.add(new Row());
@@ -102,10 +99,6 @@ public final class TetrisBoard extends Board {
 
 		width = newWidth;
 		height = newHeight;
-	}
-	
-	public Piece startNewPiece() {
-		return pieces.getRandomPiece();
 	}
 	
 	

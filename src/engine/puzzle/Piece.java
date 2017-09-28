@@ -18,6 +18,7 @@ public abstract class Piece {
 			blocks.add(new Block(currOtherBlock));
 		}
 	}
+
 	
 	public List<Block> getBlocks() {
 		return blocks;
@@ -33,5 +34,8 @@ public abstract class Piece {
 		}
 	}
 
+	public static Piece getRandomPiece() {
+		return null;
+	}
 	public abstract Piece move(PieceAction action);
 }

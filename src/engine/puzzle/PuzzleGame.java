@@ -3,14 +3,13 @@ package engine.puzzle;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import engine.Game;
-import engine.tetris.TetrisPiecePool;
 import engine.tetris.TetrisBoard;
+import engine.tetris.TetrisPiece;
 
 public abstract class PuzzleGame extends Game {
 	
 	public TetrisBoard board;
 	public Score score;
-	protected TetrisPiecePool pieces;
 	protected Piece piece;
 	protected Number level;
 	protected Number rowsCleared;
@@ -25,7 +24,7 @@ public abstract class PuzzleGame extends Game {
 		rowsCleared = new Number(Number.Type.ROWS, 0, (byte)3);
 
 		
-		piece = board.startNewPiece();
+		piece = new TetrisPiece();
 		while (board.doesPieceFit(piece)) {		
 			engine.screen.addParts(piece.getBlocks());
 			engine.screen.update();
@@ -46,7 +45,7 @@ public abstract class PuzzleGame extends Game {
 
 			PieceAction.FALL.stopPieceAction();
 
-			piece = board.startNewPiece();
+			piece = new TetrisPiece();
 		}
 	}
 	 

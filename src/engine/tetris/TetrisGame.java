@@ -1,19 +1,16 @@
 package engine.tetris;
 
-import engine.FileIO;
 import engine.puzzle.PieceAction;
 import engine.puzzle.PuzzleGame;
 import engine.puzzle.Score;
 import engine.swing.Swing;
 
 public final class TetrisGame extends PuzzleGame {
-	public static final TetrisPieceData TETRIS_PIECE_DATA =
-		(TetrisPieceData)FileIO.load(TetrisPieceData.FILE_NAME);
 	
 	public static void main(String argv[]) {
 		me = new TetrisGame();
 		me.engine = new Swing(me);
-		((PuzzleGame)me).board = new TetrisBoard(TETRIS_PIECE_DATA);
+		((PuzzleGame)me).board = new TetrisBoard();
 		// TODO: For testing.  Switch to 10 for actual thing.
 		((PuzzleGame)me).score = new Score(getScoreCalculator(ScoreType.NES), 2, (byte)7);
 		((PuzzleGame)me).run();
