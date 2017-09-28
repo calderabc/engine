@@ -8,7 +8,6 @@ import engine.Visual;
 import engine.puzzle.Block;
 import engine.puzzle.Piece;
 import engine.puzzle.PieceAction;
-import engine.puzzle.PieceData;
 
 /**
  * This Piece class represents a Tetris piece.  It is composed of Blocks.  It has
@@ -18,23 +17,23 @@ import engine.puzzle.PieceData;
  */
 
 public final class TetrisPiece extends Piece {
-	private static final Piece[] pieces = tetrisPiecePool(
-		(TetrisPieceData)FileIO.load(TetrisPieceData.FILE_NAME)
-	);
+	private static final Piece[] pieces;
 
-	private static Piece[] tetrisPiecePool(PieceData pieceData) {
-		int pieceCount = ((TetrisPieceData)pieceData).pieceTemplate.length;
+	static {
+		TetrisPieceData pieceData = 
+				(TetrisPieceData)FileIO.load(TetrisPieceData.FILE_NAME);
+		int pieceCount = pieceData.pieceTemplate.length;
 
-		Piece[] newPieces = new TetrisPiece[pieceCount];
+		pieces = new TetrisPiece[pieceCount];
 		for (byte i = 0; i < pieceCount; i++) {
-			newPieces[i] = new TetrisPiece(i, (TetrisPieceData)pieceData);	
+			pieces[i] = new TetrisPiece(i, pieceData);	
 		}	
-		return newPieces;
 	}
 
 					
 	public Coordinates currCenter = null;
 	public Coordinates destCenter = null;
+
 
 	public TetrisPiece() {
 		this((TetrisPiece)pieces[new Random().nextInt(pieces.length)]);
@@ -139,13 +138,6 @@ public final class TetrisPiece extends Piece {
 
 		return this;
 	}
-	
-	@Override
-	public TetrisPiece move(PieceAction action) {
-		return (action.type == PieceAction.Type.MOVE)
-			? move(action.offset)
-			: rotate(action.offset.x()); // x designated as direction for rotate algorithm.
-	}
 
 	private TetrisPiece move(Coordinates offset) {
 		Coordinates offsetDoubled = new Coordinates(offset.x() << 1, offset.y() << 1);
@@ -161,5 +153,12 @@ public final class TetrisPiece extends Piece {
 	
 	public static Piece getPiece(int pieceIndex) {
 		return pieces[pieceIndex];
+	}
+
+	@Override
+	public TetrisPiece move(PieceAction action) {
+		return (action.type == PieceAction.Type.MOVE)
+			? move(action.offset)
+			: rotate(action.offset.x()); // x designated as direction for rotate algorithm.
 	}
 }

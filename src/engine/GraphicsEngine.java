@@ -10,84 +10,42 @@ public abstract class GraphicsEngine {
 	protected GraphicsEngine(Game game, Class<? extends Screen> newScreenClass) {
 		screenClass = newScreenClass;
 		Screen temp = null;
-		try {
-			Constructor<? extends Screen> con = screenClass.getConstructor(game.getClass());
-			temp = (Screen) con.newInstance(game);
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			System.out.println(e.getCause().toString());
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			Constructor<? extends Screen> con;
+			try {
+				con = screenClass.getConstructor(game.getClass());
+				temp = (Screen) con.newInstance(game);
+			} catch (NoSuchMethodException | SecurityException 
+			         | InstantiationException | IllegalAccessException 
+			         | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
+			}
 		screen = temp;
 	}
 	
 	protected abstract Class<? extends Visual> getVisualClass(Part part);
 
 	public Visual newVisual(Part part, Visual.Id id) {
-		try {
-			return getVisualClass(part)
-				.getConstructor(part.getClass(), Visual.Id.class)
-				.newInstance(part, id);
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			try {
+				return getVisualClass(part)
+					.getConstructor(part.getClass(), Visual.Id.class)
+					.newInstance(part, id);
+			} catch (InstantiationException | IllegalAccessException 
+			         | IllegalArgumentException | InvocationTargetException 
+			         | NoSuchMethodException | SecurityException e) {
+				e.printStackTrace();
+			}
 		return null;
 	}
 
 	public Visual newVisual(Visual visual) {
-		try {
 			if (visual == null) return null;
-			return visual.getClass().getConstructor(Visual.class).newInstance(visual);
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			try {
+				return visual.getClass().getConstructor(Visual.class).newInstance(visual);
+			} catch (InstantiationException | IllegalAccessException 
+			         | IllegalArgumentException | InvocationTargetException 
+			         | NoSuchMethodException | SecurityException e) {
+				e.printStackTrace();
+			}
 		return null;
 	}
 }

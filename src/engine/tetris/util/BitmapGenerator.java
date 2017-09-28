@@ -12,6 +12,9 @@ import engine.FileIO;
 import engine.swing.puzzle.ImageType;
 import engine.tetris.TetrisPieceData;
 
+// Most of this is overkill.  Could be done better with image editor/renderer.
+// Proof of concept. Useful for automation. 
+
 public final class BitmapGenerator {
 	private static final int IMAGES_PER_BLOCK = 8;
 	private static final int NUM_OF_ORIENTATIONS = 4;

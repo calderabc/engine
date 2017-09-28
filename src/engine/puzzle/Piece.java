@@ -1,11 +1,12 @@
 package engine.puzzle;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Vector;
 
 
 public abstract class Piece {
-	protected List<Block> blocks;
+	protected final List<Block> blocks;
 	
 	protected Piece(int newBlockCount) {
 		blocks = new Vector<Block>(newBlockCount);	
@@ -18,8 +19,9 @@ public abstract class Piece {
 			blocks.add(new Block(currOtherBlock));
 		}
 	}
-
 	
+	// TODO: Shallow copy.  Make sure anything which calls this
+	// doesn't alter 'blocks' or makes a deep copy before alteration.
 	public List<Block> getBlocks() {
 		return blocks;
 	}
@@ -28,14 +30,23 @@ public abstract class Piece {
 		return blocks.size();
 	}
 
+	public final Piece newPiece() {
+		try {
+			return getClass().getConstructor().newInstance();
+		} catch (InstantiationException | IllegalAccessException 
+		         | IllegalArgumentException | InvocationTargetException
+		         | NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	public void updateVisual() {
 		for (Block block : blocks) {
 			block.visual.update(block);
 		}
 	}
 
-	public static Piece getRandomPiece() {
-		return null;
-	}
+
 	public abstract Piece move(PieceAction action);
 }

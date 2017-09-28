@@ -11,6 +11,7 @@ public final class TetrisGame extends PuzzleGame {
 		me = new TetrisGame();
 		me.engine = new Swing(me);
 		((PuzzleGame)me).board = new TetrisBoard();
+		((PuzzleGame)me).piece = new TetrisPiece();
 		// TODO: For testing.  Switch to 10 for actual thing.
 		((PuzzleGame)me).score = new Score(getScoreCalculator(ScoreType.NES), 2, (byte)7);
 		((PuzzleGame)me).run();
@@ -53,8 +54,8 @@ public final class TetrisGame extends PuzzleGame {
 		synchronized(piece) {
 			if (!isPieceLanded) {
 				PieceAction.resetAll();
-				board.landPiece(piece);
-				int numRowsRemoved = board.tryRemoveBlocks();
+				((TetrisBoard)board).landPiece(piece);
+				int numRowsRemoved = ((TetrisBoard)board).tryRemoveBlocks();
 				if (numRowsRemoved > 0) {
 					rowsCleared.add(numRowsRemoved);
 					// TODO: verify this is how scoring works.
