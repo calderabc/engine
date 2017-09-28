@@ -1,6 +1,5 @@
 package engine.puzzle;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Vector;
 
@@ -32,10 +31,9 @@ public abstract class Piece {
 
 	public final Piece newPiece() {
 		try {
-			return getClass().getConstructor().newInstance();
+			return getClass().newInstance();
 		} catch (InstantiationException | IllegalAccessException 
-		         | IllegalArgumentException | InvocationTargetException
-		         | NoSuchMethodException | SecurityException e) {
+		         | IllegalArgumentException | SecurityException e) {
 			e.printStackTrace();
 		}
 		return null;

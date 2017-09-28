@@ -16,12 +16,11 @@ public class Number {
 	private volatile long value;
 	private Digit[] digits;
 	
-	public Number(Type newType, long newValue, byte newLength) {
+	public Number(Type newType, byte newLength) {
 		digits = new Digit[newLength];
 		for (int i = 0; i < newLength; i++) {
 			digits[i] =  new Digit(newType, new Coordinates(i));
 		}
-		set(newValue);
 	}
 	
 	public final Number add(long offset) {

@@ -12,7 +12,6 @@ import javax.swing.InputMap;
 import javax.swing.KeyStroke;
 
 import engine.puzzle.PieceAction;
-import engine.puzzle.PuzzleGame;
 
 import javax.swing.ActionMap;
 import javax.swing.AbstractAction;
@@ -44,9 +43,7 @@ public class Keyboard {
 	}
 	
 	@SuppressWarnings("serial")
-	public static void initInputActionMaps(PuzzleGame game, 
-	                                       InputMap inputMap, 
-	                                       ActionMap aMap) {
+	public static void initInputActionMaps(InputMap inputMap, ActionMap aMap) {
 		initInputMap(inputMap);
 
 		for(KeyStroke keyStroke : inputMap.allKeys()) {

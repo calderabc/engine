@@ -15,7 +15,6 @@ import javax.swing.JPanel;
 import engine.Part;
 import engine.Screen;
 import engine.swing.puzzle.Keyboard;
-import engine.tetris.TetrisGame;
 
 
 @SuppressWarnings("serial")
@@ -28,10 +27,9 @@ public class SwingScreen extends JPanel implements Screen {
 	
 	private final List<Part> displayedParts = new Vector<Part>();
 	
-
-	public SwingScreen(TetrisGame game) {
+	public SwingScreen() {
 		// TODO: Do this method call on another thread.
-		Keyboard.initInputActionMaps(game, getInputMap(), getActionMap());
+		Keyboard.initInputActionMaps(getInputMap(), getActionMap());
 		frame = new JFrame("Tetris");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(700, 670);

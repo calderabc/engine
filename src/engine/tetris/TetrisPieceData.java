@@ -15,17 +15,21 @@ public class TetrisPieceData extends PieceData implements Serializable {
 	public final Coordinates pieceStartPos;
 
 	
-	public TetrisPieceData(byte[][][] newPieceTemplate, byte[][] newPieceCenter, Coordinates newPieceStartPos) {
+	public TetrisPieceData(byte[][][] newPieceTemplate, 
+	                       byte[][] newPieceCenter, 
+	                       Coordinates newPieceStartPos) {
 		pieceTemplate = newPieceTemplate;
 		pieceCenter = newPieceCenter;
 		pieceStartPos = newPieceStartPos;
 	}
 
 	public final Coordinates getCurrCenter(int pieceID) {
-		return new Coordinates(pieceCenter[pieceID][0], pieceCenter[pieceID][1]);
+		return new Coordinates(pieceCenter[pieceID][0], 
+		                       pieceCenter[pieceID][1]);
 	}
 
 	public final Coordinates getDestCenter(int pieceID) {
-		return new Coordinates(pieceCenter[pieceID][2], pieceCenter[pieceID][3]);
+		return new Coordinates(pieceCenter[pieceID][2], 
+		                       pieceCenter[pieceID][3]);
 	}
 }

@@ -1,27 +1,8 @@
 package engine;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 public abstract class GraphicsEngine {
-	public final Screen screen;
-	protected final Class<? extends Screen> screenClass;
-	
-	protected GraphicsEngine(Game game, Class<? extends Screen> newScreenClass) {
-		screenClass = newScreenClass;
-		Screen temp = null;
-			Constructor<? extends Screen> con;
-			try {
-				con = screenClass.getConstructor(game.getClass());
-				temp = (Screen) con.newInstance(game);
-			} catch (NoSuchMethodException | SecurityException 
-			         | InstantiationException | IllegalAccessException 
-			         | IllegalArgumentException | InvocationTargetException e) {
-				e.printStackTrace();
-			}
-		screen = temp;
-	}
-	
 	protected abstract Class<? extends Visual> getVisualClass(Part part);
 
 	public Visual newVisual(Part part, Visual.Id id) {

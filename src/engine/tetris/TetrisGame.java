@@ -1,24 +1,16 @@
 package engine.tetris;
 
+
 import engine.puzzle.PieceAction;
 import engine.puzzle.PuzzleGame;
-import engine.puzzle.Score;
-import engine.swing.Swing;
 
 public final class TetrisGame extends PuzzleGame {
 	
 	public static void main(String argv[]) {
 		me = new TetrisGame();
-		me.engine = new Swing(me);
-		((PuzzleGame)me).board = new TetrisBoard();
-		((PuzzleGame)me).piece = new TetrisPiece();
-		// TODO: For testing.  Switch to 10 for actual thing.
-		((PuzzleGame)me).score = new Score(getScoreCalculator(ScoreType.NES), 2, (byte)7);
-		((PuzzleGame)me).run();
-
-		System.exit(0);
+		((PuzzleGame)me).run("Swing");
 	}
-
+	
 	@Override
 	public boolean tryToMovePiece(PieceAction action) {
 		synchronized(piece) {
@@ -40,7 +32,7 @@ public final class TetrisGame extends PuzzleGame {
 					piece.move(action);
 
 					piece.updateVisual();
-					engine.screen.update();
+					screen.update();
 
 					return true;
 				}
@@ -67,25 +59,9 @@ public final class TetrisGame extends PuzzleGame {
 					score.update(level, numRowsRemoved);
 				}
 
-
 				isPieceLanded = true;
 			}
 		}
-	}
-	
-	
-	// TODO: Serialize the score mechanism to file.  Not sure if it would benefit.
-	
-	enum ScoreType { NES }
-	private static Score.Calculator getScoreCalculator(ScoreType type) {
-		switch (type) {
-			case NES : 
-				return (level, rowCount) -> {
-					int[] multipliers = {40, 100, 300, 1200};
-					return multipliers[rowCount - 1] * level.get();
-				}; 
-			default: return null;
-		} 
 	}
 
 }

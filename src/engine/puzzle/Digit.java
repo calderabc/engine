@@ -1,6 +1,7 @@
 package engine.puzzle;
 
 import engine.Coordinates;
+import engine.Game;
 import engine.Part;
 import engine.Visual.Id;
 
@@ -13,7 +14,7 @@ public class Digit extends Part {
 		type = newType;
 		set(newValue);
 		initVisual(new Id((byte)2));
-		PuzzleGame.me.engine.screen.addPart(this);
+		Game.me.screen.addPart(this);
 	}
 	
 	public Digit(Number.Type newType, Coordinates newPosition) {

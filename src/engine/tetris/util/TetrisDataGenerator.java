@@ -35,9 +35,11 @@ public class TetrisDataGenerator {
 
 	public static final Coordinates pieceStartPos = new Coordinates(3, 0);
 
-
 	public static void main(String argv[]) {
-		TetrisPieceData pieceData = new TetrisPieceData(pieceTemplate, pieceCenter, pieceStartPos);
+		TetrisPieceData pieceData = 
+			new TetrisPieceData(pieceTemplate, 
+			                    pieceCenter, 
+			                    pieceStartPos);
 
 		FileIO.save(TetrisPieceData.FILE_NAME, pieceData);
 	}

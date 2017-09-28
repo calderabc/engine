@@ -21,7 +21,7 @@ public abstract class Part implements Movable {
 	
 	public void terminate() {
 		if (visual != null) { 
-			Game.me.engine.screen.removePart(this);
+			Game.me.screen.removePart(this);
 		}
 		visual = null;
 	}
