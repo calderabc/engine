@@ -59,9 +59,7 @@ public abstract class PuzzleGame extends Game {
 
 		level = new Number(Number.Type.LEVEL, (byte)2).set(1);
 		rowsCleared = new Number(Number.Type.ROWS, (byte)3);
-
 		
-		//piece = new TetrisPiece();
 		while (board.doesPieceFit(piece)) {		
 			screen.addParts(piece.getBlocks());
 			screen.update();
@@ -69,23 +67,42 @@ public abstract class PuzzleGame extends Game {
 			isPieceLanded = false;
 			PieceAction.FALL.startPieceAction();
 			
-			// TODO: Make this thread (main) stop and wait for an interrupt.
-			// Polling isPieceLanded wastes CPU processing time. Interrupt, or signal 
-			// of some sort from the thread which lands the piece would be better.
-			do {
+
+			while(!isPieceLanded) {
 				try {
 					Thread.sleep(50);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-			} while (!isPieceLanded);
+			}
 
 			PieceAction.FALL.stopPieceAction();
 
 			piece = piece.newPiece();
 		}
 	}
-	 
+
+	public void landPiece() {
+		synchronized(piece) {
+			if (!isPieceLanded) {
+				PieceAction.resetAll();
+				board.landPiece(piece);
+				int numRowsRemoved = board.tryRemoveBlocks();
+				if (numRowsRemoved > 0) {
+					rowsCleared.add(numRowsRemoved);
+					// TODO: verify this is how scoring works.
+					// Here score is compounded according the the level
+					// being switched to.  Probably a way to
+					// score part on old level, and part on new level.
+					level = score.checkLevel(level, rowsCleared);
+
+					score.update(level, numRowsRemoved);
+				}
+
+				isPieceLanded = true;
+			}
+		}
+	}
+
 	public abstract boolean tryToMovePiece(PieceAction action);
-	public abstract void landPiece();
 }

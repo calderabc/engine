@@ -41,27 +41,4 @@ public final class TetrisGame extends PuzzleGame {
 		return false;
 	}
 
-	@Override
-	public void landPiece() {
-		synchronized(piece) {
-			if (!isPieceLanded) {
-				PieceAction.resetAll();
-				((TetrisBoard)board).landPiece(piece);
-				int numRowsRemoved = ((TetrisBoard)board).tryRemoveBlocks();
-				if (numRowsRemoved > 0) {
-					rowsCleared.add(numRowsRemoved);
-					// TODO: verify this is how scoring works.
-					// Here score is compounded according the the level
-					// being switched to.  Probably a way to
-					// score part on old level, and part on new level.
-					level = score.checkLevel(level, rowsCleared);
-
-					score.update(level, numRowsRemoved);
-				}
-
-				isPieceLanded = true;
-			}
-		}
-	}
-
 }

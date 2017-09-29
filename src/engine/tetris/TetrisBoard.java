@@ -106,6 +106,7 @@ public final class TetrisBoard extends Board {
 	 * Add all the Blocks that compose the specified Piece to this Board.
 	 * @param landingPiece piece containing Blocks to be added to this Board
 	 */
+	@Override
 	public void landPiece(Piece landingPiece) {
 		for (Block landingBlock : landingPiece.getBlocks()) {
 			try {
@@ -118,6 +119,7 @@ public final class TetrisBoard extends Board {
 		}
 	}
 	
+	@Override
 	public int tryRemoveBlocks() {
 		Collection<Row> terminalRows = getFullRows();
 		int count = terminalRows.size();
