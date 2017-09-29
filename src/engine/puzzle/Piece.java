@@ -1,10 +1,11 @@
 package engine.puzzle;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Vector;
 
 
-public abstract class Piece {
+public abstract class Piece implements Cloneable {
 	protected final List<Block> blocks;
 	
 	protected Piece(int newBlockCount) {
@@ -36,6 +37,19 @@ public abstract class Piece {
 		         | IllegalArgumentException | SecurityException e) {
 			e.printStackTrace();
 		}
+		return null;
+	}
+
+	@Override
+	protected Piece clone() {
+			Class<? extends Piece> myClass = this.getClass();
+			try {
+				return myClass.getConstructor(myClass).newInstance(this);
+			} catch (InstantiationException | IllegalAccessException 
+			         | IllegalArgumentException | InvocationTargetException 
+			         | NoSuchMethodException | SecurityException e) {
+				e.printStackTrace();
+			}
 		return null;
 	}
 
