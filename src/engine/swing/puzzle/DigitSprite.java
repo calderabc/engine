@@ -16,16 +16,17 @@ public class DigitSprite extends Sprite {
 	public static final Coordinates SCORE = new Coordinates(400);
 	public static final Coordinates LEVEL = new Coordinates(400, 100);
 	public static final Coordinates ROWS = new Coordinates(400, 200);
-
+	public static final Coordinates PIECES = new Coordinates(400, 300);
 	
 	public DigitSprite(Digit digit, Id newId) {
 		super(digit, newId);
 
-		// TODO: This is real ambiguous.
+		// TODO: Kludgy.  Make better.
 		switch(digit.type) {
 			case SCORE : origin = SCORE; break; 
 			case LEVEL : origin = LEVEL; break;
 			case ROWS : origin = ROWS; break;
+			case PIECES : origin = PIECES; break;
 			default : origin = Coordinates.ORIGIN; 
 		}
 	}

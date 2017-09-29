@@ -10,6 +10,7 @@ public class Number {
 		SCORE,
 		LEVEL,
 		ROWS,
+		PIECES,
 		MISC
 	}
 	

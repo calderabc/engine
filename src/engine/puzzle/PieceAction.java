@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 import engine.Coordinates;
 import engine.Game;
 
-//Map<String, PieceAction> pieceActionMap = new HashMap<String, PieceAction>(20);
 public enum PieceAction implements Serializable {
 	// TODO: Could reduce data file size by saving values instead of whole objects.
 	WARP(PieceAction.Type.MOVE, 100, new Coordinates(0, 1)) {
@@ -86,7 +85,10 @@ public enum PieceAction implements Serializable {
 	CLOCK (Type.ROTATE, 6, new Coordinates(-1)),
 	COUNTER (Type.ROTATE, 6, new Coordinates(1), CLOCK);
 
-	public static ScheduledThreadPoolExecutor scheduler = new ScheduledThreadPoolExecutor(2);
+	// Threads for the scheduled piece movement actions, piece falling etc.
+	// TODO: How many concurrent scheduled actions do I need?
+	public static ScheduledThreadPoolExecutor scheduler = 
+		new ScheduledThreadPoolExecutor(2);
 
 	static {
 		scheduler.setRemoveOnCancelPolicy(true);

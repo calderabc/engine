@@ -10,12 +10,12 @@ public abstract class PuzzleGame extends Game {
 	public Board board;
 	public Score score;
 	public Piece piece;
-	protected Number level;
-	protected Number rowsCleared;
-	protected boolean isPieceLanded;
 
-	// Threads for the scheduled piece movement actions, piece falling etc.
-	// TODO: How many concurrent scheduled actions do I need?
+	private Number level;
+	private Number rowsCleared;
+	private Number pieceCount;
+	private boolean isPieceLanded;
+
 	public ScheduledThreadPoolExecutor scheduler = 
 		new ScheduledThreadPoolExecutor(2); 
 
@@ -58,10 +58,9 @@ public abstract class PuzzleGame extends Game {
 		magicMirror(engineString, "Engine", "Screen");
 		magicMirror(gameString, "Board", "Piece", "Score");
 
-		scheduler.setRemoveOnCancelPolicy(true);
-
 		level = new Number(Number.Type.LEVEL, (byte)2).set(1);
 		rowsCleared = new Number(Number.Type.ROWS, (byte)3);
+		pieceCount = new Number(Number.Type.PIECES, (byte)4);
 		
 		while (board.doesPieceFit(piece)) {		
 			// Add the piece's blocks to screen so they will be displayed.
@@ -127,7 +126,8 @@ public abstract class PuzzleGame extends Game {
 					// The Eagle has landed. Main thread please resume.
 					this.notify();
 				}
-				// Update the score and statistics.
+				// Update score and statistics.
+				pieceCount.add(1);
 				if (removedCount > 0) {
 					rowsCleared.add(removedCount);
 					// TODO: verify this is how scoring works.
