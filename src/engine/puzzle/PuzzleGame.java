@@ -1,5 +1,6 @@
 package engine.puzzle;
 
+import java.util.Arrays;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import engine.Game;
@@ -61,7 +62,7 @@ public abstract class PuzzleGame extends Game {
 		rowsCleared = new Number(Number.Type.ROWS, (byte)3);
 		
 		while (board.doesPieceFit(piece)) {		
-			screen.addParts(piece.getBlocks());
+			screen.addParts(Arrays.asList(piece.getBlocks()));
 			screen.update();
 
 			isPieceLanded = false;

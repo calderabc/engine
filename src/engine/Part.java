@@ -11,7 +11,6 @@ public abstract class Part implements Movable {
 	public Part(Part other) {
 		pos = new Coordinates(other.pos);
 		visual = Game.me.engine.newVisual(other.visual);
-		//visual = other.visual;
 	}	
 
 	protected void initVisual(Visual.Id newId) {

@@ -7,7 +7,6 @@ import engine.FileIO;
 import engine.Visual;
 import engine.puzzle.Block;
 import engine.puzzle.Piece;
-import engine.puzzle.PieceAction;
 
 /**
  * This Piece class represents a Tetris piece.  It is composed of Blocks.  It has
@@ -29,23 +28,28 @@ public final class TetrisPiece extends Piece {
 			pieces[i] = new TetrisPiece(i, pieceData);	
 		}	
 	}
-
 					
-	public Coordinates currCenter = null;
-	public Coordinates destCenter = null;
-
+	public volatile Coordinates currCenter;
+	public volatile Coordinates destCenter;
 
 	public TetrisPiece() {
 		this((TetrisPiece)pieces[new Random().nextInt(pieces.length)]);
+	}
+
+	public TetrisPiece(TetrisPiece other) {
+		super(other);
+		currCenter = new Coordinates(other.currCenter);
+		destCenter = new Coordinates(other.destCenter);
 	}
 
 	private TetrisPiece(byte pieceId, TetrisPieceData newPieceData) {
 		super(newPieceData.pieceTemplate[pieceId].length);	
 
 		byte state = 0;
+		int i = 0;
 		for (byte[] blockXY: newPieceData.pieceTemplate[pieceId]) {
-			blocks.add(new Block(new Coordinates(blockXY[0], blockXY[1]), 
-			                     new Visual.Id((byte)1, pieceId, state++)));
+			blocks[i++] = new Block(new Coordinates(blockXY[0], blockXY[1]), 
+			                        new Visual.Id((byte)1, pieceId, state++));
 		}
 
 		// Centers are represented multiplied by two, this is why the 'pos' 
@@ -60,13 +64,6 @@ public final class TetrisPiece extends Piece {
 				currBlock.visual.update(currBlock);
 		}
 	}
-
-	public TetrisPiece(TetrisPiece other) {
-		super(other);
-		currCenter = new Coordinates(other.currCenter);
-		destCenter = new Coordinates(other.destCenter);
-	}
-
 
 	/**
 	 * Rotate the blocks in a piece. 
@@ -117,10 +114,11 @@ public final class TetrisPiece extends Piece {
 	 * position values are multiplied by two to match for the calculation 
 	 * then the results are divided by two to yield the correct position values.
 	 */
-
-	private final synchronized TetrisPiece rotate(int flip) {
-		// flip: -1 Clockwise, 1 CounterClockwise.
+	@Override
+	protected Piece rotate(Coordinates offset) {
+		// offset.x: -1 Clockwise, 1 CounterClockwise.
 		// Move the Blocks in the piece to their new positions.
+		int flip = offset.x();
 		for(Block currBlock: blocks) {
 				/* Equivalent but slower:
 				currBlock.pos = new Coordinates( (destCenter[X] + flip * (2 * currBlock.pos.y - currCenter[Y])) / 2,
@@ -139,26 +137,17 @@ public final class TetrisPiece extends Piece {
 		return this;
 	}
 
-	private TetrisPiece move(Coordinates offset) {
-		Coordinates offsetDoubled = new Coordinates(offset.x() << 1, offset.y() << 1);
-		currCenter.move(offsetDoubled);
-		destCenter.move(offsetDoubled);
-
-		for (Block currBlock: blocks) {
-			currBlock.move(offset);
-		}
-
-		return this;
-	}
-	
 	public static Piece getPiece(int pieceIndex) {
 		return pieces[pieceIndex];
 	}
 
-	@Override
-	public TetrisPiece move(PieceAction action) {
-		return (action.type == PieceAction.Type.MOVE)
-			? move(action.offset)
-			: rotate(action.offset.x()); // x designated as direction for rotate algorithm.
+	protected TetrisPiece move(Coordinates offset) {
+		Coordinates offsetDoubled = 
+			new Coordinates(offset.x() << 1, offset.y() << 1);
+		currCenter.move(offsetDoubled);
+		destCenter.move(offsetDoubled);
+
+		super.move(offset);
+		return this;
 	}
 }

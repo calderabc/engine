@@ -11,9 +11,9 @@ public class Score extends Number {
 		long calculate(Number level, int clearCount);
 	}
 	
-	public Score(Calculator newCalculator, 
+	protected Score(Calculator newCalculator, 
 	             int newClearCountPerLevel, 
-	             byte newLength) {
+	             int newLength) {
 		super(Number.Type.SCORE, newLength);
 		calculator = newCalculator; 
 		clearCountPerLevel = newClearCountPerLevel;

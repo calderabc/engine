@@ -1,33 +1,34 @@
 package engine.puzzle;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-import java.util.Vector;
+
+import engine.Coordinates;
 
 
 public abstract class Piece implements Cloneable {
-	protected final List<Block> blocks;
+	protected final Block[] blocks;
 	
 	protected Piece(int newBlockCount) {
-		blocks = new Vector<Block>(newBlockCount);	
+		blocks = new Block[newBlockCount];	
 	}
 	
 	public Piece(Piece other) {
-		List<Block> otherBlocks = other.getBlocks();
-		blocks = new Vector<Block>(otherBlocks.size());
+		Block[] otherBlocks = other.getBlocks();
+		blocks = new Block[otherBlocks.length];
+		int i = 0;
 		for (Block currOtherBlock: other.getBlocks()) {
-			blocks.add(new Block(currOtherBlock));
+			blocks[i++] = new Block(currOtherBlock);
 		}
 	}
 	
 	// TODO: Shallow copy.  Make sure anything which calls this
 	// doesn't alter 'blocks' or makes a deep copy before alteration.
-	public List<Block> getBlocks() {
+	public Block[] getBlocks() {
 		return blocks;
 	}
 
 	public final int getBlockCount() {
-		return blocks.size();
+		return blocks.length;
 	}
 
 	public final Piece newPiece() {
@@ -59,6 +60,20 @@ public abstract class Piece implements Cloneable {
 		}
 	}
 
+	protected Piece move(Coordinates offset) {
+		for (Block currBlock: blocks) {
+			currBlock.move(offset);
+		}
+		return this;
+	}
+	
+	protected abstract Piece rotate(Coordinates offset);
+		
 
-	public abstract Piece move(PieceAction action);
+	public Piece move(PieceAction action) {
+		// TODO: Maybe lambda/method-reference this.
+		return (action.type == PieceAction.Type.MOVE)
+			? move(action.offset)
+			: rotate(action.offset); 
+	}
 }

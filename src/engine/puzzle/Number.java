@@ -16,7 +16,7 @@ public class Number {
 	private volatile long value;
 	private Digit[] digits;
 	
-	public Number(Type newType, byte newLength) {
+	public Number(Type newType, int newLength) {
 		digits = new Digit[newLength];
 		for (int i = 0; i < newLength; i++) {
 			digits[i] =  new Digit(newType, new Coordinates(i));
