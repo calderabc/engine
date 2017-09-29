@@ -6,8 +6,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import engine.Game;
 
 public abstract class PuzzleGame extends Game {
-	// If ever the package hierarchy is restructured change this accordingly.
-	private static final String BASE_CLASSPATH = "engine.";
 
 	public Board board;
 	public Score score;
@@ -16,7 +14,10 @@ public abstract class PuzzleGame extends Game {
 	protected Number rowsCleared;
 	protected boolean isPieceLanded;
 
-	public ScheduledThreadPoolExecutor scheduler = new ScheduledThreadPoolExecutor(2);
+	// Threads for the scheduled piece movement actions, piece falling etc.
+	// TODO: How many concurrent scheduled actions do I need?
+	public ScheduledThreadPoolExecutor scheduler = 
+		new ScheduledThreadPoolExecutor(2); 
 
 	private void magicMirror(String packageString, String... classNames) {
 		// Who's the fairest of them all?
@@ -24,7 +25,7 @@ public abstract class PuzzleGame extends Game {
 		int i = 0;
 		for (String className : classNames) {
 			threads[i] = new Thread(() -> {
-				String fullClassName = BASE_CLASSPATH
+				String fullClassName = "engine."
 									   + packageString.toLowerCase() + "."
 									   + packageString + className;
 				try {
@@ -37,9 +38,10 @@ public abstract class PuzzleGame extends Game {
 					e.printStackTrace();
 				}
 			});
+
 			threads[i++].start();
 		}
-
+		// Game objects require that the engine objects are created first.
 		for (Thread thread : threads) {
 			try {
 				thread.join();
@@ -62,22 +64,23 @@ public abstract class PuzzleGame extends Game {
 		rowsCleared = new Number(Number.Type.ROWS, (byte)3);
 		
 		while (board.doesPieceFit(piece)) {		
+			// Add the piece's blocks to screen so they will be displayed.
 			screen.addParts(Arrays.asList(piece.getBlocks()));
 			screen.update();
 
 			isPieceLanded = false;
+			// Start the piece a-fallin'.
 			PieceAction.FALL.startPieceAction();
-			
 
-			while(!isPieceLanded) {
+			while(!isPieceLanded)  // In case of a spurious wake up.
 				try {
-					Thread.sleep(50);
+					// Suspend thread until notified of the piece's landing.
+					synchronized(this) {
+						this.wait();
+					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-			}
-
-			PieceAction.FALL.stopPieceAction();
 
 			piece = piece.newPiece();
 		}
@@ -114,21 +117,26 @@ public abstract class PuzzleGame extends Game {
 	public void landPiece() {
 		synchronized(piece) {
 			if (!isPieceLanded) {
+				// Stop all scheduled piece actions, the piece needs to land!
 				PieceAction.resetAll();
 				board.landPiece(piece);
-				int numRowsRemoved = board.tryRemoveBlocks();
-				if (numRowsRemoved > 0) {
-					rowsCleared.add(numRowsRemoved);
+				int removedCount = board.tryRemoveBlocks();
+				// Block removing is done, safe to start a new piece.
+				isPieceLanded = true;
+				synchronized(this) {
+					// The Eagle has landed. Main thread please resume.
+					this.notify();
+				}
+				// Update the score and statistics.
+				if (removedCount > 0) {
+					rowsCleared.add(removedCount);
 					// TODO: verify this is how scoring works.
 					// Here score is compounded according the the level
 					// being switched to.  Probably a way to
 					// score part on old level, and part on new level.
 					level = score.checkLevel(level, rowsCleared);
-
-					score.update(level, numRowsRemoved);
+					score.update(level, removedCount);
 				}
-
-				isPieceLanded = true;
 			}
 		}
 	}
