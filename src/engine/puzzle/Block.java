@@ -13,6 +13,7 @@ public class Block extends Part {
 
 	public Block(Coordinates newCoords, Visual.Id newId, byte newType) {
 		super(newCoords);
+		System.out.println(newType);
 		initVisual(newId);
 		type = newType;
 	}

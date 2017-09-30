@@ -16,9 +16,6 @@ public abstract class PuzzleGame extends Game {
 	private Number pieceCount;
 	private boolean isPieceLanded;
 
-	public ScheduledThreadPoolExecutor scheduler = 
-		new ScheduledThreadPoolExecutor(2); 
-
 	private void magicMirror(String packageString, String... classNames) {
 		// Who's the fairest of them all?
 		Thread[] threads = new Thread[classNames.length];

@@ -6,5 +6,6 @@ public class ColumnsGame extends PuzzleGame {
 	public static void main(String argv[]) {
 		me = new ColumnsGame();
 		((PuzzleGame)me).run("Swing");
+		System.exit(0);
 	}
 }

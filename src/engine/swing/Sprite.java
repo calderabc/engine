@@ -1,7 +1,7 @@
 package engine.swing;
 
 import java.awt.Graphics2D;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 import engine.Visual;
@@ -9,8 +9,12 @@ import engine.Coordinates;
 import engine.Part;
 
 public abstract class Sprite extends Visual {
-	static protected Map<Id, ImageList> imageListMap = 
-		new Hashtable<>(30);
+	static protected Map<Visual.Id, ImageList> imageListMap =
+		new HashMap<>(30);
+
+	static protected Map<Class<? extends Part>,
+	                     Class<? extends Sprite>> visualMap =
+		new HashMap<>(5);
 
 	protected ImageList images;
 	protected Coordinates position;
@@ -44,6 +48,7 @@ public abstract class Sprite extends Visual {
 
 	@Override
 	public void update(Part part) {
+		System.out.println(origin.x());
 		position = part.pos.scale(positionScaleFactor).move(origin);
 	}
 
