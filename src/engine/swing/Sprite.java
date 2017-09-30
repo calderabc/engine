@@ -48,7 +48,6 @@ public abstract class Sprite extends Visual {
 
 	@Override
 	public void update(Part part) {
-		System.out.println(origin.x());
 		position = part.pos.scale(positionScaleFactor).move(origin);
 	}
 

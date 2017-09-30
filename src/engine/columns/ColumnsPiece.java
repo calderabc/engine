@@ -29,25 +29,27 @@ public class ColumnsPiece extends Piece {
 	
 	@Override
 	protected Piece rotate(Coordinates offset) {
-		// This would be easier with a Vector.
-		// TODO: Is it worth the overhead of a Vector?
 		int length = blocks.length;
 		int shift = offset.x();
-		if (shift == -1) {
-			shift += length;
-		}
-		Block[] shiftedBlocks = new Block[length];
-		int j = shift;
+
+		int topPosition = 40000;
 		for (int i = 0; i < length; i++) {
-			if (j >= length) {
-				j -= length;
+			int blockPos = blocks[i].pos.y();
+			if (blockPos < topPosition) topPosition = blockPos;
+		}
+
+		// TODO: There's got to be a simpler way.  Work on it.
+		for (int i = 0; i < length; i++) {
+			int ordinal = blocks[i].pos.y() - topPosition + shift;
+			if (ordinal < 0) {
+				ordinal += length;
+			} else if (ordinal >= length) {
+				ordinal -= length;
 			}
-			shiftedBlocks[i] = blocks[j++];
+
+			blocks[i].pos.y(topPosition + ordinal);
 		}
-		for (int i = 0; i < length; i++) {
-			blocks[i] = shiftedBlocks[i];
-		}
-		
+
 		return this;
 	}
 

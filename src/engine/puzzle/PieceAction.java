@@ -100,7 +100,7 @@ public enum PieceAction implements Serializable {
 	// done in terms of milliseconds (1.0e3 per second)?
 	private long delay; 
 
-	private PieceAction opposite;
+	protected PieceAction opposite;
 	protected ScheduledFuture<?> future;
 
 	protected boolean isMoving = false;  

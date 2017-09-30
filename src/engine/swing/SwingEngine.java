@@ -11,7 +11,7 @@ public class SwingEngine extends GraphicsEngine {
 	static {
 		// Poke the classes.
 		ColumnsSprite.go = 0;
-		//BlockSprite.go = 0;
+		BlockSprite.go = 0;
 		DigitSprite.go = 0;
 
 	}
