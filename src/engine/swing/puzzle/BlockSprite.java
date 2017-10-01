@@ -8,12 +8,13 @@ import engine.swing.Sprite;
 
 public class BlockSprite extends Sprite {
 	public static int go;
+	public static ImageType block;
 	static {
-		ImageType block = new ImageType("piece_image_sheet.png",
-				                         new Coordinates(32, 32),
-				                         new Coordinates(32, 32),
-				                         4,
-				                         ImageType.ScanDirection.HORIZONTAL);
+		block = new ImageType("piece_image_sheet.png",
+		                      new Coordinates(32, 32),
+		                      new Coordinates(32, 32),
+		                      4,
+		                      ImageType.ScanDirection.HORIZONTAL);
 
 		visualMap.put(Block.class, BlockSprite.class);
 		int x = 0;
@@ -24,9 +25,9 @@ public class BlockSprite extends Sprite {
 				imageListMap.put(new Id((byte)1, i, j), 
 				                 new ImageList(block, new Coordinates(x, y))
 				);
-				y += block.DIMENSIONS.y();
+				y += block.DIMENSIONS.y;
 			}
-			x += block.DIMENSIONS.x() * 4;
+			x += block.DIMENSIONS.x * 4;
 		}
 	}
 

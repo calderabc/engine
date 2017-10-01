@@ -54,8 +54,8 @@ public final class TetrisPiece extends Piece {
 
 		// Centers are represented multiplied by two, this is why the 'pos' 
 		// variables are doubled to match the already doubled 'pieceCenter'.
-		Coordinates posDoubled = new Coordinates(newPieceData.pieceStartPos.x() << 1, 
-		                                         newPieceData.pieceStartPos.y() << 1);
+		Coordinates posDoubled = new Coordinates(newPieceData.pieceStartPos.x << 1,
+		                                         newPieceData.pieceStartPos.y << 1);
 		currCenter = newPieceData.getCurrCenter(pieceId).move(posDoubled);
 		destCenter = newPieceData.getDestCenter(pieceId).move(posDoubled);
 
@@ -118,13 +118,13 @@ public final class TetrisPiece extends Piece {
 	protected Piece rotate(Coordinates offset) {
 		// offset.x: -1 Clockwise, 1 CounterClockwise.
 		// Move the Blocks in the piece to their new positions.
-		int flip = offset.x();
+		int flip = offset.x;
 		for(Block currBlock: blocks) {
 				/* Equivalent but slower:
 				currBlock.pos = new Coordinates( (destCenter[X] + flip * (2 * currBlock.pos.y - currCenter[Y])) / 2,
 				                                 (destCenter[Y] - flip * (2 * currBlock.pos.x - currCenter[X])) / 2 ); */
-				currBlock.pos = new Coordinates( destCenter.x() + flip * ((currBlock.pos.y() << 1) - currCenter.y()) >> 1,
-				                                 destCenter.y() - flip * ((currBlock.pos.x() << 1) - currCenter.x()) >> 1 );
+				currBlock.pos = new Coordinates( destCenter.x + flip * ((currBlock.pos.y << 1) - currCenter.y) >> 1,
+				                                 destCenter.y - flip * ((currBlock.pos.x << 1) - currCenter.x) >> 1 );
 				
 				currBlock.visual.rotate(flip);
 		}
@@ -143,7 +143,7 @@ public final class TetrisPiece extends Piece {
 
 	protected TetrisPiece move(Coordinates offset) {
 		Coordinates offsetDoubled = 
-			new Coordinates(offset.x() << 1, offset.y() << 1);
+			new Coordinates(offset.x << 1, offset.y << 1);
 		currCenter.move(offsetDoubled);
 		destCenter.move(offsetDoubled);
 

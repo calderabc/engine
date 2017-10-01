@@ -9,6 +9,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import engine.FileIO;
+import engine.swing.puzzle.BlockSprite;
 import engine.swing.puzzle.ImageType;
 import engine.tetris.TetrisPieceData;
 
@@ -73,7 +74,7 @@ public final class BitmapGenerator {
 	}
 
 	private static final int COUNT = 13;
-	private static final BufferedImage[] images = loadImages(ImageType.BLOCK);
+	private static final BufferedImage[] images = loadImages(BlockSprite.block);
 
 	public static final BufferedImage[] loadImages(ImageType type) {
 		BufferedImage[] returnImages = new BufferedImage[COUNT]; 

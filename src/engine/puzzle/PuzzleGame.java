@@ -58,8 +58,9 @@ public abstract class PuzzleGame extends Game {
 		level = new Number(Number.Type.LEVEL, (byte)2).set(1);
 		rowsCleared = new Number(Number.Type.ROWS, (byte)3);
 		pieceCount = new Number(Number.Type.PIECES, (byte)4);
-		
-		while (board.doesPieceFit(piece)) {		
+
+		while (board.doesPieceFit(piece)) {
+			System.out.println("hello");
 			// Add the piece's blocks to screen so they will be displayed.
 			screen.addParts(Arrays.asList(piece.getBlocks()));
 			screen.update();
@@ -115,8 +116,7 @@ public abstract class PuzzleGame extends Game {
 			if (!isPieceLanded) {
 				// Stop all scheduled piece actions, the piece needs to land!
 				PieceAction.resetAll();
-				board.landPiece(piece);
-				int removedCount = board.tryRemoveBlocks();
+				int removedCount = board.landPiece(piece);
 				// Block removing is done, safe to start a new piece.
 				isPieceLanded = true;
 				synchronized(this) {

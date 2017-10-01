@@ -42,13 +42,13 @@ public abstract class Sprite extends Visual {
 	
 	public void draw(Graphics2D canvas) {
 		canvas.drawImage(images.get(currImage),  
-					     position.x(), position.y(), 
-					     dimensions.x(), dimensions.y(), null);
+					     position.x, position.y,
+					     dimensions.x, dimensions.y, null);
 	}
 
 	@Override
 	public void update(Part part) {
-		position = part.pos.scale(positionScaleFactor).move(origin);
+		position = Coordinates.multiply(part.pos, positionScaleFactor).move(origin);
 	}
 
 	@Override

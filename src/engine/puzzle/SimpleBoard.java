@@ -11,7 +11,7 @@ public abstract class SimpleBoard extends Board {
 	}
 
 	protected Block getBlock(Coordinates position) {
-		return blockMatrix[position.x()][position.y()];
+		return blockMatrix[position.x][position.y];
 	}
 
 	@Override
@@ -20,7 +20,7 @@ public abstract class SimpleBoard extends Board {
 			throw new PositionOccupiedException();
 		}
 
-		blockMatrix[landingBlock.pos.x()][landingBlock.pos.y()] = landingBlock;
+		blockMatrix[landingBlock.pos.x][landingBlock.pos.y] = landingBlock;
 		return this;
 	}
 }

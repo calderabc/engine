@@ -79,13 +79,13 @@ public final class TetrisBoard extends Board {
 		super(10, 20);
 
 		blockMatrix = new Vector<Row>();
-		for (int i = 0; i < dimensions.y(); i++) {
+		for (int i = 0; i < dimensions.y; i++) {
 			blockMatrix.add(new Row());
 		}
 	}
 	
 	@Override
-	public int tryRemoveBlocks() {
+	protected int tryRemoveBlocks(Block[] blocksJustAdded) {
 		Collection<Row> terminalRows = getFullRows();
 		int count = terminalRows.size();
 		
@@ -121,14 +121,18 @@ public final class TetrisBoard extends Board {
 	
 	@Override
 	public Block getBlock(Coordinates position) {
-		return blockMatrix.get(position.y()).get(position.x());
+		try {
+			return blockMatrix.get(position.y).get(position.x);
+		} catch (IndexOutOfBoundsException e) {
+			return null; //TODO: Make custom exception.
+		}
 	}
 
 	@Override
 	public Board landBlock(Block landingBlock) 
 		throws PositionOccupiedException {
-		blockMatrix.get(landingBlock.pos.y())
-				   .set(landingBlock.pos.x(), landingBlock);
+		blockMatrix.get(landingBlock.pos.y)
+				   .set(landingBlock.pos.x, landingBlock);
 		return this;
 	}
 }

@@ -2,6 +2,9 @@ package engine.puzzle;
 
 import engine.Coordinates;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 public abstract class Board {
 	@SuppressWarnings("serial")
 	public static class PositionOccupiedException extends Throwable {};
@@ -36,8 +39,8 @@ public abstract class Board {
 		catch (IndexOutOfBoundsException e) {
 			return false;
 		}
-		// Using try/catch for logic (above) is bad form but I reckon it'll
-		// execute faster than the procedural way (below). 
+		// Using try/catch to check if the block is out of bounds is probably
+		// bad form but is simpler and may execute faster than explicit checks.
 		// TODO: Verify.
 	}
 
@@ -46,7 +49,7 @@ public abstract class Board {
 	 * Add all the Blocks that compose the specified Piece to this Board.
 	 * @param landingPiece piece containing Blocks to be added to this Board
 	 */
-	public void landPiece(Piece landingPiece) {
+	public final int landPiece(Piece landingPiece) {
 		for (Block landingBlock : landingPiece.getBlocks()) {
 			try {
 				landBlock(landingBlock);
@@ -55,12 +58,15 @@ public abstract class Board {
 			}
 
 		}
+
+		return tryRemoveBlocks(landingPiece.getBlocks());
+
 	}
 
 	protected abstract Block getBlock(Coordinates position);
 
-	protected abstract Board landBlock(Block landingBlock) 
+	protected abstract Board landBlock(Block landingBlock)
 		throws PositionOccupiedException;
 
-	public abstract int tryRemoveBlocks();
+	protected abstract int tryRemoveBlocks(Block[] blocksJustLanded);
 }

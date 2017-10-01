@@ -1,6 +1,7 @@
 package engine;
 
 import java.io.Serializable;
+import java.util.function.BiFunction;
 
 /**
  * Generic three dimensional Cartesian coordinates.  Represents integer X, Y, and Z coordinates.  
@@ -9,97 +10,95 @@ import java.io.Serializable;
  *
  */
 
-// TODO: I've over-designed this class.  There is far too much code required to
-// do simple tasks.  Seriously! Sacrifice a little wasted memory to streamline
-// simple operations.  It's no good saving wasted space in an array if many
-// operations, and lots of code are required to maintain it!
-// Use a fixed length array or risk looking silly!  A couple extra array.
-public final class Coordinates implements Movable, Serializable {
+public final class Coordinates implements Movable, Serializable, Cloneable {
 	private static final long serialVersionUID = -3811798543403117929L;
 
-	//public static final Coordinates ORIGIN = new Coordinates(0, 0, 0);
-	public static final Coordinates ORIGIN = new Coordinates(0);
+	public static final Coordinates ORIGIN = new Coordinates();
 
-	private int[] values;
+	public int x;
+	public int y;
+	public int z;
 
-	// I'm not going to add exceptions here.  I'll just assume the developer
-	// Is smart enough to figure out that if they are getting an
-	// ArrayIndexOutOfBounds exception it's because they're calling a 
-	// function they shouldn't.
-	public int x() { return values[0]; } 
-	public int x(int newX) { return values[0] = newX; }
-	public int y() { 
-		if (values.length < 2) {
-			return 0;
-		}
-		return values[1]; 
-	}
-	public int y(int newY) { return values[1] = newY; }
-	public int z() {
-		if (values.length < 3) {
-			return 0;
-		}
-		return values[2]; 
-	}
-	public int z(int newZ) { return values[2] = newZ; }
-	
-	public int get(int ordinal) {
-		if (ordinal >= values.length) {
-			return 0;
-		}
-		return values[ordinal];
+	public Coordinates(int newX, int newY, int newZ) {
+		x = newX;
+		y = newY;
+		z = newZ;
 	}
 
-	public Coordinates(int... newValues) {
-		if (newValues.length == 0) {
-			throw new IllegalArgumentException();
-		}
-		setValues(newValues);
+	public Coordinates(int newX, int newY) {
+		x = newX;
+		y = newY;
 	}
-	
+
+	public Coordinates(int newX) {
+		x = newX;
+	}
+
+	public Coordinates() {}
+
 	public Coordinates(Coordinates other) {
-		setValues(other.values);
+		this(other.x, other.y, other.z);
 	}
 	
 	@Override
 	public final Coordinates move(Coordinates offset) {
-		if (offset.values.length > values.length) {
-			int[] oldValues = values;
-			values = new int[offset.values.length];
-			for (int i = 0; i < values.length; i++) {
-				values[i] = (i < oldValues.length) ? oldValues[i]
-				                                   : 0;
-			}
-		}
-		for (int i = 0; i < offset.values.length; i++) {
-			values[i] += offset.values[i];
-		}
-
+		x += offset.x;
+		y += offset.y;
+		z += offset.z;
 		return this;
-	}	
-
-	private void setValues(int[] newValues)	 {
-		values = new int[newValues.length];
-		for (int i = 0; i < newValues.length; i++) {
-			values[i] = newValues[i];
-		}
 	}
-	
-	// TODO: This is basically a scale transform.  Maybe I can reuse some standard java code.
+
 	public Coordinates scale(Coordinates scaleFactor) {
-		if (scaleFactor.values.length > values.length) {
-			int[] oldValues = values;
-			values = new int[scaleFactor.values.length];
-			for (int i = 0; i < values.length; i++) {
-				values[i] = (i < oldValues.length) ? oldValues[i]
-				                                   : 0;
-			}
-		}
-
-		Coordinates scaledCoordinates = new Coordinates(this);
-		for (int i = 0; i < scaleFactor.values.length; i++) {
-			scaledCoordinates.values[i] *= scaleFactor.get(i);
-		}
-		return scaledCoordinates;
+		x *= scaleFactor.x;
+		y *=  scaleFactor.y;
+		z *= scaleFactor.z;
+		return this;
 	}
+
+	public Coordinates negate() {
+		x = -x;
+		y = -y;
+		z = -z;
+		return this;
+	}
+
+	@Override
+	public Coordinates clone() {
+		return new Coordinates(x, y, z);
+	}
+
+	// Much more elegant with overloaded operators in C++.
+	public static Coordinates add(Coordinates a, Coordinates b) {
+		return new Coordinates(a.x + b.x, a.y + b.y, a.z + b.z);
+	}
+
+	public static Coordinates subtract(Coordinates a, Coordinates b) {
+		return new Coordinates(a.x - b.x, a.y - b.y, a.z - b.z);
+	}
+
+	public static Coordinates multiply(Coordinates a, Coordinates b) {
+		return new Coordinates(a.x * b.x, a.y * b.y, a.z * b.z);
+	}
+
+
+	// Lambdas are elegant, but I don't want the overhead: autoboxing, extra objects, etc.
+	// TODO: See if lambdas would be worth it here.
+	/*
+	public static Coordinates operation(BiFunction<Integer, Integer, Integer> function,
+	                                    Coordinates a,
+	                                    Coordinates b) {
+		return new Coordinates(function.apply(a.x, b.x),
+		                       function.apply(a.y, b.y),
+		                       function.apply(a.z, b.z));
+	}
+
+	public static BiFunction<Integer, Integer, Integer> add = (a, b) -> a + b;
+	public static BiFunction<Integer, Integer, Integer> subtract = (a, b) -> a - b;
+	public static BiFunction<Integer, Integer, Integer> multiply = (a, b) -> a * b;
+
+	// Look how pretty the function calls would be.
+	// operation(Coordinates.add, a, b);
+
+	*/
+
 }
