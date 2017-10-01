@@ -55,7 +55,7 @@ public final class Coordinates implements Movable, Serializable, Cloneable {
 		return this;
 	}
 
-	public Coordinates negate() {
+	public Coordinates invert() {
 		x = -x;
 		y = -y;
 		z = -z;
@@ -78,6 +78,10 @@ public final class Coordinates implements Movable, Serializable, Cloneable {
 
 	public static Coordinates multiply(Coordinates a, Coordinates b) {
 		return new Coordinates(a.x * b.x, a.y * b.y, a.z * b.z);
+	}
+
+	public static Coordinates inversion(Coordinates a) {
+		return new Coordinates(-a.x, -a.y, -a.z);
 	}
 
 

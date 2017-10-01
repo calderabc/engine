@@ -7,6 +7,7 @@ import engine.puzzle.SimpleBoard;
 import java.util.*;
 
 public class ColumnsBoard extends SimpleBoard {
+	/*
 	// Coordinate offsets for scanning around a block position, in a circular order.
 	private static final Coordinates[] aroundCoords = {new Coordinates(-1, 1),
 	                                                   new Coordinates( 0, 1),
@@ -16,6 +17,13 @@ public class ColumnsBoard extends SimpleBoard {
 	                                                   new Coordinates( 0,-1),
 	                                                   new Coordinates(-1,-1),
 	                                                   new Coordinates(-1, 0)};
+	                                                   */
+
+	// Coordinate offsets for scanning around a block position, in a circular order.
+	private static final Coordinates[] aroundCoords = {new Coordinates(-1, 1),
+	                                                   new Coordinates( 0, 1),
+	                                                   new Coordinates( 1, 1),
+	                                                   new Coordinates( 1, 0)};
 
 	public ColumnsBoard() {
 		super(6, 13);
@@ -26,66 +34,57 @@ public class ColumnsBoard extends SimpleBoard {
 		return null;
 	}
 
+	private Block getMatchingBlock(Block block, Coordinates offset) {
+		Block testBlock = null;
+		try {
+			testBlock = getBlock(Coordinates.add(block.pos, offset));
+		} catch (ArrayIndexOutOfBoundsException e) {};
+		if (testBlock != null && block.type == testBlock.type) {
+			return testBlock;
+		}
+		return null;
+	}
+
+	private Block checkAhead(Block currBlock,
+	                         Set<Block> deathRow,
+	                         Coordinates offset) {
+		Block nearBlock, farBlock;
+		if ((nearBlock = getMatchingBlock(currBlock, offset)) != null) {
+			if ((farBlock = getMatchingBlock(nearBlock, offset)) != null) {
+				deathRow.add(currBlock);
+				deathRow.add(nearBlock);
+				deathRow.add(farBlock);
+			}
+		}
+		return nearBlock;
+	}
 
 	// Remove blocks which form straight lines of 3 or more of the same
 	// block type in a row vertically, diagnally, or horizontally.
 	@Override
 	public int tryRemoveBlocks(Block[] blocksJustLanded) {
 		if (blocksJustLanded.length == 0) return 0; // Nothing (more) to do.
-
-		// Used a Set so terminal blocks won't be added multiple times.
+		// Use a Set so terminal blocks won't be added multiple times.
 		Set<Block> deathRow = new HashSet<>();
-
 		for (Block currBlock : blocksJustLanded) {
-			if (currBlock == null) continue;
-
-			// TODO: Surely this algorithm can be made more efficient.
-			// Combine 2 or all of the for loops.
-
-			Block[] suspects = new Block[8];
-			// Get adjacent blocks which are of the same type.
-			// Add to suspects array in circular order around the block.
-			for (int i = 0; i < 8; i++) {
-				Block testBlock = null;
-				try {
-					testBlock = getBlock(
-						Coordinates.add(currBlock.pos, aroundCoords[i])
-					);
-				} catch (ArrayIndexOutOfBoundsException e) {};
-				if (testBlock != null && currBlock.type == testBlock.type) {
-					suspects[i] = testBlock;
-				}
-			}
-			// If this block is directly between two matching blocks
-			// remove all three blocks.
 			for (int i = 0; i < 4; i++) {
-				if (suspects[i] != null && suspects[i + 4] != null) {
-					deathRow.add(suspects[i + 4]);
+				Block forwards = checkAhead(currBlock,
+				                            deathRow,
+				                            aroundCoords[i]);
+				Block backwards =
+					checkAhead(currBlock,
+					           deathRow,
+					           Coordinates.inversion(aroundCoords[i]));
+
+				if (forwards != null && backwards != null) {
+					deathRow.add(forwards);
 					deathRow.add(currBlock);
-					deathRow.add(suspects[i]);
-				}
-			}
-			// If any of the adjacent matching blocks are directly between this
-			// block and another matching block remove all three blocks.
-			for (int i = 0; i < 8; i++) {
-				if (suspects[i] != null) {
-					Block testBlock = null;
-					try {
-						testBlock = getBlock(
-						Coordinates.add(suspects[i].pos, aroundCoords[i])
-						);
-					} catch (ArrayIndexOutOfBoundsException e) {};
-				    if (testBlock != null && currBlock.type == testBlock.type) {
-				    	deathRow.add(currBlock);
-					    deathRow.add(suspects[i]);
-					    deathRow.add(testBlock);
-				    }
+					deathRow.add(backwards);
 				}
 			}
 		}
 
 		Set<Block> theFallen = new HashSet();
-
 		for (Block terminalBlock : deathRow) {
 			int x = terminalBlock.pos.x;
 			// Move all blocks directly above this block down a position.
