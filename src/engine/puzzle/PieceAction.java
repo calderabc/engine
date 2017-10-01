@@ -31,7 +31,7 @@ public enum PieceAction implements Serializable {
 		@Override
 		public synchronized void stopPieceAction() { }
 	},
-	FALL (Type.MOVE, 3, new Coordinates(0, 1)) {
+	FALL (Type.MOVE, 2, new Coordinates(0, 1)) {
 		@Override
 		public synchronized void startPieceAction() {
 			if (!isMoving) {

@@ -17,12 +17,9 @@ public class ColumnsBoard extends SimpleBoard {
 	                                                   new Coordinates(-1,-1),
 	                                                   new Coordinates(-1, 0)};
 
-
-
 	public ColumnsBoard() {
 		super(6, 13);
 	}
-
 
 
 	private Block getBlockIfSameType(Block block, Coordinates offset) {
@@ -46,9 +43,30 @@ public class ColumnsBoard extends SimpleBoard {
 
 	}
 
+	// TODO: Fix bug. Noticed the following situation
+		/*
+				#
+				*  falling piece
+				*
+
+				 *
+				*#* landed blocks
+				*##
+
+		Does not remove bottom "*".
+
+		result is:
+
+				##
+			    *##
+
+		 */
+
 	// Remove blocks with three or more of the same type in a row from board.
 	@Override
 	public int tryRemoveBlocks(Block[] blocksJustLanded) {
+		if (blocksJustLanded.length == 0) return 0; // Nothing (more) to do.
+
 		// Use a set so terminal blocks won't be added multiple times.
 		Set<Block> deathRow = new HashSet<>();
 
@@ -103,24 +121,28 @@ public class ColumnsBoard extends SimpleBoard {
 
 		}
 
-		for (Block terminalBlock : deathRow) {
+		Set<Block> theFallen = new HashSet();
 
-			/*
+		for (Block terminalBlock : deathRow) {
+			int x = terminalBlock.pos.x;
 			// Move all blocks directly above this block down a position.
-			for (int y = terminalBlock.pos.y; y >= 0; y--) {
-				blockMatrix[terminalBlock.pos.x][y].pos.move(
-					new Coordinates(0,1)
-				);
+			for (int y = terminalBlock.pos.y - 1; y >= 0; y--) {
+				Block aBlockAbove = blockMatrix[x][y];
+				blockMatrix[x][y + 1] = aBlockAbove;
+				if (aBlockAbove != null) {
+					theFallen.add(aBlockAbove);
+					aBlockAbove.move(new Coordinates(0, 1));
+					aBlockAbove.visual.update(aBlockAbove);
+				}
 			}
-			*/
+			// Be sure space at top of column is empty.
+			blockMatrix[x][0] = null;
 			// Remove block from screen.
 			terminalBlock.terminate();
-			// Remove block from the board;
-			blockMatrix[terminalBlock.pos.x][terminalBlock.pos.y] = null;
 		}
-
-		return deathRow.size();
-
+		// Now call block removal for all the blocks which were above and fell.
+		// TODO: Add mechanism for scoring chain moves.
+		return deathRow.size() + tryRemoveBlocks(theFallen.toArray(new Block[0]));
 	}
 
 }
