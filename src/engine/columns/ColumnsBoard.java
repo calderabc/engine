@@ -104,7 +104,19 @@ public class ColumnsBoard extends SimpleBoard {
 		}
 
 		for (Block terminalBlock : deathRow) {
+
+			/*
+			// Move all blocks directly above this block down a position.
+			for (int y = terminalBlock.pos.y; y >= 0; y--) {
+				blockMatrix[terminalBlock.pos.x][y].pos.move(
+					new Coordinates(0,1)
+				);
+			}
+			*/
+			// Remove block from screen.
 			terminalBlock.terminate();
+			// Remove block from the board;
+			blockMatrix[terminalBlock.pos.x][terminalBlock.pos.y] = null;
 		}
 
 		return deathRow.size();
