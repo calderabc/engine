@@ -5,10 +5,42 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Properties;
 
 
 public final class FileIO {
-	private FileIO() {};
+	private FileIO() {}
+
+	public static final class GameProperties extends Properties {
+		public GameProperties(String fileName) {
+			try {
+				load(new FileInputStream(fileName + ".ini"));
+				storeToXML(new FileOutputStream(fileName + ".xml"), null);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		private String[] split(String string) {
+			String[] returnArray = string.split(",");
+			for (int i = 0; i < returnArray.length; i++) {
+				returnArray[i] = returnArray[i].trim();
+			}
+			return returnArray;
+		}
+
+		public String[] getPropertyArray(String key) {
+			return split(getProperty(key));
+		}
+
+		public String[] getPropertyArrayLowerCase(String key) {
+			return split(getProperty(key).toLowerCase());
+		}
+
+		public String[] getPropertyArrayUpperCase(String key) {
+			return split(getProperty(key).toUpperCase());
+		}
+	}
 
 	// Wonder why the Java designers didn't just build these methods in.
 	// Boilerplate code for reading/writing serializable objects from/to a file.

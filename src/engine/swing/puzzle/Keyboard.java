@@ -2,15 +2,14 @@ package engine.swing.puzzle;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.swing.InputMap;
 import javax.swing.KeyStroke;
 
+import engine.FileIO;
 import engine.puzzle.PieceAction;
 
 import javax.swing.ActionMap;
@@ -20,21 +19,17 @@ public class Keyboard {
 	private static final String STOP_PREFIX = "stop_";
 	
 	private static void initInputMap(InputMap inputMap) {
-		Properties inputToAction = new Properties();
-		try {
-			inputToAction.load(new FileInputStream("input_to_action.dat"));
-			inputToAction.storeToXML(new FileOutputStream("input_to_action.xml"), null);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		for(Map.Entry<Object, Object> entry : inputToAction.entrySet()) {
-			String[] keyStrokes = ((String)entry.getValue()).toUpperCase().split(",");
-			String action = ((String)entry.getKey()).toLowerCase().trim();
-			
+		FileIO.GameProperties inputToAction = new FileIO.GameProperties("input_to_action");
+
+		for(Object key : inputToAction.keySet()) {
+
+			String action = ((String) key).toLowerCase();
+			String[] keyStrokes =
+				inputToAction.getPropertyArrayUpperCase((String) key);
+
 			for(String keyStroke : keyStrokes) {
-				inputMap.put(KeyStroke.getKeyStroke(keyStroke.trim()), action);
-				inputMap.put(KeyStroke.getKeyStroke("released " + keyStroke.trim()), STOP_PREFIX + action);
+				inputMap.put(KeyStroke.getKeyStroke(keyStroke), action);
+				inputMap.put(KeyStroke.getKeyStroke("released " + keyStroke), STOP_PREFIX + action);
 			}
 		}
 
