@@ -52,7 +52,7 @@ public abstract class PuzzleGame extends Game {
 		String gameString = this.getClass().getSimpleName();
 		gameString = gameString.substring(0, gameString.length() - 4);
 
-		magicMirror(engineString, "Engine", "Screen");
+		magicMirror(engineString, "Screen");
 		magicMirror(gameString, "Board", "Piece", "Score");
 
 		level = new Number(Number.Type.LEVEL, (byte)2).set(1);

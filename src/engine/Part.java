@@ -10,11 +10,11 @@ public abstract class Part implements Movable {
 
 	public Part(Part other) {
 		pos = new Coordinates(other.pos);
-		visual = Game.me.engine.newVisual(other.visual);
+		visual = Game.me.screen.newVisual(other.visual);
 	}	
 
 	protected void initVisual(Visual.Id newId) {
-		visual = Game.me.engine.newVisual(this, newId);
+		visual = Game.me.screen.newVisual(this, newId);
 		visual.update(this);
 	}
 	

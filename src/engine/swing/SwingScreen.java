@@ -14,22 +14,53 @@ import javax.swing.JPanel;
 
 import engine.Part;
 import engine.Screen;
+import engine.swing.puzzle.BlockSprite;
+import engine.swing.puzzle.ColumnsSprite;
+import engine.swing.puzzle.DigitSprite;
 import engine.swing.puzzle.Keyboard;
 
 
 @SuppressWarnings("serial")
-public class SwingScreen extends JPanel implements Screen {
+public class SwingScreen extends Screen {
 	public static int colorFilter = 0x40FFB0B0;
 	public JFrame frame;
-	
+
+	public JPanel panel = new JPanel(true) {
+		@Override
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			Graphics2D g2d = (Graphics2D) g;
+			// Synchronized to avoid exception where another thread alters
+			// displayedParts' structure while this thread is iterating through it.
+			synchronized (displayedParts) {
+				for (Part displayPart : displayedParts) {
+					((Sprite) displayPart.visual).draw(g2d);
+				}
+			}
+		}
+	};
+
+
 	private int colorFilterIndex = 0;
 	private static final int[] colorMasks = {0x40FFB0B0, 0x40B0FFB0, 0x40B0B0FF, 0x40FFFFB0, 0x40FFB0FF, 0x40B0FFFF};
 	
 	private final List<Part> displayedParts = new Vector<>();
-	
+	static {
+		// Poke the classes.
+		ColumnsSprite.go = 0;
+		BlockSprite.go = 0;
+		DigitSprite.go = 0;
+
+	}
+
+	@Override
+	protected Class<? extends Sprite> getVisualClass(Part part) {
+		return Sprite.visualMap.get(part.getClass());
+	}
+
 	public SwingScreen() {
 		// TODO: Do this method call on another thread.
-		Keyboard.initInputActionMaps(getInputMap(), getActionMap());
+		Keyboard.initInputActionMaps(panel.getInputMap(), panel.getActionMap());
 		frame = new JFrame("Tetris");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(700, 670);
@@ -37,15 +68,14 @@ public class SwingScreen extends JPanel implements Screen {
 		frame.requestFocusInWindow();
 
 		// Init JPanel
-		setBackground(Color.BLACK);
-		setOpaque(true);
-		setDoubleBuffered(true);
-		frame.setContentPane(this);
+		panel.setBackground(Color.BLACK);
+		panel.setOpaque(true);
+		frame.setContentPane(panel);
 
 		// This method causes the event dispatch thread to paint.
 		frame.setVisible(true);
 		// TODO: There's got to be a better way to make sure this panel always has focus.
-		grabFocus();
+		panel.grabFocus();
 
 	}
 	
@@ -59,25 +89,12 @@ public class SwingScreen extends JPanel implements Screen {
 		SwingScreen.colorFilter = colorMasks[colorFilterIndex];
 	}
 
-	@Override 
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		Graphics2D g2d = (Graphics2D)g;
-		// Synchronized to avoid exception where another thread alters 
-		// displayedParts' structure while this thread is iterating through it. 
-		synchronized (displayedParts) {
-			for (Part displayPart: displayedParts) {
-				((Sprite)displayPart.visual).draw(g2d);
-			}
-		}
-	}
-
 	@Override
 	public void update() {
 		try {
 			// Repaint right now!
 			javax.swing.SwingUtilities.invokeAndWait(
-				() -> paintImmediately(0, 0, this.getWidth() - 1, this.getHeight() - 1)
+				() -> panel.paintImmediately(0, 0, panel.getWidth() - 1, panel.getHeight() - 1)
 			);
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
