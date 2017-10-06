@@ -33,9 +33,10 @@ public abstract class Piece implements Cloneable {
 
 	public final Piece newPiece() {
 		try {
-			return getClass().newInstance();
+			return getClass().getDeclaredConstructor().newInstance();
 		} catch (InstantiationException | IllegalAccessException 
-		         | IllegalArgumentException | SecurityException e) {
+		         | IllegalArgumentException | SecurityException
+		         | NoSuchMethodException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
 		return null;

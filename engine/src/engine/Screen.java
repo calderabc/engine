@@ -1,6 +1,5 @@
 package engine;
 
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
@@ -36,4 +35,6 @@ public abstract class Screen {
 		}
 		return null;
 	}
+
+	public abstract void setScale(Field field, Visual Visual);
 }

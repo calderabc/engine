@@ -17,7 +17,7 @@ public class ColumnsPiece extends Piece {
 		super(newBlockCount);
 		for(int i = 0; i < newBlockCount; i++) {
 			byte type = (byte) new Random().nextInt(typeCount);
-			blocks[i] = new Block(new Coordinates(4, i),
+			blocks[i] = new Block(new Coordinates(3, i),
 			                      new Visual.Id((byte)3, type), 
 			                      type);
 		}

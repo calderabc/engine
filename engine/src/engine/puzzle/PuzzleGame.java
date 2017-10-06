@@ -1,5 +1,6 @@
 package engine.puzzle;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 import engine.Game;
@@ -29,10 +30,13 @@ public abstract class PuzzleGame extends Game {
 				try {
 					this.getClass()    // Holy Reflection Batman!
 						.getField(className.toLowerCase())
-						.set(this, Class.forName(fullClassName).newInstance());
-				} catch (IllegalArgumentException | IllegalAccessException 
+						.set(this, Class.forName(fullClassName)
+						                .getDeclaredConstructor()
+						                .newInstance());
+				} catch (IllegalArgumentException | IllegalAccessException
 						 | NoSuchFieldException | SecurityException 
-						 | InstantiationException | ClassNotFoundException e) {
+						 | InstantiationException | ClassNotFoundException
+				         | NoSuchMethodException | InvocationTargetException e) {
 					e.printStackTrace();
 				}
 			});
@@ -59,6 +63,7 @@ public abstract class PuzzleGame extends Game {
 		System.out.println(name);
 		magicMirror(engineString, "Screen");
 		magicMirror(name, "Board", "Piece", "Score");
+		screen.setScale(board, piece.getBlocks()[0].visual);
 
 		level = new Number(Number.Type.LEVEL, (byte)2).set(1);
 		rowsCleared = new Number(Number.Type.ROWS, (byte)3);

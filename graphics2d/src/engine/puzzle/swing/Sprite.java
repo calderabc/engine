@@ -1,6 +1,7 @@
 package engine.puzzle.swing;
 
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,13 +17,14 @@ public abstract class Sprite extends Visual {
 	                     Class<? extends Sprite>> visualMap =
 		new HashMap<>(5);
 
-	protected ImageList images;
-	protected Coordinates position;
+	public ImageList images;
+	public Coordinates position;
 	protected Coordinates dimensions;
 	protected Coordinates positionScaleFactor;
 	protected Coordinates origin = Coordinates.ORIGIN;
-	protected int currImage;
-	
+	public int currImage;
+
+
 	protected Sprite(Part newPart, Id newId) {
 		images = imageListMap.get(newId); // Save memory by always using the same images.
 		positionScaleFactor = images.imageType.POSITION_SCALE_FACTOR;
@@ -40,12 +42,6 @@ public abstract class Sprite extends Visual {
 		currImage = ((Sprite)other).currImage;
 	}
 	
-	public void draw(Graphics2D canvas) {
-		canvas.drawImage(images.get(currImage),  
-					     position.x, position.y,
-					     dimensions.x, dimensions.y, null);
-	}
-
 	@Override
 	public void update(Part part) {
 		position = Coordinates.multiply(part.pos, positionScaleFactor).move(origin);
@@ -55,5 +51,9 @@ public abstract class Sprite extends Visual {
 	public void rotate(int offset) {
 		// TODO: For now the default sprite rotation does nothing.
 		// Eventually add rotation by degrees functionality.
+	}
+
+	public int getHeight() {
+		return dimensions.y;
 	}
 }

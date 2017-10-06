@@ -1,11 +1,10 @@
 package engine.puzzle;
 
 import engine.Coordinates;
+import engine.Field;
 
-import java.util.Arrays;
-import java.util.Collection;
 
-public abstract class Board {
+public abstract class Board extends Field {
 	@SuppressWarnings("serial")
 	public static class PositionOccupiedException extends Throwable {};
 	
@@ -69,4 +68,8 @@ public abstract class Board {
 		throws PositionOccupiedException;
 
 	protected abstract int tryRemoveBlocks(Block[] blocksJustLanded);
+
+	public int getHeight() {
+		return dimensions.y;
+	}
 }

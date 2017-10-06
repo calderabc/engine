@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
+import java.awt.geom.AffineTransform;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.List;
@@ -15,6 +16,9 @@ import javax.swing.JPanel;
 import engine.Game;
 import engine.Part;
 import engine.Screen;
+import engine.Visual;
+import engine.Field;
+import engine.puzzle.Board;
 import engine.puzzle.Keyboard;
 import engine.puzzle.PuzzleGame;
 import engine.puzzle.swing.Sprite;
@@ -34,12 +38,30 @@ public class SwingScreen extends Screen {
 			// displayedParts' structure while this thread is iterating through it.
 			synchronized (displayedParts) {
 				for (Part displayPart : displayedParts) {
-					((Sprite) displayPart.visual).draw(g2d);
+
+					draw((Sprite)displayPart.visual, g2d);
 				}
 			}
 		}
+
+		private void draw(Sprite visual, Graphics2D canvas) {
+			// TODO: Likely due to floating point arithmetic with
+			// conversion to integers the width and/or height of the
+			// displayed sprite are sometimes one pixel too small.
+			// For Tetris the result is pieces with sometimes visible gaps
+			// between blocks.  Figure out how to fix.
+			AffineTransform transformer =
+				AffineTransform.getTranslateInstance(scale * visual.position.x,
+				                                     scale * visual.position.y);
+			transformer.concatenate(AffineTransform.getScaleInstance(scale, scale));
+			canvas.drawImage(visual.images.get(visual.currImage),
+			transformer,
+			null);
+
+		}
 	};
 
+	private double scale;
 
 	private int colorFilterIndex = 0;
 	private static final int[] colorMasks = {0x40FFB0B0, 0x40B0FFB0, 0x40B0B0FF, 0x40FFFFB0, 0x40FFB0FF, 0x40B0FFFF};
@@ -48,7 +70,6 @@ public class SwingScreen extends Screen {
 
 	@Override
 	public Class<?> getVisualClass(Game game, Part part) {
-		System.out.println("made it to here");
 
 		try {
 			return Class.forName("engine."
@@ -72,7 +93,10 @@ public class SwingScreen extends Screen {
 		Keyboard.initInputActionMaps(panel.getInputMap(), panel.getActionMap());
 		frame = new JFrame("Tetris");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(700, 670);
+
+		// Make fullscreen.
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
 		frame.setFocusable(true);
 		frame.requestFocusInWindow();
 
@@ -99,8 +123,17 @@ public class SwingScreen extends Screen {
 	}
 
 	@Override
+	public void setScale(Field field, Visual visual) {
+		scale = ((double)panel.getHeight())
+		        / (((Board)field).getHeight() * ((Sprite)visual).getHeight());
+	}
+
+	@Override
 	public void update() {
 		try {
+			// TODO: This repaints the whole screen.
+			// TODO: Make it repaint only the area which has changed.
+			//
 			// Repaint right now!
 			javax.swing.SwingUtilities.invokeAndWait(
 				() -> panel.paintImmediately(0, 0, panel.getWidth() - 1, panel.getHeight() - 1)
