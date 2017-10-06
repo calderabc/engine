@@ -1,7 +1,6 @@
 package engine.puzzle;
 
 import java.util.Arrays;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import engine.Game;
 
@@ -10,6 +9,8 @@ public abstract class PuzzleGame extends Game {
 	public Board board;
 	public Score score;
 	public Piece piece;
+
+	public final String name;
 
 	private Number level;
 	private Number rowsCleared;
@@ -47,20 +48,23 @@ public abstract class PuzzleGame extends Game {
 			}
 		}
 	}
-	
-	public final void run(String engineString) {
+
+	protected PuzzleGame() {
 		String gameString = this.getClass().getSimpleName();
 		gameString = gameString.substring(0, gameString.length() - 4);
-
+		name = gameString;
+	}
+	
+	public final void run(String engineString) {
+		System.out.println(name);
 		magicMirror(engineString, "Screen");
-		magicMirror(gameString, "Board", "Piece", "Score");
+		magicMirror(name, "Board", "Piece", "Score");
 
 		level = new Number(Number.Type.LEVEL, (byte)2).set(1);
 		rowsCleared = new Number(Number.Type.ROWS, (byte)3);
 		pieceCount = new Number(Number.Type.PIECES, (byte)4);
 
 		while (board.doesPieceFit(piece)) {
-			System.out.println("hello");
 			// Add the piece's blocks to screen so they will be displayed.
 			screen.addParts(Arrays.asList(piece.getBlocks()));
 			screen.update();

@@ -1,5 +1,6 @@
 package engine;
 
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
@@ -9,11 +10,11 @@ public abstract class Screen {
 	public abstract void addPart(Part part);
 	public abstract void removePart(Part terminalPart);
 
-	protected abstract Class<? extends Visual> getVisualClass(Part part);
+	protected abstract Class<?> getVisualClass(Game game, Part part);
 
-	public final Visual newVisual(Part part, Visual.Id id) {
+	public final Visual newVisual(Game game, Part part, Visual.Id id) {
 		try {
-			return getVisualClass(part)
+			return (Visual)getVisualClass(game, part)
 			       .getConstructor(part.getClass(), Visual.Id.class)
 			       .newInstance(part, id);
 		} catch (InstantiationException | IllegalAccessException

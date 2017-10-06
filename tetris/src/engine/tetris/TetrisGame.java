@@ -1,6 +1,5 @@
 package engine.tetris;
 
-
 import engine.puzzle.PuzzleGame;
 
 public final class TetrisGame extends PuzzleGame {

@@ -1,11 +1,10 @@
-package engine.swing.puzzle;
+package engine.puzzle.swing;
 
 import engine.Coordinates;
 import engine.Part;
 import engine.Visual;
 import engine.puzzle.Digit;
-import engine.swing.ImageList;
-import engine.swing.Sprite;
+import engine.puzzle.ImageType;
 
 public class DigitSprite extends Sprite {
 	public static int go;

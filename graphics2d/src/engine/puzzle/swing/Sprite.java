@@ -1,4 +1,4 @@
-package engine.swing;
+package engine.puzzle.swing;
 
 import java.awt.Graphics2D;
 import java.util.HashMap;

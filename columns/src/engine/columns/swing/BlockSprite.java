@@ -1,14 +1,14 @@
-package engine.swing.puzzle;
+package engine.columns.swing;
 
 import engine.Coordinates;
-import engine.Part;
 import engine.Visual;
 import engine.puzzle.Block;
-import engine.swing.ImageList;
-import engine.swing.Sprite;
-import engine.swing.puzzle.ImageType.ScanDirection;
+import engine.puzzle.ImageType;
+import engine.puzzle.ImageType.ScanDirection;
+import engine.puzzle.swing.ImageList;
+import engine.puzzle.swing.Sprite;
 
-public class ColumnsSprite extends Sprite {
+public class BlockSprite extends Sprite {
 	public static int go;
 
 	static {
@@ -18,7 +18,6 @@ public class ColumnsSprite extends Sprite {
 		                                     1,
 		                                     ScanDirection.HORIZONTAL);
 
-		visualMap.put(Block.class, ColumnsSprite.class);
 
 		for (int i = 0; i < 6; i++) {
 			imageListMap.put(new Visual.Id((byte) 3, (byte) i),
@@ -27,11 +26,11 @@ public class ColumnsSprite extends Sprite {
 		}
 	}
 
-	public ColumnsSprite(Visual other) {
+	public BlockSprite(Visual other) {
 		super(other);
 	}
 
-	public ColumnsSprite(Block newPart, Id newId) {
+	public BlockSprite(Block newPart, Id newId) {
 		super(newPart, newId);
 	}
 }

@@ -14,7 +14,7 @@ public abstract class Part implements Movable {
 	}	
 
 	protected void initVisual(Visual.Id newId) {
-		visual = Game.me.screen.newVisual(this, newId);
+		visual = Game.me.screen.newVisual(Game.me, this, newId);
 		visual.update(this);
 	}
 	

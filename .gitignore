@@ -1,3 +1,8 @@
 .idea/
 bin/
-tetris.iml
+out/
+*.iml
+java.properties
+.project
+.classpath
+input_to_action.xml

@@ -1,9 +1,8 @@
-package engine.swing.puzzle;
+package engine.puzzle;
 
 import java.io.Serializable;
 
 import engine.Coordinates;
-import engine.swing.Sprite;
 
 public class ImageType implements Serializable {
 

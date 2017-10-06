@@ -1,10 +1,11 @@
-package engine.swing.puzzle;
+package engine.tetris.swing;
 
 import engine.Coordinates;
 import engine.Visual;
 import engine.puzzle.Block;
-import engine.swing.ImageList;
-import engine.swing.Sprite;
+import engine.puzzle.ImageType;
+import engine.puzzle.swing.ImageList;
+import engine.puzzle.swing.Sprite;
 
 public class BlockSprite extends Sprite {
 	public static int go;
@@ -16,7 +17,6 @@ public class BlockSprite extends Sprite {
 		                      4,
 		                      ImageType.ScanDirection.HORIZONTAL);
 
-		visualMap.put(Block.class, BlockSprite.class);
 		int x = 0;
 		for(byte i = 0; i < 7; i++) {
 			int y = 0;

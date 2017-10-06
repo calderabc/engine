@@ -1,10 +1,7 @@
-package engine.swing.puzzle;
+package engine.puzzle;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
 
 import javax.swing.InputMap;
 import javax.swing.KeyStroke;
