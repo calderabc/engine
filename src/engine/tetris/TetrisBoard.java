@@ -121,11 +121,7 @@ public final class TetrisBoard extends Board {
 	
 	@Override
 	public Block getBlock(Coordinates position) {
-		try {
-			return blockMatrix.get(position.y).get(position.x);
-		} catch (IndexOutOfBoundsException e) {
-			return null; //TODO: Make custom exception.
-		}
+		return blockMatrix.get(position.y).get(position.x);
 	}
 
 	@Override

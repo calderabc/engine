@@ -7,18 +7,6 @@ import engine.puzzle.SimpleBoard;
 import java.util.*;
 
 public class ColumnsBoard extends SimpleBoard {
-	/*
-	// Coordinate offsets for scanning around a block position, in a circular order.
-	private static final Coordinates[] aroundCoords = {new Coordinates(-1, 1),
-	                                                   new Coordinates( 0, 1),
-	                                                   new Coordinates( 1, 1),
-	                                                   new Coordinates( 1, 0),
-	                                                   new Coordinates( 1,-1),
-	                                                   new Coordinates( 0,-1),
-	                                                   new Coordinates(-1,-1),
-	                                                   new Coordinates(-1, 0)};
-	                                                   */
-
 	// Coordinate offsets for scanning around a block position, in a circular order.
 	private static final Coordinates[] aroundCoords = {new Coordinates(-1, 1),
 	                                                   new Coordinates( 0, 1),
