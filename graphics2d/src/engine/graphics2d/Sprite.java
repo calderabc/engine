@@ -1,13 +1,12 @@
-package engine.puzzle.swing;
+package engine.graphics2d;
 
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 import java.util.HashMap;
 import java.util.Map;
 
 import engine.Visual;
 import engine.Coordinates;
 import engine.Part;
+import engine.swing.ImageList;
 
 public abstract class Sprite extends Visual {
 	static protected Map<Visual.Id, ImageList> imageListMap =

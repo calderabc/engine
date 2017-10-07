@@ -3,10 +3,10 @@ package engine.columns.swing;
 import engine.Coordinates;
 import engine.Visual;
 import engine.puzzle.Block;
-import engine.puzzle.ImageType;
-import engine.puzzle.ImageType.ScanDirection;
-import engine.puzzle.swing.ImageList;
-import engine.puzzle.swing.Sprite;
+import engine.graphics2d.ImageType;
+import engine.graphics2d.ImageType.ScanDirection;
+import engine.swing.ImageList;
+import engine.graphics2d.Sprite;
 
 public class BlockSprite extends Sprite {
 	public static int go;

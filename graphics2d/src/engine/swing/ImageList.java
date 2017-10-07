@@ -1,4 +1,4 @@
-package engine.puzzle.swing;
+package engine.swing;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -7,7 +7,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import engine.Coordinates;
-import engine.puzzle.ImageType;
+import engine.graphics2d.ImageType;
 
 public class ImageList {
 

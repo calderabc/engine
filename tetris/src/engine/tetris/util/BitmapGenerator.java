@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 
 import engine.FileIO;
 import engine.tetris.swing.BlockSprite;
-import engine.puzzle.ImageType;
+import engine.graphics2d.ImageType;
 import engine.tetris.TetrisPieceData;
 
 // Most of this is overkill.  Could be done better with image editor/renderer.

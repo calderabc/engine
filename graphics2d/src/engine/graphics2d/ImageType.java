@@ -1,4 +1,4 @@
-package engine.puzzle;
+package engine.graphics2d;
 
 import java.io.Serializable;
 

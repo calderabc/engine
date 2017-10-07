@@ -1,4 +1,4 @@
-package engine.puzzle;
+package engine.swing;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
