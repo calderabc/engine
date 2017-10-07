@@ -6,7 +6,6 @@ import java.util.Map;
 import engine.Visual;
 import engine.Coordinates;
 import engine.Part;
-import engine.swing.ImageList;
 
 public abstract class Sprite extends Visual {
 	static protected Map<Visual.Id, ImageList> imageListMap =
@@ -26,9 +25,9 @@ public abstract class Sprite extends Visual {
 
 	protected Sprite(Part newPart, Id newId) {
 		images = imageListMap.get(newId); // Save memory by always using the same images.
-		positionScaleFactor = images.imageType.POSITION_SCALE_FACTOR;
-		//position = new Coordinates(newPart.pos.scale(positionScaleFactor));
-		dimensions = images.imageType.DIMENSIONS;
+		positionScaleFactor = images.imageType.translationFactor;
+		//position = new Coordinates(newPart.pos.scale(translationFactor));
+		dimensions = images.imageType.dimensions;
 		currImage = 0;
 	}
 

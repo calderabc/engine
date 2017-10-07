@@ -1,34 +1,31 @@
-package engine.swing;
+package engine.graphics2d;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
 
 import engine.Coordinates;
-import engine.graphics2d.ImageType;
 
-public class ImageList {
+public abstract class ImageList<T> {
 
 	final public ImageType imageType;
-	final private BufferedImage[] images;
+	final private Object[] images;
 
 	// Variable names shortened for brevety. "image" could be appended to beginning of each.
 	public ImageList(ImageType newImageType, Coordinates scanStart) {
 		imageType = newImageType;
-		images = new BufferedImage[imageType.COUNT];
+		images = new Object[imageType.COUNT];
 		
 		try {
-			BufferedImage spriteImageSource = 
-				ImageIO.read(new File(imageType.IMAGE_FILE_NAME));
-		
+			T spriteImageSource = loadImageFromFile(imageType.imageFileName);
+
 			int scanX = scanStart.x;
 			int scanY = scanStart.y;
-			int width = imageType.DIMENSIONS.x;
-			int height = imageType.DIMENSIONS.y;
+			int width = imageType.dimensions.x;
+			int height = imageType.dimensions.y;
 			for(int i = 0; i < imageType.COUNT; i++) {
-				images[i] = spriteImageSource.getSubimage(scanX, scanY, width, height);
+				images[i] = getSubimage(spriteImageSource,
+				                        new Coordinates(scanX, scanY),
+				                        imageType.dimensions);
 				
 				if (imageType.SCAN_DIRECTION == ImageType.ScanDirection.VERTICAL)
 					scanY += height;
@@ -40,9 +37,14 @@ public class ImageList {
 			System.exit(1);
 		}	
 	}
-	
-	public BufferedImage get(int index) {
+
+
+
+	public final T get(int index) {
 		if (index < 0 || index >= imageType.COUNT) throw new IndexOutOfBoundsException();
-		return images[index];
+		return (T)images[index];
 	}
+
+	protected abstract T loadImageFromFile(String fileName) throws IOException;
+	protected abstract T getSubimage(T image, Coordinates position, Coordinates dimensions);
 }

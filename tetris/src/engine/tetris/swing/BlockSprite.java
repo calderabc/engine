@@ -4,18 +4,14 @@ import engine.Coordinates;
 import engine.Visual;
 import engine.puzzle.Block;
 import engine.graphics2d.ImageType;
-import engine.swing.ImageList;
+import engine.graphics2d.ImageList;
 import engine.graphics2d.Sprite;
 
 public class BlockSprite extends Sprite {
 	public static int go;
 	public static ImageType block;
 	static {
-		block = new ImageType("piece_image_sheet.png",
-		                      new Coordinates(32, 32),
-		                      new Coordinates(32, 32),
-		                      4,
-		                      ImageType.ScanDirection.HORIZONTAL);
+		block = new ImageType("tetris", Block.class);
 
 		int x = 0;
 		for(byte i = 0; i < 7; i++) {
@@ -25,9 +21,9 @@ public class BlockSprite extends Sprite {
 				imageListMap.put(new Id((byte)1, i, j), 
 				                 new ImageList(block, new Coordinates(x, y))
 				);
-				y += block.DIMENSIONS.y;
+				y += block.dimensions.y;
 			}
-			x += block.DIMENSIONS.x * 4;
+			x += block.dimensions.x * 4;
 		}
 	}
 

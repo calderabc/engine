@@ -34,6 +34,27 @@ public final class Coordinates implements Movable, Serializable, Cloneable {
 		x = newX;
 	}
 
+	public Coordinates(int[] integers) {
+		switch (integers.length) {
+			case 3: z = integers[2];
+			case 2: y = integers[1];
+			case 1: x = integers[0];
+			default: // TODO: throw exception here.
+		}
+
+
+	}
+
+	// Redundant. Faster than loop conversion to int[] then private method call.
+	public Coordinates(String[] intStrings) {
+		switch (intStrings.length) {
+			case 3: z = Integer.valueOf(intStrings[2]);
+			case 2: y = Integer.valueOf(intStrings[1]);
+			case 1: x = Integer.valueOf(intStrings[0]);
+			default: // TODO: throw exception here.
+		}
+	}
+
 	public Coordinates() {}
 
 	public Coordinates(Coordinates other) {

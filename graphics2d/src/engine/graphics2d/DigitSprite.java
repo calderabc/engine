@@ -1,20 +1,14 @@
-package engine.swing;
+package engine.graphics2d;
 
 import engine.Coordinates;
 import engine.Part;
 import engine.Visual;
-import engine.graphics2d.ImageType;
-import engine.graphics2d.Sprite;
 import engine.puzzle.Digit;
 
 public class DigitSprite extends Sprite {
 	public static int go;
 	static {
-		ImageType digit = new ImageType("numbers.png",
-		                                new Coordinates(30, 60),
-		                                new Coordinates(40),
-		                                10,
-		                                ImageType.ScanDirection.HORIZONTAL);
+		ImageType digit = new ImageType("puzzle", Digit.class);
 
 		visualMap.put(Digit.class, DigitSprite.class);
 
