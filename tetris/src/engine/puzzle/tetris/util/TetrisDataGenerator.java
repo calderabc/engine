@@ -1,9 +1,9 @@
-package engine.tetris.util;
+package engine.puzzle.tetris.util;
 
 
 import engine.Coordinates;
 import engine.FileIO;
-import engine.tetris.TetrisPieceData;
+import engine.puzzle.tetris.TetrisPieceData;
 
 public class TetrisDataGenerator {
 
@@ -36,7 +36,7 @@ public class TetrisDataGenerator {
 	public static final Coordinates pieceStartPos = new Coordinates(3, 0);
 
 	public static void main(String argv[]) {
-		TetrisPieceData pieceData = 
+		TetrisPieceData pieceData =
 			new TetrisPieceData(pieceTemplate, 
 			                    pieceCenter, 
 			                    pieceStartPos);

@@ -1,4 +1,4 @@
-package engine.swing;
+package engine.graphics2d.swing;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -12,7 +12,7 @@ import engine.puzzle.PieceAction;
 import javax.swing.ActionMap;
 import javax.swing.AbstractAction;
 
-public class Keyboard {
+public class SwingKeyboard {
 	private static final String STOP_PREFIX = "stop_";
 	
 	private static void initInputMap(InputMap inputMap) {

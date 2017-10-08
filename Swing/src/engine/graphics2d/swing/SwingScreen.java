@@ -1,4 +1,4 @@
-package engine.swing;
+package engine.graphics2d.swing;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -70,6 +70,7 @@ public class SwingScreen extends Screen {
 	@Override
 	public Class<?> getVisualClass(Game game, Part part) {
 
+
 		try {
 			return Class.forName("engine."
 			              + ((PuzzleGame)game).name.toLowerCase() + "."
@@ -88,8 +89,10 @@ public class SwingScreen extends Screen {
 	}
 
 	public SwingScreen() {
+		super("Sprite");
+
 		// TODO: Do this method call on another thread.
-		Keyboard.initInputActionMaps(panel.getInputMap(), panel.getActionMap());
+		SwingKeyboard.initInputActionMaps(panel.getInputMap(), panel.getActionMap());
 		frame = new JFrame("Tetris");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

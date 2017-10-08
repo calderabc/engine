@@ -1,4 +1,4 @@
-package engine.javafx;
+package engine.graphics2d.javafx;
 
 import engine.graphics2d.Sprite;
 

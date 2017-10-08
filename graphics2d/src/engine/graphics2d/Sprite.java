@@ -54,4 +54,5 @@ public abstract class Sprite extends Visual {
 	public int getHeight() {
 		return dimensions.y;
 	}
+
 }

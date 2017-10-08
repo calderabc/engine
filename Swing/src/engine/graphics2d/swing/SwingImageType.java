@@ -1,4 +1,4 @@
-package engine.swing;
+package engine.graphics2d.swing;
 
 import java.io.File;
 
@@ -10,8 +10,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public final class SwingImageList extends ImageList<BufferedImage> {
-	public SwingImageList(ImageType newImageType, Coordinates scanStart) {
+public final class SwingImageType extends ImageType {
+	public SwingImageType(ImageType newImageType, Coordinates scanStart) {
 		super(newImageType, scanStart);
 	}
 

@@ -1,4 +1,4 @@
-package engine.tetris.util;
+package engine.puzzle.tetris.util;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -9,9 +9,9 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import engine.FileIO;
-import engine.tetris.swing.BlockSprite;
+import engine.puzzle.tetris.TetrisBlockSprite;
 import engine.graphics2d.ImageType;
-import engine.tetris.TetrisPieceData;
+import engine.puzzle.tetris.TetrisPieceData;
 
 // Most of this is overkill.  Could be done better with image editor/renderer.
 // Proof of concept. Useful for automation. 
@@ -74,7 +74,7 @@ public final class BitmapGenerator {
 	}
 
 	private static final int COUNT = 13;
-	private static final BufferedImage[] images = loadImages(BlockSprite.block);
+	private static final BufferedImage[] images = loadImages(TetrisBlockSprite.block);
 
 	public static final BufferedImage[] loadImages(ImageType type) {
 		BufferedImage[] returnImages = new BufferedImage[COUNT]; 

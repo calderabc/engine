@@ -4,46 +4,29 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 import engine.Game;
+import engine.Reflection;
 
-public abstract class PuzzleGame extends Game {
+public class PuzzleGame extends Game {
 
 	public Board board;
 	public Score score;
 	public Piece piece;
-
-	public final String name;
 
 	private Number level;
 	private Number rowsCleared;
 	private Number pieceCount;
 	private boolean isPieceLanded;
 
-	private void magicMirror(String packageString, String... classNames) {
-		// Who's the fairest of them all?
+	private void newFields(String packageString, String... classNames) {
 		Thread[] threads = new Thread[classNames.length];
 		int i = 0;
 		for (String className : classNames) {
 			threads[i] = new Thread(() -> {
-				String fullClassName = "engine."
-									   + packageString.toLowerCase() + "."
-									   + packageString + className;
-				try {
-					this.getClass()    // Holy Reflection Batman!
-						.getField(className.toLowerCase())
-						.set(this, Class.forName(fullClassName)
-						                .getDeclaredConstructor()
-						                .newInstance());
-				} catch (IllegalArgumentException | IllegalAccessException
-						 | NoSuchFieldException | SecurityException 
-						 | InstantiationException | ClassNotFoundException
-				         | NoSuchMethodException | InvocationTargetException e) {
-					e.printStackTrace();
-				}
+				Reflection.instantiateGameField(this, className);
 			});
 
 			threads[i++].start();
 		}
-		// Game objects require that the engine objects are created first.
 		for (Thread thread : threads) {
 			try {
 				thread.join();
@@ -53,16 +36,10 @@ public abstract class PuzzleGame extends Game {
 		}
 	}
 
-	protected PuzzleGame() {
-		String gameString = this.getClass().getSimpleName();
-		gameString = gameString.substring(0, gameString.length() - 4);
-		name = gameString;
-	}
-	
-	public final void run(String engineString) {
-		System.out.println(name);
-		magicMirror(engineString, "Screen");
-		magicMirror(name, "Board", "Piece", "Score");
+	public PuzzleGame(String newGameName, String newEngineName) {
+		super(newGameName, "Puzzle", newEngineName, "Graphics2d");
+
+		newFields(gameName, "Board", "Piece", "Score");
 		screen.setScale(board, piece.getBlocks()[0].visual);
 
 		level = new Number(Number.Type.LEVEL, (byte)2).set(1);
@@ -145,5 +122,13 @@ public abstract class PuzzleGame extends Game {
 				}
 			}
 		}
+	}
+
+	public static void main(String argv[]) {
+		// TODO: Make more robust. Validate arguments.
+		if (argv.length != 2) {
+			throw new IllegalArgumentException();
+		}
+		new PuzzleGame(argv[0], argv[1]);
 	}
 }

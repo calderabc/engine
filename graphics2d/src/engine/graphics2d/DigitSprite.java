@@ -5,15 +5,19 @@ import engine.Part;
 import engine.Visual;
 import engine.puzzle.Digit;
 
+import java.awt.image.BufferedImage;
+
 public class DigitSprite extends Sprite {
 	public static int go;
 	static {
-		ImageType digit = new ImageType("puzzle", Digit.class);
+		ImageType digit = new ImageType("puzzle", Digit.class, BufferedImage.class);
 
 		visualMap.put(Digit.class, DigitSprite.class);
 
+		/*
 		imageListMap.put(new Id((byte)2),
 						 new ImageList(digit, Coordinates.ORIGIN));
+						 */
 
 
 	}

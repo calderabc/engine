@@ -1,4 +1,4 @@
-package engine.columns;
+package engine.puzzle.columns;
 
 import java.util.Random;
 
