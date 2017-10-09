@@ -54,7 +54,7 @@ public class SwingScreen extends Screen {
 				AffineTransform.getTranslateInstance(scale * visual.position.x,
 				                                     scale * visual.position.y);
 			transformer.concatenate(AffineTransform.getScaleInstance(scale, scale));
-			canvas.drawImage(visual.images[(visual.currImage)],
+			canvas.drawImage((BufferedImage)visual.images[visual.currImage],
 			transformer,
 			null);
 

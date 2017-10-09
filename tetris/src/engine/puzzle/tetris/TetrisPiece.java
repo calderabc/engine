@@ -4,6 +4,7 @@ import java.util.Random;
 
 import engine.Coordinates;
 import engine.FileIO;
+import engine.Game;
 import engine.Visual;
 import engine.puzzle.Block;
 import engine.puzzle.Piece;
@@ -48,8 +49,14 @@ public final class TetrisPiece extends Piece {
 		byte state = 0;
 		int i = 0;
 		for (byte[] blockXY: newPieceData.pieceTemplate[pieceId]) {
-			blocks[i++] = new Block(new Coordinates(blockXY[0], blockXY[1]), 
-			                        new Visual.Id((byte)1, pieceId, state++));
+			blocks[i++] = new Block(
+				new Coordinates(blockXY[0], blockXY[1]),
+				new Visual.Id(
+					Visual.Id.getUnique(Game.me.gameName + "Block"),
+					pieceId,
+					state++
+				)
+			);
 		}
 
 		// Centers are represented multiplied by two, this is why the 'pos' 

@@ -47,6 +47,10 @@ public class PuzzleGame extends Game {
 		blockImageType = Reflection.newImageType(this, Block.class);
 		digitImageType = Reflection.newImageType(this, Digit.class);
 
+	}
+
+	public void run() {
+
 		newFields(gameName, "Board", "Piece", "Score");
 		screen.setScale(board, piece.getBlocks()[0].visual);
 
@@ -137,6 +141,9 @@ public class PuzzleGame extends Game {
 		if (argv.length != 2) {
 			throw new IllegalArgumentException();
 		}
-		new PuzzleGame(argv[0], argv[1]);
+		me = new PuzzleGame(argv[0], argv[1]);
+		// Have to separate game creation from part creation (in run()) so
+		// part constructors can reference game.me.
+		((PuzzleGame)me).run();
 	}
 }

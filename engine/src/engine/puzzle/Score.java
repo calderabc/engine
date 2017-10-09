@@ -1,5 +1,7 @@
 package engine.puzzle;
 
+import engine.graphics2d.ImageType;
+
 import java.io.Serializable;
 
 public class Score extends Number {

@@ -2,6 +2,7 @@ package engine;
 
 import engine.graphics2d.ImageType;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 public final class Reflection {
@@ -27,7 +28,9 @@ public final class Reflection {
 		for (String canonicalName : canonicalNames)
 			try {
 				return Class.forName(canonicalName);
-			} catch (ClassNotFoundException e) { }// Continue loop on exception.
+			} catch (ClassNotFoundException e) {
+			//e.printStackTrace();
+			}// Continue loop on exception.
 
 		return null; // If canonicalNames is empty or class cannot be found.
 	}
@@ -64,7 +67,7 @@ public final class Reflection {
 		return null;
 	}
 
-	private static Object newInstance(Object object, Object... parameters) {
+	static Object newInstance(Object object, Object... parameters) {
 		return newInstance(object.getClass(), parameters);
 	}
 
@@ -76,25 +79,34 @@ public final class Reflection {
 		return newInstance(object, object);
 	}
 
-	static Visual newVisual(Game game, Part part, Visual.Id id) {
-		return (Visual)newInstance(getClass(game.gameTypeName,
+	static Visual newVisual(Game game, Part part, ImageType imageType, Visual.Id id) {
+		Class<?> clazz = getClass(game.gameTypeName,
                                             game.gameName,
                                             part.getClass().getSimpleName(),
-                                            game.screen.visualName),
-                                   id);
+                                            game.screen.visualName);
+		Constructor<?>[] constructors = clazz.getConstructors();
+		// TODO: Quick and dirty solution.  Improve.
+		for (Constructor<?> constructor : constructors) {
+			if (constructor.getParameterCount() == 3) {
+				try {
+					return (Visual)constructor.newInstance(part, imageType, id);
+				} catch (InstantiationException | IllegalAccessException
+				         | InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
 	}
 
-	public static ImageType newImageType(Game game, Class<? extends Part> part) {
-		String imageFileName = game.gameTypeName + "_"
-		                       + game.gameName + "_"
-							   + part.getClass().getSimpleName()
-		                       + ".png";
+	public static ImageType newImageType(Game game,
+	                                     Class<? extends Part> partClass) {
 		return (ImageType)newInstance( getClass(game.engineTypeName,
 		                                        game.engineName,
 		                                        "ImageType"),
-		                               game.gameName,
-		                               part,
-		                               imageFileName.toLowerCase() );
+		                               game.gameName.toLowerCase(),
+		                               game.gameTypeName.toLowerCase(),
+		                               partClass );
 	}
 
 	static Screen newScreen(Game game) {
@@ -112,5 +124,6 @@ public final class Reflection {
 			e.printStackTrace();
 		}
 	}
+
 }
 

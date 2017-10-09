@@ -74,9 +74,9 @@ public final class BitmapGenerator {
 	}
 
 	private static final int COUNT = 13;
-	private static final BufferedImage[] images = loadImages(TetrisBlockSprite.block);
+	private static final BufferedImage[] images = loadImages();
 
-	public static final BufferedImage[] loadImages(ImageType type) {
+	public static final BufferedImage[] loadImages() {
 		BufferedImage[] returnImages = new BufferedImage[COUNT]; 
 		
 		for (int i = 0; i < COUNT; i++) {

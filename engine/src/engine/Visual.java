@@ -1,12 +1,25 @@
 package engine;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public abstract class Visual {
 	public static final class Id {
 		private static byte unique = 0;
+		// TODO: Memory wasteful.  Work out a better way.
+		private static Map<String, Byte> idMap = new HashMap<>();
 
-		public static byte getUnique() {
+		public static byte getUnique(String key) {
 			synchronized(Id.class) {
-				return ++unique;
+			//<><> If map has entry return value otherwise return new value.
+				Byte value = idMap.get(key);
+				if (value != null) {
+					return value;
+				}
+				value = ++unique;
+				idMap.put(key, value);
+				return value;
+				//<><>
 			}
 		}
 

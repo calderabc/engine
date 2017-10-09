@@ -1,15 +1,14 @@
-package engine.graphics2d;
+package engine.puzzle;
 
 import engine.Coordinates;
 import engine.Part;
 import engine.Visual;
-import engine.puzzle.Digit;
-
-import java.awt.image.BufferedImage;
+import engine.graphics2d.ImageType;
+import engine.graphics2d.Sprite;
 
 public class DigitSprite extends Sprite {
-	public DigitSprite(Digit digit, Id newId) {
-		super(digit, newId);
+	public DigitSprite(Digit digit, ImageType imageType, Id newId) {
+		super(digit, imageType, newId);
 
 		// TODO: Kludgy.  Make better.
 		switch(digit.type) {

@@ -43,6 +43,7 @@ public abstract class ImageType implements Serializable {
 		final Object image;
 	}
 
+
 	private Node scanInstructions;
 
 	public final Coordinates dimensions;
@@ -53,15 +54,24 @@ public abstract class ImageType implements Serializable {
 	private final Object sourceImage;
 
 	public ImageType(String configFileName,
+	                 String defaultConfigFileName,
 	                 Class<? extends Part> partClass,
-	                 String imageFileName,
 	                 Class<?> imageClass) {
 
 		this.imageClass = imageClass;
-		sourceImage = loadImageFromFile(imageFileName);
+
+		// TODO: Make everything fail gracefully if config file
+		// TODO: doesn't have the property wanted. Output useful error message.
+
+		FileIO.GameProperties properties = new FileIO.GameProperties(
+			configFileName,
+			new FileIO.GameProperties(defaultConfigFileName)
+		);
 
 		String partString = partClass.getSimpleName().toLowerCase();
-		FileIO.GameProperties properties = new FileIO.GameProperties(configFileName);
+		sourceImage = loadImageFromFile(
+			properties.getProperty(partString + "_image_file")
+		);
 
 		// <><> Populate the linked list with scan instructions.
 		String[] directions =
@@ -75,14 +85,14 @@ public abstract class ImageType implements Serializable {
 			scanInstructions = instruction;
 		} // <><>
 
-		imageFileName = properties.getProperty(partString + "_image_file");
 		dimensions =
 			properties.getCoordinates(partString + "_dimensions");
-		translationFactor =
+
+		Coordinates dummy =
 			properties.getCoordinates(partString + "_translation");
+		translationFactor = (dummy != null) ? dummy : dimensions;
 
-
-		scan(new Visual.Id(Visual.Id.getUnique()),
+		scan(new Visual.Id(Visual.Id.getUnique(configFileName + partClass.getSimpleName())),
 		     scanInstructions,
 		     Coordinates.ORIGIN);
 	}
@@ -126,7 +136,7 @@ public abstract class ImageType implements Serializable {
 		for (byte i = 0; i < instruction.count; i++) {
 
 			Result result = scan(new Visual.Id(id, i),
-			                     instruction,
+			                     instruction.next,
 			                     startPosition);
 			if (doImageList) {
 				images[i] = result.image;

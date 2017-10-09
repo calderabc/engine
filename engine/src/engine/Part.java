@@ -1,5 +1,7 @@
 package engine;
 
+import engine.graphics2d.ImageType;
+
 public abstract class Part implements Movable {
 	public Visual visual = null; 
 	public Coordinates pos = null;
@@ -13,8 +15,8 @@ public abstract class Part implements Movable {
 		visual = (Visual)Reflection.newInstance(other.visual);
 	}	
 
-	protected void initVisual(Visual.Id newId) {
-		visual = Reflection.newVisual(Game.me, this, newId);
+	protected void initVisual(ImageType imageType, Visual.Id newId) {
+		visual = Reflection.newVisual(Game.me, this, imageType, newId);
 		visual.update(this);
 	}
 	

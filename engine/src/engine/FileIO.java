@@ -12,13 +12,22 @@ public final class FileIO {
 	private FileIO() {}
 
 	public static final class GameProperties extends Properties {
-		public GameProperties(String fileName) {
+		private void load(String fileName) {
 			try {
 				load(new FileInputStream(fileName + ".ini"));
 				storeToXML(new FileOutputStream(fileName + ".xml"), null);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+
+		public GameProperties(String fileName) {
+			load(fileName);
+		}
+
+		public GameProperties(String fileName, Properties defaultProperties) {
+			super(defaultProperties);
+			load(fileName);
 		}
 
 		private String[] split(String string) {
@@ -34,6 +43,9 @@ public final class FileIO {
 		}
 
 		public int[] getArrayInteger(String key) {
+			String property = getProperty(key);
+			if (property == null)
+				return null;
 			String[] stringArray = split(getProperty(key));
 			int[] intArray = new int[stringArray.length];
 			for (int i = 0; i < stringArray.length; i++) {
@@ -43,7 +55,11 @@ public final class FileIO {
 		}
 
 		public Coordinates getCoordinates(String key) {
-			return new Coordinates(getArrayInteger(key));
+			try {
+				return new Coordinates(getArrayInteger(key));
+			} catch (NullPointerException e) {
+				return null;
+			}
 		}
 
 		public String[] getArrayLowerCase(String key) {

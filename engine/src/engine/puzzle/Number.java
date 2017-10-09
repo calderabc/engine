@@ -1,6 +1,7 @@
 package engine.puzzle;
 
 import engine.Coordinates;
+import engine.graphics2d.ImageType;
 
 // This is only meant to work for positive numbers.
 // Negative values have no meaning, won't work.

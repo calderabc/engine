@@ -19,6 +19,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.awt.geom.AffineTransform;
+import java.util.List;
+import java.util.Vector;
 
 
 public class JavaFXScreen extends Screen {
@@ -88,26 +90,6 @@ public class JavaFXScreen extends Screen {
 	private double scale;
 
 	private final List<Part> displayedParts = new Vector<>();
-
-	@Override
-	public Class<?> getVisualClass(Game game, Part part) {
-
-		try {
-			return Class.forName("engine."
-								 + ((PuzzleGame)game).name.toLowerCase() + "."
-								 + "swing."
-								 + part.getClass().getSimpleName() + "Sprite");
-		} catch (ClassNotFoundException e) {
-			try {
-				return Class.forName(
-				"engine.swing." + part.getClass().getSimpleName() + "Sprite");
-			} catch (ClassNotFoundException e1) {
-				e1.printStackTrace();
-			}
-
-		}
-		return null;
-	}
 
 	public JavaFXScreen() {
 		// TODO: Do this method call on another thread.

@@ -22,11 +22,13 @@ public abstract class Sprite extends Visual {
 	public int currImage;
 
 
-	protected Sprite(Part newPart, Id newId) {
+	public ImageType imageType;
+
+	protected Sprite(Part newPart, ImageType imageType, Id newId) {
 		images = ImageType.imageListMap.get(newId); // Save memory by always using the same images.
-		positionScaleFactor = Game.me..images.imageType.translationFactor;
+		dimensions = imageType.dimensions;
+		positionScaleFactor = imageType.translationFactor;
 		//position = new Coordinates(newPart.pos.scale(translationFactor));
-		dimensions = images.imageType.dimensions;
 		currImage = 0;
 	}
 

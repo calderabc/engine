@@ -12,9 +12,12 @@ import java.io.IOException;
 
 public final class SwingImageType extends ImageType {
 	public SwingImageType(String configFileName,
-	                      Class<? extends Part> partClass,
-	                      String imageFileName) {
-		super(configFileName, partClass, imageFileName, BufferedImage.class);
+	                      String defaultConfigFileName,
+	                      Class<? extends Part> partClass) {
+		super(configFileName,
+		      defaultConfigFileName,
+		      partClass,
+		      BufferedImage.class);
 	}
 
 	@Override

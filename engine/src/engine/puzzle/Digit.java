@@ -3,7 +3,9 @@ package engine.puzzle;
 import engine.Coordinates;
 import engine.Game;
 import engine.Part;
+import engine.Visual;
 import engine.Visual.Id;
+import engine.graphics2d.ImageType;
 
 public class Digit extends Part {
 	private byte value;
@@ -13,7 +15,8 @@ public class Digit extends Part {
 		super(newPosition);
 		type = newType;
 		set(newValue);
-		initVisual(new Id((byte)2));
+		initVisual( ((PuzzleGame)Game.me).digitImageType,
+		            new Visual.Id(Visual.Id.getUnique("Digit")) );
 		Game.me.screen.addPart(this);
 	}
 	
