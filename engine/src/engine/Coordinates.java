@@ -69,6 +69,16 @@ public final class Coordinates implements Movable, Serializable, Cloneable {
 		return this;
 	}
 
+	public final Coordinates moveX(int xOffset) {
+		x += xOffset;
+		return this;
+	}
+
+	public final Coordinates moveY(int yOffset) {
+		y += yOffset;
+		return this;
+	}
+
 	public Coordinates scale(Coordinates scaleFactor) {
 		x *= scaleFactor.x;
 		y *=  scaleFactor.y;
@@ -85,7 +95,7 @@ public final class Coordinates implements Movable, Serializable, Cloneable {
 
 	@Override
 	public Coordinates clone() {
-		return new Coordinates(x, y, z);
+		return new Coordinates(this);
 	}
 
 	// Much more elegant with overloaded operators in C++.

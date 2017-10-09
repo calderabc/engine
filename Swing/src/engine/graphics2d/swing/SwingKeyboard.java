@@ -22,7 +22,7 @@ public class SwingKeyboard {
 
 			String action = ((String) key).toLowerCase();
 			String[] keyStrokes =
-				inputToAction.getPropertyArrayUpperCase((String) key);
+				inputToAction.getArrayUpperCase((String) key);
 
 			for(String keyStroke : keyStrokes) {
 				inputMap.put(KeyStroke.getKeyStroke(keyStroke), action);

@@ -3,19 +3,18 @@ package engine.graphics2d;
 import java.util.HashMap;
 import java.util.Map;
 
+import engine.Game;
 import engine.Visual;
 import engine.Coordinates;
 import engine.Part;
 
 public abstract class Sprite extends Visual {
-	static protected Map<Visual.Id, ImageList> imageListMap =
-		new HashMap<>(30);
 
 	static protected Map<Class<? extends Part>,
 	                     Class<? extends Sprite>> visualMap =
 		new HashMap<>(5);
 
-	public ImageList images;
+	public Object[] images;
 	public Coordinates position;
 	protected Coordinates dimensions;
 	protected Coordinates positionScaleFactor;
@@ -24,8 +23,8 @@ public abstract class Sprite extends Visual {
 
 
 	protected Sprite(Part newPart, Id newId) {
-		images = imageListMap.get(newId); // Save memory by always using the same images.
-		positionScaleFactor = images.imageType.translationFactor;
+		images = ImageType.imageListMap.get(newId); // Save memory by always using the same images.
+		positionScaleFactor = Game.me..images.imageType.translationFactor;
 		//position = new Coordinates(newPart.pos.scale(translationFactor));
 		dimensions = images.imageType.dimensions;
 		currImage = 0;

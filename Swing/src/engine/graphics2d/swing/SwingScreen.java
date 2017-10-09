@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.List;
@@ -53,7 +54,7 @@ public class SwingScreen extends Screen {
 				AffineTransform.getTranslateInstance(scale * visual.position.x,
 				                                     scale * visual.position.y);
 			transformer.concatenate(AffineTransform.getScaleInstance(scale, scale));
-			canvas.drawImage(visual.images.get(visual.currImage),
+			canvas.drawImage(visual.images[(visual.currImage)],
 			transformer,
 			null);
 
@@ -66,27 +67,6 @@ public class SwingScreen extends Screen {
 	private static final int[] colorMasks = {0x40FFB0B0, 0x40B0FFB0, 0x40B0B0FF, 0x40FFFFB0, 0x40FFB0FF, 0x40B0FFFF};
 	
 	private final List<Part> displayedParts = new Vector<>();
-
-	@Override
-	public Class<?> getVisualClass(Game game, Part part) {
-
-
-		try {
-			return Class.forName("engine."
-			              + ((PuzzleGame)game).name.toLowerCase() + "."
-			              + "swing."
-			              + part.getClass().getSimpleName() + "Sprite");
-		} catch (ClassNotFoundException e) {
-			try {
-				return Class.forName(
-					"engine.swing." + part.getClass().getSimpleName() + "Sprite");
-			} catch (ClassNotFoundException e1) {
-				e1.printStackTrace();
-			}
-
-		}
-		return null;
-	}
 
 	public SwingScreen() {
 		super("Sprite");

@@ -3,7 +3,7 @@ package engine;
 import java.util.Collection;
 
 public abstract class Screen {
-	public String visualName;
+	final String visualName;
 
 	public abstract void update();
 	public abstract void addParts(Collection<? extends Part> parts);

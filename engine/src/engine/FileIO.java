@@ -29,15 +29,28 @@ public final class FileIO {
 			return returnArray;
 		}
 
-		public String[] getPropertyArray(String key) {
+		public String[] getArray(String key) {
 			return split(getProperty(key));
 		}
 
-		public String[] getPropertyArrayLowerCase(String key) {
+		public int[] getArrayInteger(String key) {
+			String[] stringArray = split(getProperty(key));
+			int[] intArray = new int[stringArray.length];
+			for (int i = 0; i < stringArray.length; i++) {
+				intArray[i] = Integer.valueOf(stringArray[i]);
+			}
+			return intArray;
+		}
+
+		public Coordinates getCoordinates(String key) {
+			return new Coordinates(getArrayInteger(key));
+		}
+
+		public String[] getArrayLowerCase(String key) {
 			return split(getProperty(key).toLowerCase());
 		}
 
-		public String[] getPropertyArrayUpperCase(String key) {
+		public String[] getArrayUpperCase(String key) {
 			return split(getProperty(key).toUpperCase());
 		}
 	}

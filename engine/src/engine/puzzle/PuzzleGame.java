@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import engine.Game;
 import engine.Reflection;
+import engine.graphics2d.ImageType;
 
 public class PuzzleGame extends Game {
 
@@ -16,6 +17,10 @@ public class PuzzleGame extends Game {
 	private Number rowsCleared;
 	private Number pieceCount;
 	private boolean isPieceLanded;
+
+	public final ImageType blockImageType;
+	public final ImageType digitImageType;
+
 
 	private void newFields(String packageString, String... classNames) {
 		Thread[] threads = new Thread[classNames.length];
@@ -38,6 +43,9 @@ public class PuzzleGame extends Game {
 
 	public PuzzleGame(String newGameName, String newEngineName) {
 		super(newGameName, "Puzzle", newEngineName, "Graphics2d");
+
+		blockImageType = Reflection.newImageType(this, Block.class);
+		digitImageType = Reflection.newImageType(this, Digit.class);
 
 		newFields(gameName, "Board", "Piece", "Score");
 		screen.setScale(board, piece.getBlocks()[0].visual);

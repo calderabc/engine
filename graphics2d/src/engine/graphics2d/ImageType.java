@@ -1,47 +1,73 @@
 package engine.graphics2d;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.HashMap;
+import java.util.Map;
 
 import engine.Coordinates;
 import engine.FileIO;
 import engine.Part;
+import engine.Visual;
 
 public abstract class ImageType implements Serializable {
 
-	public enum ScanDirection {
+	static Map<Visual.Id, Object[]> imageListMap = new HashMap<>(30);
+
+	private enum ScanDirection {
 		VERTICAL,
 		HORIZONTAL
 	}
 
-	public class Node {
-		public Node(ScanDirection direction, int count, Node next) {
+	private class Node {
+		Node(ScanDirection direction, int count, Node next) {
 			this.direction = direction;
 			this.count = count;
 			this.next = next;
 		}
-		public final ScanDirection direction;
-		public final int count;
-		public Node next;
+		final ScanDirection direction;
+		final int count;
+		Node next;
 	}
 
-	Node scanInstructions = null;
+	private class Result {
+		public Result(Coordinates dimensions, Object image) {
+			this.dimensions = dimensions;
+			this.image = image;
+		}
+		public Result(Coordinates dimensions) {
+			this(dimensions, null);
+		}
+		final Coordinates dimensions;
+		final Object image;
+	}
 
-	public final String imageFileName;
+	private Node scanInstructions;
+
 	public final Coordinates dimensions;
 	public final Coordinates translationFactor;
 
+	public final Class<?> imageClass;
 
-	public ImageType(String fileName, Class<? extends Part> partClass, Class<?> newImageClass) {
-		imageClass = newImageClass;
+	private final Object sourceImage;
+
+	public ImageType(String configFileName,
+	                 Class<? extends Part> partClass,
+	                 String imageFileName,
+	                 Class<?> imageClass) {
+
+		this.imageClass = imageClass;
+		sourceImage = loadImageFromFile(imageFileName);
 
 		String partString = partClass.getSimpleName().toLowerCase();
-		FileIO.GameProperties properties = new FileIO.GameProperties(fileName);
+		FileIO.GameProperties properties = new FileIO.GameProperties(configFileName);
 
 		// <><> Populate the linked list with scan instructions.
 		String[] directions =
-			properties.getPropertyArrayUpperCase(partString + "_scan_direction");
+			properties.getArrayUpperCase(partString + "_scan_direction");
 		String[] counts =
-			properties.getPropertyArrayLowerCase(partString + "_scan_count");
+			properties.getArrayLowerCase(partString + "_scan_count");
 		for (int i = counts.length - 1; i >= 0; i--) {
 			Node instruction = new Node(ScanDirection.valueOf(directions[i]),
 			                            Integer.valueOf(counts[i]),
@@ -49,69 +75,83 @@ public abstract class ImageType implements Serializable {
 			scanInstructions = instruction;
 		} // <><>
 
-		// TODO: Implement these with a loop and reflection. Would be overkill.
 		imageFileName = properties.getProperty(partString + "_image_file");
-		dimensions = new Coordinates(
-			properties.getPropertyArray(partString + "_dimensions")
-		);
-		translationFactor = new Coordinates(
-			properties.getPropertyArray(partString + "_translation")
-		);
+		dimensions =
+			properties.getCoordinates(partString + "_dimensions");
+		translationFactor =
+			properties.getCoordinates(partString + "_translation");
+
+
+		scan(new Visual.Id(Visual.Id.getUnique()),
+		     scanInstructions,
+		     Coordinates.ORIGIN);
 	}
 
-	private Class<?> imageClass;
+	protected abstract Object loadImageFromFile(String fileName);
+	protected abstract Object getSubimage(Object image, Coordinates position, Coordinates dimensions);
 
-	protected abstract T loadImageFromFile(String fileName) throws IOException;
-	protected abstract T getSubimage(T image, Coordinates position, Coordinates dimensions);
 
-	private Coordinates scan(Node instruction, Coordinates startPosition) {
-		if (instruction.next == null) {
-			// Create an image list based on the instruction.
-			ImageList<?>
+	private Coordinates movePosition(Coordinates position,
+	                                 Coordinates offset,
+	                                 ScanDirection direction,
+	                                 ScanDirection ifDirection) {
+		if (direction == ifDirection)
+			position.moveX(offset.x);
+		else
+			position.moveY(offset.y);
+		return position;
+	}
 
-		/*
-			try {
-				T spriteImageSource = loadImageFromFile(imageType.imageFileName);
 
-				int scanX = scanStart.x;
-				int scanY = scanStart.y;
-				int width = imageType.dimensions.x;
-				int height = imageType.dimensions.y;
-				for(int i = 0; i < imageType.COUNT; i++) {
-					images[i] = getSubimage(spriteImageSource,
-					new Coordinates(scanX, scanY),
-					imageType.dimensions);
 
-					if (imageType.SCAN_DIRECTION == ImageType.ScanDirection.VERTICAL)
-						scanY += height;
-					else
-						scanX += width;
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-				System.exit(1);
-			}
-		*/
-		}
-		else {
-			for (int i = 0; i < instruction.count; i++) {
-				// Recurse
-				Coordinates scanDimensions = scan(instruction.next, startPosition);
-
-				// Move the scan start position by the size (width or height) of
-				// the size of what was scanned the next recursion in.
-				if (instruction.direction == ScanDirection.HORIZONTAL) {
-					startPosition.x += scanDimensions.x;
-				} else {
-					startPosition.y += scanDimensions.y;
-				}
-			}
+	private Result scan(Visual.Id id,
+	                    Node instruction,
+	                    Coordinates startPosition) {
+		if (instruction == null) {
+			// Base of recursion.
+			return new Result(
+				dimensions,
+				getSubimage(sourceImage, startPosition, dimensions)
+			);
 		}
 
+		boolean doImageList = instruction.next == null;
 
+		Object[] images = null;
+		if (doImageList) {
+			images = (Object[])Array.newInstance(imageClass, instruction.count);
+		}
 
+		Coordinates scanPosition = startPosition.clone();
+		for (byte i = 0; i < instruction.count; i++) {
 
+			Result result = scan(new Visual.Id(id, i),
+			                     instruction,
+			                     startPosition);
+			if (doImageList) {
+				images[i] = result.image;
+			}
+			// Move to next position to scan.
+			movePosition(scanPosition,
+			             result.dimensions,
+			             instruction.direction,
+			             ScanDirection.HORIZONTAL);
+		}
 
+		if (doImageList) {
+			// Add image array to lookup map.
+			imageListMap.put(id, images);
+		}
+		// Return the dimensions of the rectangle just scanned.
+		return new Result(
+			Coordinates.subtract(
+				movePosition(scanPosition,
+				             dimensions,
+				             instruction.direction,
+				             ScanDirection.VERTICAL),
+                startPosition
+			)
+		);
 	}
 
 }

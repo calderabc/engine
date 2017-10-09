@@ -1,5 +1,7 @@
 package engine;
 
+import engine.graphics2d.ImageType;
+
 import java.lang.reflect.InvocationTargetException;
 
 public final class Reflection {
@@ -21,7 +23,7 @@ public final class Reflection {
 
 	private static Class<?> getClass(String a, String b, String c) {
 		String[] canonicalNames = getCanonicalNames(a, b, c);
-		// Return the first class in canonicalNames which exists.
+		// Result the first class in canonicalNames which exists.
 		for (String canonicalName : canonicalNames)
 			try {
 				return Class.forName(canonicalName);
@@ -48,36 +50,55 @@ public final class Reflection {
 		return newInstance(a, b, c + d);
 	}
 
-	// Locate and call the object's copy constructor.
-	static Object newInstance(Object object) {
-		// This is to allow for Parts with a null visual.
-		if (object == null) return null;
+	private static Object newInstance(Class<?> objectClass, Object... parameters) {
+		Class<?>[] parameterClasses = new Class<?>[parameters.length];
+		for (int i = 0; i < parameters.length; i++) {
+			parameterClasses[i] = parameters[i].getClass();
+		}
 		try {
-			return object.getClass().getConstructor(object.getClass()).newInstance(object);
+			return objectClass.getConstructor(parameterClasses).newInstance(parameters);
 		} catch (InstantiationException | IllegalAccessException
 		         | InvocationTargetException | NoSuchMethodException e) {
 			e.printStackTrace();
 		}
-		return null;  // If there is an exception.
+		return null;
+	}
+
+	private static Object newInstance(Object object, Object... parameters) {
+		return newInstance(object.getClass(), parameters);
+	}
+
+	// Locate and call the object's copy constructor.
+	static Object newInstance(Object object) {
+		// This is to allow for Parts with a null visual.
+		if (object == null)
+			return null;
+		return newInstance(object, object);
 	}
 
 	static Visual newVisual(Game game, Part part, Visual.Id id) {
-		try {
-			getClass(game.gameTypeName,
-				     game.gameName,
-			         part.getClass().getSimpleName(),
-			         game.screen.visualName)
-				.getConstructor(Visual.Id.class)
-				.newInstance(id);
-		} catch (InstantiationException | IllegalAccessException
-		         | NoSuchMethodException | InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		return null; // If there is an exception.
+		return (Visual)newInstance(getClass(game.gameTypeName,
+                                            game.gameName,
+                                            part.getClass().getSimpleName(),
+                                            game.screen.visualName),
+                                   id);
+	}
+
+	public static ImageType newImageType(Game game, Class<? extends Part> part) {
+		String imageFileName = game.gameTypeName + "_"
+		                       + game.gameName + "_"
+							   + part.getClass().getSimpleName()
+		                       + ".png";
+		return (ImageType)newInstance( getClass(game.engineTypeName,
+		                                        game.engineName,
+		                                        "ImageType"),
+		                               game.gameName,
+		                               part,
+		                               imageFileName.toLowerCase() );
 	}
 
 	static Screen newScreen(Game game) {
-		return (Screen)newInstance(game.engineTypeName, game.engineName, "screen");
+		return (Screen)newInstance(game.engineTypeName, game.engineName, "Screen");
 	}
 
 	public static void instantiateGameField(Game game, String fieldClassName) {

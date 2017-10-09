@@ -2,6 +2,14 @@ package engine;
 
 public abstract class Visual {
 	public static final class Id {
+		private static byte unique = 0;
+
+		public static byte getUnique() {
+			synchronized(Id.class) {
+				return ++unique;
+			}
+		}
+
 		private final int datum; 
 		public Id(byte... values) {
 			int newDatum = 0;
@@ -10,7 +18,11 @@ public abstract class Visual {
 			}
 			datum = newDatum;
 		}
-		
+
+		public Id(Id id, byte append) {
+			datum = (id.datum << 8) + append;
+		}
+
 		@Override 
 		public boolean equals(Object obj) {
 			return datum == ((Id)obj).datum;
