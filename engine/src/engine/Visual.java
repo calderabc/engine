@@ -9,7 +9,8 @@ public abstract class Visual {
 		// TODO: Memory wasteful.  Work out a better way.
 		private static Map<String, Byte> idMap = new HashMap<>();
 
-		public static byte getUnique(String key) {
+		private static byte getUnique(String key) {
+			key = key.toLowerCase();
 			synchronized(Id.class) {
 			//<><> If map has entry return value otherwise return new value.
 				Byte value = idMap.get(key);
@@ -24,8 +25,8 @@ public abstract class Visual {
 		}
 
 		private final int datum; 
-		public Id(byte... values) {
-			int newDatum = 0;
+		public Id(String keyString, byte... values) {
+			int newDatum = getUnique(keyString);
 			for(byte value : values) {
 				newDatum = (newDatum << 8) + value;
 			}

@@ -44,6 +44,7 @@ public class PuzzleGame extends Game {
 	public PuzzleGame(String newGameName, String newEngineName) {
 		super(newGameName, "Puzzle", newEngineName, "Graphics2d");
 
+		// TODO: These are independant and should be thread safe, run on separate threads.
 		blockImageType = Reflection.newImageType(this, Block.class);
 		digitImageType = Reflection.newImageType(this, Digit.class);
 

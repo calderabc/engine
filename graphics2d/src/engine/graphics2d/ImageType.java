@@ -1,9 +1,8 @@
 package engine.graphics2d;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Array;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 import engine.Coordinates;
@@ -12,14 +11,17 @@ import engine.Part;
 import engine.Visual;
 
 public abstract class ImageType implements Serializable {
+	// To contain arrays of images for any sprites which may be made.
+	static Map<Visual.Id, Object[]> imageListMap = new Hashtable<>(30);
 
-	static Map<Visual.Id, Object[]> imageListMap = new HashMap<>(30);
-
+	// The direction to scan in a scan instruction
 	private enum ScanDirection {
 		VERTICAL,
 		HORIZONTAL
 	}
 
+	// For a linked list of instructions to be used by recursive scan();
+	private Node scanInstructions;
 	private class Node {
 		Node(ScanDirection direction, int count, Node next) {
 			this.direction = direction;
@@ -31,6 +33,8 @@ public abstract class ImageType implements Serializable {
 		Node next;
 	}
 
+	// Type used to return the dimensions of this scan and a image if this
+	// scan is the recursions base case.
 	private class Result {
 		public Result(Coordinates dimensions, Object image) {
 			this.dimensions = dimensions;
@@ -43,14 +47,9 @@ public abstract class ImageType implements Serializable {
 		final Object image;
 	}
 
-
-	private Node scanInstructions;
-
 	public final Coordinates dimensions;
 	public final Coordinates translationFactor;
-
 	public final Class<?> imageClass;
-
 	private final Object sourceImage;
 
 	public ImageType(String configFileName,
@@ -60,8 +59,12 @@ public abstract class ImageType implements Serializable {
 
 		this.imageClass = imageClass;
 
+		// TODO: This system needs much improvement!
 		// TODO: Make everything fail gracefully if config file
 		// TODO: doesn't have the property wanted. Output useful error message.
+		//
+		// TODO: Create new exceptions for any sort of bad data in config file.
+		// TODO: Check data retrieved from config file.  Catch user errors.
 
 		FileIO.GameProperties properties = new FileIO.GameProperties(
 			configFileName,
@@ -92,7 +95,8 @@ public abstract class ImageType implements Serializable {
 			properties.getCoordinates(partString + "_translation");
 		translationFactor = (dummy != null) ? dummy : dimensions;
 
-		scan(new Visual.Id(Visual.Id.getUnique(configFileName + partClass.getSimpleName())),
+		// Head into the recursive scan.
+		scan(new Visual.Id(partClass.getSimpleName()),
 		     scanInstructions,
 		     Coordinates.ORIGIN);
 	}
@@ -112,13 +116,12 @@ public abstract class ImageType implements Serializable {
 		return position;
 	}
 
-
-
+	// Scan the image file to populate the image list lookup table.
 	private Result scan(Visual.Id id,
 	                    Node instruction,
 	                    Coordinates startPosition) {
 		if (instruction == null) {
-			// Base of recursion.
+			// Base case of the recursion. Return the scanned image.
 			return new Result(
 				dimensions,
 				getSubimage(sourceImage, startPosition, dimensions)
@@ -132,20 +135,19 @@ public abstract class ImageType implements Serializable {
 			images = (Object[])Array.newInstance(imageClass, instruction.count);
 		}
 
+		Result result = null;
 		Coordinates scanPosition = startPosition.clone();
 		for (byte i = 0; i < instruction.count; i++) {
-
-			Result result = scan(new Visual.Id(id, i),
-			                     instruction.next,
-			                     startPosition);
+			// Recurse.
+			result = scan(new Visual.Id(id, i),
+			              instruction.next,
+			              scanPosition);
 			if (doImageList) {
 				images[i] = result.image;
 			}
 			// Move to next position to scan.
-			movePosition(scanPosition,
-			             result.dimensions,
-			             instruction.direction,
-			             ScanDirection.HORIZONTAL);
+			movePosition(scanPosition, result.dimensions,
+			             instruction.direction, ScanDirection.HORIZONTAL);
 		}
 
 		if (doImageList) {
@@ -155,13 +157,10 @@ public abstract class ImageType implements Serializable {
 		// Return the dimensions of the rectangle just scanned.
 		return new Result(
 			Coordinates.subtract(
-				movePosition(scanPosition,
-				             dimensions,
-				             instruction.direction,
-				             ScanDirection.VERTICAL),
+				movePosition(scanPosition, result.dimensions,
+				             instruction.direction, ScanDirection.VERTICAL),
                 startPosition
 			)
 		);
 	}
-
 }

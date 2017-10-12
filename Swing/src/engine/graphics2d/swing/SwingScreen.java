@@ -94,8 +94,6 @@ public class SwingScreen extends Screen {
 		// TODO: There's got to be a better way to make sure this panel always has focus.
 		panel.grabFocus();
 
-		System.out.println(frame.getHeight());
-		System.out.println("hello");
 	}
 	
 	public void changeColorFilter() {

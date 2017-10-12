@@ -51,11 +51,7 @@ public final class TetrisPiece extends Piece {
 		for (byte[] blockXY: newPieceData.pieceTemplate[pieceId]) {
 			blocks[i++] = new Block(
 				new Coordinates(blockXY[0], blockXY[1]),
-				new Visual.Id(
-					Visual.Id.getUnique(Game.me.gameName + "Block"),
-					pieceId,
-					state++
-				)
+				new Visual.Id("Block", pieceId, state++)
 			);
 		}
 

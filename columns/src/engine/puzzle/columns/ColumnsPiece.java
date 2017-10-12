@@ -21,9 +21,7 @@ public class ColumnsPiece extends Piece {
 			blocks[i] =
 				new Block(
 					new Coordinates(3, i),
-					new Visual.Id(
-						Visual.Id.getUnique(Game.me.gameName + "Block"),
-						type),
+					new Visual.Id("block", type),
 					type
 				);
 		}

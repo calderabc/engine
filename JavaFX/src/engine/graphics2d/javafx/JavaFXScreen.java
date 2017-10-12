@@ -18,7 +18,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 

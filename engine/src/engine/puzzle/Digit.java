@@ -16,7 +16,7 @@ public class Digit extends Part {
 		type = newType;
 		set(newValue);
 		initVisual( ((PuzzleGame)Game.me).digitImageType,
-		            new Visual.Id(Visual.Id.getUnique("Digit")) );
+		            new Visual.Id("Digit") );
 		Game.me.screen.addPart(this);
 	}
 	
