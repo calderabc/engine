@@ -14,12 +14,13 @@ import javax.swing.JPanel;
 import engine.Screen;
 import engine.Visual;
 import engine.Field;
+import engine.graphics2d.Graphics2dScreen;
 import engine.graphics2d.Sprite;
 import engine.puzzle.Board;
 
 
 @SuppressWarnings("serial")
-public class SwingScreen extends Screen {
+public class SwingScreen extends Graphics2dScreen {
 	public static int colorFilter = 0x40FFB0B0;
 	public JFrame frame;
 

@@ -1,11 +1,8 @@
 package engine.puzzle.columns;
 
-import engine.Visual;
+import engine.Game;
 import engine.puzzle.Block;
-import engine.graphics2d.ImageType;
 import engine.graphics2d.Sprite;
-
-import java.awt.image.BufferedImage;
 
 public class ColumnsBlockSprite extends Sprite {
 	// TODO: This class is a placeholder, all constructors pass through.
@@ -15,7 +12,7 @@ public class ColumnsBlockSprite extends Sprite {
 		super(other);
 	}
 
-	public ColumnsBlockSprite(Block newPart, ImageType imageType, Id newId) {
-		super(newPart, imageType, newId);
+	public ColumnsBlockSprite(Game game, Block newPart, Id newId) {
+		super(game, newPart, newId);
 	}
 }

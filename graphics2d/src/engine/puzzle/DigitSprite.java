@@ -1,14 +1,15 @@
 package engine.puzzle;
 
 import engine.Coordinates;
+import engine.Game;
 import engine.Part;
 import engine.Visual;
 import engine.graphics2d.ImageType;
 import engine.graphics2d.Sprite;
 
 public class DigitSprite extends Sprite {
-	public DigitSprite(Digit digit, ImageType imageType, Id newId) {
-		super(digit, imageType, newId);
+	public DigitSprite(Game game, Digit digit, Id newId) {
+		super(game, digit, newId);
 
 		// TODO: Kludgy.  Make better.
 		switch(digit.type) {

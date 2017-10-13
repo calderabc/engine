@@ -1,13 +1,15 @@
 package engine.puzzle.tetris;
 
+import engine.Game;
+import engine.graphics2d.Graphics2dScreen;
 import engine.puzzle.Block;
-import engine.graphics2d.ImageType;
 import engine.graphics2d.Sprite;
 
 
 public class TetrisBlockSprite extends Sprite {
-	public TetrisBlockSprite(Block block, ImageType imageType, Id newId) {
-		super(block, imageType, newId );
+	public TetrisBlockSprite(Game game, Block block, Id newId) {
+		super(game, block, newId );
+
 	}
 	
 	public TetrisBlockSprite(TetrisBlockSprite sprite) {

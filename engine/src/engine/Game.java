@@ -8,12 +8,11 @@ import java.util.Map;
 public abstract class Game {
 	public static Game me;
 
-	final Map<Class<? extends Part>, ImageType> imageTypeMap = new Hashtable<>();
 
-	protected final String gameName;
-	final String gameTypeName;
-	final String engineName;
-	final String engineTypeName;
+	public final String gameName;
+	public String gameTypeName;
+	public String engineName;
+	public String engineTypeName;
 
 	public Screen screen;
 

@@ -1,7 +1,5 @@
 package engine;
 
-import engine.graphics2d.ImageType;
-
 public abstract class Part implements Movable {
 	public Visual visual = null; 
 	public Coordinates pos = null;

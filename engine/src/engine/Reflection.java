@@ -1,7 +1,5 @@
 package engine;
 
-import engine.graphics2d.ImageType;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -22,7 +20,7 @@ public final class Reflection {
 		return canons;
 	}
 
-	private static Class<?> getClass(String a, String b, String c) {
+	public static Class<?> getClass(String a, String b, String c) {
 		String[] canonicalNames = getCanonicalNames(a, b, c);
 		// Result the first class in canonicalNames which exists.
 		for (String canonicalName : canonicalNames)
@@ -53,7 +51,7 @@ public final class Reflection {
 		return newInstance(a, b, c + d);
 	}
 
-	private static Object newInstance(Class<?> objectClass, Object... parameters) {
+	public static Object newInstance(Class<?> objectClass, Object... parameters) {
 		Class<?>[] parameterClasses = new Class<?>[parameters.length];
 		for (int i = 0; i < parameters.length; i++) {
 			parameterClasses[i] = parameters[i].getClass();
@@ -80,23 +78,16 @@ public final class Reflection {
 	}
 
 	static Visual newVisual(Game game, Part part, Visual.Id id) {
-		Class<? extends Part> partClass = part.getClass();
-		ImageType imageType = game.imageTypeMap.get(partClass);
-		if (imageType == null) {
-			imageType = newImageType(game, partClass);
-			game.imageTypeMap.put(partClass, imageType);
-		}
-
 		Class<?> clazz = getClass(game.gameTypeName,
                                             game.gameName,
-                                            partClass.getSimpleName(),
+                                            part.getClass().getSimpleName(),
                                             game.screen.visualName);
 		Constructor<?>[] constructors = clazz.getConstructors();
 		// TODO: Quick and dirty solution.  Improve.
 		for (Constructor<?> constructor : constructors) {
 			if (constructor.getParameterCount() == 3) {
 				try {
-					return (Visual)constructor.newInstance(part, imageType, id);
+					return (Visual)constructor.newInstance(game, part, id);
 				} catch (InstantiationException | IllegalAccessException
 				         | InvocationTargetException e) {
 					e.printStackTrace();
@@ -106,15 +97,6 @@ public final class Reflection {
 		return null;
 	}
 
-	public static ImageType newImageType(Game game,
-	                                     Class<? extends Part> partClass) {
-		return (ImageType)newInstance( getClass(game.engineTypeName,
-		                                        game.engineName,
-		                                        "ImageType"),
-		                               game.gameName.toLowerCase(),
-		                               game.gameTypeName.toLowerCase(),
-		                               partClass );
-	}
 
 	static Screen newScreen(Game game) {
 		return (Screen)newInstance(game.engineTypeName, game.engineName, "Screen");
