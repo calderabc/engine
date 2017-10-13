@@ -1,18 +1,20 @@
 package engine.puzzle.columns;
 
+import engine.Game;
 import engine.puzzle.Score;
 
 public class ColumnsScore extends Score {
 
-	public ColumnsScore() {
+	public ColumnsScore(Game game) {
 		// TODO: Add scoring code. This is just default return 0.
-		this((level, clearCount) -> { return 0; }, 20, 7);
+		this(game, (level, clearCount) -> { return 0; }, 20, 7);
 
 	}
-	protected ColumnsScore(Calculator newCalculator, 
-	                       int newClearCountPerLevel, 
+	protected ColumnsScore(Game game,
+	                       Calculator newCalculator,
+	                       int newClearCountPerLevel,
 	                       int newLength) {
-		super(newCalculator, newClearCountPerLevel, newLength);
+		super(game, newCalculator, newClearCountPerLevel, newLength);
 		// TODO Auto-generated constructor stub
 	}
 

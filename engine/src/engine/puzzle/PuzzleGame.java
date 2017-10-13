@@ -5,6 +5,7 @@ import java.util.Arrays;
 import engine.Game;
 import engine.Reflection;
 
+
 public final class PuzzleGame extends Game {
 	// The have to be public for reflection to work.
 	public Board board;
@@ -15,6 +16,7 @@ public final class PuzzleGame extends Game {
 	private Number rowsCleared;
 	private Number pieceCount;
 	private boolean isPieceLanded;
+	private PieceAction.Action pieceAction;
 
 
 
@@ -40,18 +42,15 @@ public final class PuzzleGame extends Game {
 	private PuzzleGame(String newGameName, String newEngineName) {
 		super(newGameName, "Puzzle", newEngineName, "Graphics2d");
 
-
-	}
-
-	private void run() {
+		pieceAction = PieceAction.newInstance(this);
 
 		newFields(gameName, "Board", "Piece", "Score");
 
 		screen.setScale(board, piece.getBlocks()[0].visual);
 
-		level = new Number(Number.Type.LEVEL, (byte)2).set(1);
-		rowsCleared = new Number(Number.Type.ROWS, (byte)3);
-		pieceCount = new Number(Number.Type.PIECES, (byte)4);
+		level = new Number(this, Number.Type.LEVEL, (byte)2).set(1);
+		rowsCleared = new Number(this, Number.Type.ROWS, (byte)3);
+		pieceCount = new Number(this, Number.Type.PIECES, (byte)4);
 
 		while (board.doesPieceFit(piece)) {
 			// Add the piece's blocks to screen so they will be displayed.
@@ -60,7 +59,7 @@ public final class PuzzleGame extends Game {
 
 			isPieceLanded = false;
 			// Start the piece a-fallin'.
-			PieceAction.FALL.startPieceAction();
+			pieceAction.FALL.startPieceAction();
 
 			while(!isPieceLanded)  // In case of a spurious wake up.
 				try {
@@ -108,7 +107,7 @@ public final class PuzzleGame extends Game {
 		synchronized(piece) {
 			if (!isPieceLanded) {
 				// Stop all scheduled piece actions, the piece needs to land!
-				PieceAction.resetAll();
+				pieceAction.resetAll();
 				int removedCount = board.landPiece(piece);
 				// Block removing is done, safe to start a new piece.
 				isPieceLanded = true;
@@ -136,9 +135,7 @@ public final class PuzzleGame extends Game {
 		if (argv.length != 2) {
 			throw new IllegalArgumentException();
 		}
-		me = new PuzzleGame(argv[0], argv[1]);
-		// Have to separate game creation from part creation (in run()) so
-		// part constructors can reference game.me.
-		((PuzzleGame)me).run();
+		new PuzzleGame(argv[0], argv[1]);
 	}
+
 }

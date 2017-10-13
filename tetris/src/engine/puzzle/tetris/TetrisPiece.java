@@ -17,24 +17,31 @@ import engine.puzzle.Piece;
  */
 
 public final class TetrisPiece extends Piece {
-	private static final Piece[] pieces;
+	private static Piece[] pieces;
 
-	static {
-		TetrisPieceData pieceData = 
+	private void populatePieces(Game game) {
+		TetrisPieceData pieceData =
 				(TetrisPieceData)FileIO.load(TetrisPieceData.FILE_NAME);
 		int pieceCount = pieceData.pieceTemplate.length;
 
 		pieces = new TetrisPiece[pieceCount];
 		for (byte i = 0; i < pieceCount; i++) {
-			pieces[i] = new TetrisPiece(i, pieceData);	
+			pieces[i] = new TetrisPiece(game, i, pieceData);
 		}	
 	}
 					
 	public volatile Coordinates currCenter;
 	public volatile Coordinates destCenter;
 
-	public TetrisPiece() {
-		this((TetrisPiece)pieces[new Random().nextInt(pieces.length)]);
+	private TetrisPiece newPiece() {
+		if (pieces == null) {
+			populatePieces(game);
+		}
+		TetrisPiece piece = (TetrisPiece)pieces[new Random().nextInt(pieces.length)];
+		
+	}
+
+	public TetrisPiece(Game game) {
 	}
 
 	public TetrisPiece(TetrisPiece other) {
@@ -43,13 +50,14 @@ public final class TetrisPiece extends Piece {
 		destCenter = new Coordinates(other.destCenter);
 	}
 
-	private TetrisPiece(byte pieceId, TetrisPieceData newPieceData) {
+	private TetrisPiece(Game game, byte pieceId, TetrisPieceData newPieceData) {
 		super(newPieceData.pieceTemplate[pieceId].length);	
 
 		byte state = 0;
 		int i = 0;
 		for (byte[] blockXY: newPieceData.pieceTemplate[pieceId]) {
 			blocks[i++] = new Block(
+				game,
 				new Coordinates(blockXY[0], blockXY[1]),
 				new Visual.Id("Block", pieceId, state++)
 			);

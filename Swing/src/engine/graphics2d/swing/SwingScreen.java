@@ -11,6 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import engine.Game;
 import engine.Screen;
 import engine.Visual;
 import engine.Field;
@@ -62,11 +63,11 @@ public class SwingScreen extends Graphics2dScreen {
 	private static final int[] colorMasks = {0x40FFB0B0, 0x40B0FFB0, 0x40B0B0FF, 0x40FFFFB0, 0x40FFB0FF, 0x40B0FFFF};
 	
 
-	public SwingScreen() {
+	public SwingScreen(Game game) {
 		super("Sprite");
 
 		// TODO: Do this method call on another thread.
-		SwingKeyboard.initInputActionMaps(panel.getInputMap(), panel.getActionMap());
+		SwingKeyboard.initInputActionMaps(game, panel.getInputMap(), panel.getActionMap());
 		frame = new JFrame("Tetris");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

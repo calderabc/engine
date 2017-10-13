@@ -13,14 +13,14 @@ public abstract class Part implements Movable {
 		visual = (Visual)Reflection.newInstance(other.visual);
 	}	
 
-	public void initVisual(Visual.Id newId) {
-		visual = Reflection.newVisual(Game.me, this, newId);
+	public void initVisual(Game game, Visual.Id newId) {
+		visual = Reflection.newVisual(game, this, newId);
 		visual.update(this);
 	}
 	
-	public void terminate() {
+	public void terminate(Game game) {
 		if (visual != null) { 
-			Game.me.screen.removePart(this);
+			game.screen.removePart(this);
 		}
 		visual = null;
 	}

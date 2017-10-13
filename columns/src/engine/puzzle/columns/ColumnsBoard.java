@@ -1,6 +1,7 @@
 package engine.puzzle.columns;
 
 import engine.Coordinates;
+import engine.Game;
 import engine.puzzle.Block;
 import engine.puzzle.SimpleBoard;
 
@@ -13,8 +14,8 @@ public class ColumnsBoard extends SimpleBoard {
 	                                                   new Coordinates( 1, 1),
 	                                                   new Coordinates( 1, 0)};
 
-	public ColumnsBoard() {
-		super(6, 13);
+	public ColumnsBoard(Game game) {
+		super(game, 6, 13);
 	}
 
 
@@ -88,7 +89,7 @@ public class ColumnsBoard extends SimpleBoard {
 			// Be sure tile at top of column is empty.
 			blockMatrix[x][0] = null;
 			// Remove block from screen.
-			terminalBlock.terminate();
+			terminalBlock.terminate(game);
 		}
 		// Now call block removal for all the blocks which were above and fell.
 		// TODO: Add mechanism for scoring chain moves.

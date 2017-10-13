@@ -10,16 +10,16 @@ public class Digit extends Part {
 	private byte value;
 	public final Number.Type type;
 	
-	public Digit(Number.Type newType, Coordinates newPosition, byte value) {
+	public Digit(Game game, Number.Type newType, Coordinates newPosition, byte value) {
 		super(newPosition);
 		type = newType;
 		set(value);
-		initVisual(new Visual.Id("Digit") );
-		Game.me.screen.addPart(this);
+		initVisual(game, new Visual.Id("Digit") );
+		game.screen.addPart(this);
 	}
 	
-	public Digit(Number.Type newType, Coordinates newPosition) {
-		this(newType, newPosition, (byte)0);
+	public Digit(Game game, Number.Type newType, Coordinates newPosition) {
+		this(game, newType, newPosition, (byte)0);
 	}
 	
 	public byte get() {

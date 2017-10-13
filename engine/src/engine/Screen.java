@@ -9,6 +9,7 @@ public abstract class Screen {
 
 	protected final List<Visual> visuals = new Vector<>();
 
+
 	public final void addParts(Collection<? extends Part> parts) {
 		synchronized(visuals) {
 			for (Part part : parts) {

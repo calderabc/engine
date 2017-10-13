@@ -7,6 +7,8 @@ import javax.swing.InputMap;
 import javax.swing.KeyStroke;
 
 import engine.FileIO;
+import engine.Game;
+import engine.Screen;
 import engine.puzzle.PieceAction;
 
 import javax.swing.ActionMap;
@@ -35,7 +37,7 @@ public class SwingKeyboard {
 	}
 	
 	@SuppressWarnings("serial")
-	public static void initInputActionMaps(InputMap inputMap, ActionMap aMap) {
+	public static void initInputActionMaps(Game game, InputMap inputMap, ActionMap aMap) {
 		initInputMap(inputMap);
 
 		for(KeyStroke keyStroke : inputMap.allKeys()) {
@@ -48,13 +50,13 @@ public class SwingKeyboard {
 			else {
 				try {
 					pieceActionRunner = (keyBinding.startsWith(STOP_PREFIX))
-						? PieceAction.valueOf(
+						? ((PieceAction)PieceAction.Action.class.getField(
 							  keyBinding.substring(STOP_PREFIX.length()).toUpperCase()
-						  )::stopPieceAction
-						: PieceAction.valueOf(
+						  ).get(game))::stopPieceAction
+						: ((PieceAction)PieceAction.Action.class.getField(
 							  keyBinding.toUpperCase()
-						  )::startPieceAction;
-				} catch (NullPointerException e) {
+						  ).get(game))::startPieceAction;
+				} catch (NullPointerException | NoSuchFieldException | IllegalAccessException e) {
 					// The value in the input map does not correspond with anything
 					// in the PieceActionMap so don't add an action to the ActionMap.
 					break;

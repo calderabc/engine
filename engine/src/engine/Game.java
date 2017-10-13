@@ -1,14 +1,7 @@
 package engine;
 
-import engine.graphics2d.ImageType;
-
-import java.util.Hashtable;
-import java.util.Map;
 
 public abstract class Game {
-	public static Game me;
-
-
 	public final String gameName;
 	public String gameTypeName;
 	public String engineName;

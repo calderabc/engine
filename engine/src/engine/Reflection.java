@@ -79,9 +79,9 @@ public final class Reflection {
 
 	static Visual newVisual(Game game, Part part, Visual.Id id) {
 		Class<?> clazz = getClass(game.gameTypeName,
-                                            game.gameName,
-                                            part.getClass().getSimpleName(),
-                                            game.screen.visualName);
+                                  game.gameName,
+                                  part.getClass().getSimpleName(),
+                                  game.screen.visualName);
 		Constructor<?>[] constructors = clazz.getConstructors();
 		// TODO: Quick and dirty solution.  Improve.
 		for (Constructor<?> constructor : constructors) {
@@ -99,7 +99,10 @@ public final class Reflection {
 
 
 	static Screen newScreen(Game game) {
-		return (Screen)newInstance(game.engineTypeName, game.engineName, "Screen");
+		return (Screen)newInstance( getClass(game.engineTypeName,
+		                                     game.engineName,
+		                                     "Screen"),
+		                            game );
 	}
 
 	public static void instantiateGameField(Game game, String fieldClassName) {

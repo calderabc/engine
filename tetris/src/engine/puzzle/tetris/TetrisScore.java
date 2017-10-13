@@ -1,12 +1,13 @@
 package engine.puzzle.tetris;
 
+import engine.Game;
 import engine.puzzle.Score;
 
 public class TetrisScore extends Score {
 	private enum ScoreType { NES }
 	
-	public TetrisScore() {
-		super(getScoreCalculator(ScoreType.NES), 2, (byte)7);
+	public TetrisScore(Game game) {
+		super(game, getScoreCalculator(ScoreType.NES), 2, (byte)7);
 	}
 
 	public static Score.Calculator getScoreCalculator(ScoreType type) {

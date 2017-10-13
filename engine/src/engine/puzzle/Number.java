@@ -1,6 +1,7 @@
 package engine.puzzle;
 
 import engine.Coordinates;
+import engine.Game;
 
 // This is only meant to work for positive numbers.
 // Negative values have no meaning, won't work.
@@ -17,10 +18,10 @@ public class Number {
 	private volatile long value;
 	private Digit[] digits;
 	
-	public Number(Type newType, int newLength) {
+	public Number(Game game, Type newType, int newLength) {
 		digits = new Digit[newLength];
 		for (int i = 0; i < newLength; i++) {
-			digits[i] =  new Digit(newType, new Coordinates(i));
+			digits[i] =  new Digit(game, newType, new Coordinates(i));
 		}
 	}
 	

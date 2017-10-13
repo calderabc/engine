@@ -2,6 +2,7 @@ package engine.puzzle;
 
 import engine.Coordinates;
 import engine.Field;
+import engine.Game;
 
 
 public abstract class Board extends Field {
@@ -9,11 +10,13 @@ public abstract class Board extends Field {
 	public static class PositionOccupiedException extends Throwable {};
 	
 	protected final Coordinates dimensions;
+	protected final Game game;
 	
-	protected Board(int newWidth, int newHeight) {
+	protected Board(Game game, int newWidth, int newHeight) {
+		this.game = game;
 		dimensions = new Coordinates(newWidth, newHeight);
 	}
-	
+
 	/**
 	 * Tests to see if the specified piece fits somewhere on the board.
 	 * If none of the Blocks in the piece exceed the bounds of the board 

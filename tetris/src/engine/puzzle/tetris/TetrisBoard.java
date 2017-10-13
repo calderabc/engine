@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Vector;
 
 import engine.Coordinates;
+import engine.Game;
 import engine.puzzle.Block;
 import engine.puzzle.Board;
 
@@ -21,11 +22,7 @@ public final class TetrisBoard extends Board {
 
 	private static final int DEFAULT_BOARD_HEIGHT = 20;
 	private static final int width = 10;
-	/*
-	private static final Coordinates MAX_POSITION = 
-		new Coordinates(DEFAULT_BOARD_WIDTH - 1, DEFAULT_BOARD_HEIGHT - 1);
-	*/
-	
+
 	private List<Row> blockMatrix = new Vector<Row>(DEFAULT_BOARD_HEIGHT);
 
 	
@@ -55,7 +52,7 @@ public final class TetrisBoard extends Board {
 		
 		public void terminate() {
 			for (Block terminalBlock : blocks) { 
-				terminalBlock.terminate();
+				terminalBlock.terminate(game);
 			}
 			blocks = newRow();
 		}
@@ -75,8 +72,8 @@ public final class TetrisBoard extends Board {
 	/**
 	 * Default Constructor
 	 */
-	public TetrisBoard() {
-		super(10, 20);
+	public TetrisBoard(Game game) {
+		super(game, 10, 20);
 
 		blockMatrix = new Vector<Row>();
 		for (int i = 0; i < dimensions.y; i++) {

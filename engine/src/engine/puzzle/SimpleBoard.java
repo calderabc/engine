@@ -1,12 +1,13 @@
 package engine.puzzle;
 
 import engine.Coordinates;
+import engine.Game;
 
 public abstract class SimpleBoard extends Board {
 	protected final Block[][] blockMatrix;
 
-	protected SimpleBoard(int newWidth, int newHeight) {
-		super(newWidth, newHeight);
+	protected SimpleBoard(Game game, int newWidth, int newHeight) {
+		super(game, newWidth, newHeight);
 		blockMatrix = new Block[newWidth][newHeight];
 	}
 

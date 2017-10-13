@@ -10,23 +10,24 @@ import engine.puzzle.Piece;
 
 public class ColumnsPiece extends Piece {
 	
-	public ColumnsPiece() {
-		this(3, 6);
-	}
 
-	private ColumnsPiece(int newBlockCount, int typeCount) {
+	private ColumnsPiece(Game game, int newBlockCount, int typeCount) {
 		super(newBlockCount);
 		for(int i = 0; i < newBlockCount; i++) {
 			byte type = (byte) new Random().nextInt(typeCount);
 			blocks[i] =
-				new Block(
+				new Block(game,
 					new Coordinates(3, i),
 					new Visual.Id("block", type),
 					type
 				);
 		}
 	}
-	
+
+	public ColumnsPiece(Game game) {
+		this(game, 3, 6);
+	}
+
 	public ColumnsPiece(ColumnsPiece other) {
 		super(other);
 	}
