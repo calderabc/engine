@@ -1,19 +1,10 @@
 package engine.graphics2d;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import engine.Game;
 import engine.Visual;
 import engine.Coordinates;
 import engine.Part;
 
 public abstract class Sprite extends Visual {
-
-	static protected Map<Class<? extends Part>,
-	                     Class<? extends Sprite>> visualMap =
-		new HashMap<>(5);
-
 	public Object[] images;
 	public Coordinates position;
 	protected Coordinates dimensions;

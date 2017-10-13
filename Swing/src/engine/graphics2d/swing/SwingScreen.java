@@ -14,14 +14,12 @@ import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import engine.Game;
 import engine.Part;
 import engine.Screen;
 import engine.Visual;
 import engine.Field;
 import engine.graphics2d.Sprite;
 import engine.puzzle.Board;
-import engine.puzzle.PuzzleGame;
 
 
 @SuppressWarnings("serial")
@@ -30,20 +28,6 @@ public class SwingScreen extends Screen {
 	public JFrame frame;
 
 	public JPanel panel = new JPanel(true) {
-		@Override
-		public void paintComponent(Graphics g) {
-			super.paintComponent(g);
-			Graphics2D g2d = (Graphics2D) g;
-			// Synchronized to avoid exception where another thread alters
-			// displayedParts' structure while this thread is iterating through it.
-			synchronized (displayedParts) {
-				for (Part displayPart : displayedParts) {
-
-					draw((Sprite)displayPart.visual, g2d);
-				}
-			}
-		}
-
 		private void draw(Sprite visual, Graphics2D canvas) {
 			// TODO: Likely due to floating point arithmetic with
 			// conversion to integers the width and/or height of the
@@ -51,14 +35,28 @@ public class SwingScreen extends Screen {
 			// For Tetris the result is pieces with sometimes visible gaps
 			// between blocks.  Figure out how to fix.
 			AffineTransform transformer =
-				AffineTransform.getTranslateInstance(scale * visual.position.x,
-				                                     scale * visual.position.y);
+			AffineTransform.getTranslateInstance(scale * visual.position.x,
+			scale * visual.position.y);
 			transformer.concatenate(AffineTransform.getScaleInstance(scale, scale));
 			canvas.drawImage((BufferedImage)visual.images[visual.currImage],
 			transformer,
 			null);
 
 		}
+
+		@Override
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			Graphics2D g2d = (Graphics2D) g;
+			// Synchronized to avoid exception where another thread alters
+			// visuals' structure while this thread is iterating through it.
+			synchronized (visuals) {
+				for (Visual visual : visuals) {
+					draw((Sprite)visual, g2d);
+				}
+			}
+		}
+
 	};
 
 	private double scale;
@@ -66,7 +64,6 @@ public class SwingScreen extends Screen {
 	private int colorFilterIndex = 0;
 	private static final int[] colorMasks = {0x40FFB0B0, 0x40B0FFB0, 0x40B0B0FF, 0x40FFFFB0, 0x40FFB0FF, 0x40B0FFFF};
 	
-	private final List<Part> displayedParts = new Vector<>();
 
 	public SwingScreen() {
 		super("Sprite");
@@ -140,24 +137,4 @@ public class SwingScreen extends Screen {
 		Toolkit.getDefaultToolkit().sync();
 	}
 
-	@Override
-	public void addParts(Collection<? extends Part> parts) {
-		synchronized(displayedParts) {
-			displayedParts.addAll(parts);
-		}
-	}
-	
-	@Override
-	public void addPart(Part part) {
-		synchronized(displayedParts) {
-			displayedParts.add(part);
-		}
-	}
-
-	@Override
-	public void removePart(Part terminalPart) {
-		synchronized(displayedParts) {
-			displayedParts.remove(terminalPart);
-		}
-	}
 }
