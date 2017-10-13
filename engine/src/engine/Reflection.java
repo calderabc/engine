@@ -79,10 +79,17 @@ public final class Reflection {
 		return newInstance(object, object);
 	}
 
-	static Visual newVisual(Game game, Part part, ImageType imageType, Visual.Id id) {
+	static Visual newVisual(Game game, Part part, Visual.Id id) {
+		Class<? extends Part> partClass = part.getClass();
+		ImageType imageType = game.imageTypeMap.get(partClass);
+		if (imageType == null) {
+			imageType = newImageType(game, partClass);
+			game.imageTypeMap.put(partClass, imageType);
+		}
+
 		Class<?> clazz = getClass(game.gameTypeName,
                                             game.gameName,
-                                            part.getClass().getSimpleName(),
+                                            partClass.getSimpleName(),
                                             game.screen.visualName);
 		Constructor<?>[] constructors = clazz.getConstructors();
 		// TODO: Quick and dirty solution.  Improve.

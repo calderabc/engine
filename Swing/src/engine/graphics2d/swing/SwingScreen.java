@@ -7,14 +7,10 @@ import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
-import java.util.List;
-import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import engine.Part;
 import engine.Screen;
 import engine.Visual;
 import engine.Field;
@@ -117,7 +113,10 @@ public class SwingScreen extends Screen {
 			//
 			// Repaint right now!
 			javax.swing.SwingUtilities.invokeAndWait(
-				() -> panel.paintImmediately(0, 0, panel.getWidth() - 1, panel.getHeight() - 1)
+				() -> panel.paintImmediately(0,
+				                             0,
+				                             panel.getWidth() - 1,
+				                             panel.getHeight() - 1)
 			);
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();

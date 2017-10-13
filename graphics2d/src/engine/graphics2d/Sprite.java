@@ -13,8 +13,6 @@ public abstract class Sprite extends Visual {
 	public int currImage;
 
 
-	public ImageType imageType;
-
 	protected Sprite(Part newPart, ImageType imageType, Id newId) {
 		images = ImageType.imageListMap.get(newId); // Save memory by always using the same images.
 		dimensions = imageType.dimensions;

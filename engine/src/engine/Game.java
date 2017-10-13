@@ -1,12 +1,19 @@
 package engine;
 
+import engine.graphics2d.ImageType;
+
+import java.util.Hashtable;
+import java.util.Map;
+
 public abstract class Game {
 	public static Game me;
 
-	public final String gameName;
-	public final String gameTypeName;
-	public final String engineName;
-	public final String engineTypeName;
+	final Map<Class<? extends Part>, ImageType> imageTypeMap = new Hashtable<>();
+
+	protected final String gameName;
+	final String gameTypeName;
+	final String engineName;
+	final String engineTypeName;
 
 	public Screen screen;
 

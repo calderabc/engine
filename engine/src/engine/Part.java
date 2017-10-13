@@ -15,8 +15,8 @@ public abstract class Part implements Movable {
 		visual = (Visual)Reflection.newInstance(other.visual);
 	}	
 
-	public void initVisual(ImageType imageType, Visual.Id newId) {
-		visual = Reflection.newVisual(Game.me, this, imageType, newId);
+	public void initVisual(Visual.Id newId) {
+		visual = Reflection.newVisual(Game.me, this, newId);
 		visual.update(this);
 	}
 	

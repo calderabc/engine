@@ -1,22 +1,20 @@
 package engine.puzzle;
 
+
 import engine.Coordinates;
 import engine.Game;
 import engine.Part;
 import engine.Visual;
-import engine.Visual.Id;
-import engine.graphics2d.ImageType;
 
 public class Digit extends Part {
 	private byte value;
 	public final Number.Type type;
 	
-	public Digit(Number.Type newType, Coordinates newPosition, byte newValue) {
+	public Digit(Number.Type newType, Coordinates newPosition, byte value) {
 		super(newPosition);
 		type = newType;
-		set(newValue);
-		initVisual( ((PuzzleGame)Game.me).digitImageType,
-		            new Visual.Id("Digit") );
+		set(value);
+		initVisual(new Visual.Id("Digit") );
 		Game.me.screen.addPart(this);
 	}
 	

@@ -1,14 +1,12 @@
 package engine.puzzle;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 import engine.Game;
 import engine.Reflection;
-import engine.graphics2d.ImageType;
 
-public class PuzzleGame extends Game {
-
+public final class PuzzleGame extends Game {
+	// The have to be public for reflection to work.
 	public Board board;
 	public Score score;
 	public Piece piece;
@@ -18,8 +16,6 @@ public class PuzzleGame extends Game {
 	private Number pieceCount;
 	private boolean isPieceLanded;
 
-	public final ImageType blockImageType;
-	public final ImageType digitImageType;
 
 
 	private void newFields(String packageString, String... classNames) {
@@ -41,18 +37,16 @@ public class PuzzleGame extends Game {
 		}
 	}
 
-	public PuzzleGame(String newGameName, String newEngineName) {
+	private PuzzleGame(String newGameName, String newEngineName) {
 		super(newGameName, "Puzzle", newEngineName, "Graphics2d");
 
-		// TODO: These are independant and should be thread safe, run on separate threads.
-		blockImageType = Reflection.newImageType(this, Block.class);
-		digitImageType = Reflection.newImageType(this, Digit.class);
 
 	}
 
-	public void run() {
+	private void run() {
 
 		newFields(gameName, "Board", "Piece", "Score");
+
 		screen.setScale(board, piece.getBlocks()[0].visual);
 
 		level = new Number(Number.Type.LEVEL, (byte)2).set(1);
@@ -83,7 +77,7 @@ public class PuzzleGame extends Game {
 	}
 
 
-	public boolean tryToMovePiece(PieceAction action) {
+	boolean tryToMovePiece(PieceAction action) {
 		synchronized(piece) {
 			if (!isPieceLanded) {
 				/**
@@ -110,7 +104,7 @@ public class PuzzleGame extends Game {
 		return false;
 	}
 
-	public void landPiece() {
+	void landPiece() {
 		synchronized(piece) {
 			if (!isPieceLanded) {
 				// Stop all scheduled piece actions, the piece needs to land!
