@@ -1,15 +1,12 @@
 package engine.puzzle.tetris;
 
-import engine.Game;
-import engine.graphics2d.Graphics2dScreen;
-import engine.puzzle.Block;
+import engine.Part;
 import engine.graphics2d.Sprite;
 
 
 public class TetrisBlockSprite extends Sprite {
-	public TetrisBlockSprite(Game game, Block block, Id newId) {
-		super(game, block, newId );
-
+	public TetrisBlockSprite(Part part) {
+		super(part);
 	}
 	
 	public TetrisBlockSprite(TetrisBlockSprite sprite) {

@@ -12,7 +12,7 @@ public class ColumnsBlockSprite extends Sprite {
 		super(other);
 	}
 
-	public ColumnsBlockSprite(Game game, Block newPart, Id newId) {
-		super(game, newPart, newId);
+	public ColumnsBlockSprite(Block newPart) {
+		super(newPart);
 	}
 }

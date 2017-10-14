@@ -6,9 +6,9 @@ import engine.Game;
 public abstract class SimpleBoard extends Board {
 	protected final Block[][] blockMatrix;
 
-	protected SimpleBoard(Game game, int newWidth, int newHeight) {
-		super(game, newWidth, newHeight);
-		blockMatrix = new Block[newWidth][newHeight];
+	protected SimpleBoard(Coordinates newDimensions) {
+		super(newDimensions);
+		blockMatrix = new Block[dimensions.x][dimensions.y];
 	}
 
 	protected Block getBlock(Coordinates position) {

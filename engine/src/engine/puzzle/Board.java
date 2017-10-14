@@ -10,11 +10,9 @@ public abstract class Board extends Field {
 	public static class PositionOccupiedException extends Throwable {};
 	
 	protected final Coordinates dimensions;
-	protected final Game game;
-	
-	protected Board(Game game, int newWidth, int newHeight) {
-		this.game = game;
-		dimensions = new Coordinates(newWidth, newHeight);
+
+	protected Board(Coordinates newDimensions) {
+		dimensions = newDimensions;
 	}
 
 	/**

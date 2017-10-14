@@ -7,6 +7,19 @@ public final class Reflection {
 	// Don't instantiate me!
 	private Reflection() {}
 
+
+	public static class ClassAndObject {
+		final Class<?> objectClass;
+		final Object object;
+		public ClassAndObject(Class<?> newObjectClass, Object newObject) {
+			objectClass = newObjectClass;
+			object = newObject;
+		}
+		public ClassAndObject(Object newObject) {
+			this(newObject.getClass(), newObject);
+		}
+	}
+
 	private static String[] getCanonicalNames(String a, String b, String c) {
 		String[] canons = new String[2];
 		// Different places to search for the class.
@@ -20,7 +33,7 @@ public final class Reflection {
 		return canons;
 	}
 
-	public static Class<?> getClass(String a, String b, String c) {
+	private static Class<?> getClass(String a, String b, String c) {
 		String[] canonicalNames = getCanonicalNames(a, b, c);
 		// Result the first class in canonicalNames which exists.
 		for (String canonicalName : canonicalNames)
@@ -33,13 +46,20 @@ public final class Reflection {
 		return null; // If canonicalNames is empty or class cannot be found.
 	}
 
-	private static Class<?> getClass(String a, String b, String c, String d) {
-		return getClass(a, b, c + d);
+
+	private static Class<?> getClass(String... strings) {
+		switch (strings.length) {
+			case 4 : strings[2] += strings[3];
+			case 3 : return getClass(strings[0], strings[1], strings[2]);
+			default : assert false : "Error: Invalid arguments for getClass().";
+		}
+		return null;
 	}
 
-	private static Object newInstance(String a, String b, String c) {
+
+	private static Object newInstance(String... strings) {
 		try {
-			return getClass(a, b, c).getDeclaredConstructor().newInstance();
+			return getClass(strings).getDeclaredConstructor().newInstance();
 		} catch (InstantiationException | InvocationTargetException
 		         | IllegalAccessException | NoSuchMethodException e) {
 			e.printStackTrace();
@@ -47,11 +67,7 @@ public final class Reflection {
 		return null; // If there is an exception.
 	}
 
-	private static Object newInstance(String a, String b, String c, String d) {
-		return newInstance(a, b, c + d);
-	}
-
-	public static Object newInstance(Class<?> objectClass, Object... parameters) {
+	private static Object newInstance(Class<?> objectClass, Object... parameters) {
 		Class<?>[] parameterClasses = new Class<?>[parameters.length];
 		for (int i = 0; i < parameters.length; i++) {
 			parameterClasses[i] = parameters[i].getClass();
@@ -65,7 +81,32 @@ public final class Reflection {
 		return null;
 	}
 
-	static Object newInstance(Object object, Object... parameters) {
+
+	public static Object newInstance(Class<?> objectClass, ClassAndObject... parameterMeta) {
+		Class<?>[] parameterClasses = new Class<?>[parameterMeta.length];
+		Object[] parameters = new Object[parameterMeta.length];
+		for (int i = 0; i < parameters.length; i++) {
+			parameterClasses[i] = parameterMeta[i].objectClass;
+			parameters[i] = parameterMeta[i].object;
+		}
+		try {
+			return objectClass.getConstructor(parameterClasses).newInstance(parameters);
+		} catch (InstantiationException | IllegalAccessException
+		         | InvocationTargetException | NoSuchMethodException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static Object newInstance(String[] strings, ClassAndObject... parameterMeta) {
+		return newInstance(getClass(strings), parameterMeta);
+	}
+
+	static Object newInstance(Object object, ClassAndObject... parameterMeta) {
+		return newInstance(object.getClass(), parameterMeta);
+	}
+
+	private static Object newInstance(Object object, Object... parameters) {
 		return newInstance(object.getClass(), parameters);
 	}
 
@@ -77,44 +118,43 @@ public final class Reflection {
 		return newInstance(object, object);
 	}
 
-	static Visual newVisual(Game game, Part part, Visual.Id id) {
-		Class<?> clazz = getClass(game.gameTypeName,
-                                  game.gameName,
-                                  part.getClass().getSimpleName(),
-                                  game.screen.visualName);
-		Constructor<?>[] constructors = clazz.getConstructors();
-		// TODO: Quick and dirty solution.  Improve.
-		for (Constructor<?> constructor : constructors) {
-			if (constructor.getParameterCount() == 3) {
-				try {
-					return (Visual)constructor.newInstance(game, part, id);
-				} catch (InstantiationException | IllegalAccessException
-				         | InvocationTargetException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		return null;
+	static Visual newVisual(Part part) {
+		return (Visual)newInstance( getClass(part.game.gameTypeName,
+		                                     part.game.gameName,
+                                             part.getClass().getSimpleName(),
+                                             part.game.screen.visualName),
+		                            new ClassAndObject(Part.class, part) );
 	}
 
 
-	static Screen newScreen(Game game) {
+	public static Screen newScreen(Game game) {
 		return (Screen)newInstance( getClass(game.engineTypeName,
 		                                     game.engineName,
 		                                     "Screen"),
-		                            game );
-	}
+		                             new ClassAndObject(Game.class, game) );
+		}
 
+
+	// TODO: Name this more precisely.
 	public static void instantiateGameField(Game game, String fieldClassName) {
 		try {                  // Holy Reflection Batman!
 			game.getClass()
 			    .getField(fieldClassName.toLowerCase())
-			    .set( game, newInstance(game.gameTypeName,
-			                            game.gameName,
-			                            fieldClassName) );
+			    .set(game,
+			         newInstance( getClass(game.gameTypeName,
+			                               game.gameName,
+			                               fieldClassName),
+			                      new ClassAndObject(Game.class, game) )
+			    );
 		} catch (IllegalAccessException | NoSuchFieldException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static Object newGameField(Game game, String fieldClassName) {
+		return newInstance(game.gameTypeName,
+						   game.gameName,
+						   fieldClassName);
 	}
 
 }

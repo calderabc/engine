@@ -1,5 +1,6 @@
 package engine.puzzle.tetris;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import engine.Coordinates;
@@ -17,31 +18,30 @@ import engine.puzzle.Piece;
  */
 
 public final class TetrisPiece extends Piece {
-	private static Piece[] pieces;
+	private final static Piece[] pieces;
 
-	private void populatePieces(Game game) {
+	static {
 		TetrisPieceData pieceData =
 				(TetrisPieceData)FileIO.load(TetrisPieceData.FILE_NAME);
 		int pieceCount = pieceData.pieceTemplate.length;
 
 		pieces = new TetrisPiece[pieceCount];
 		for (byte i = 0; i < pieceCount; i++) {
-			pieces[i] = new TetrisPiece(game, i, pieceData);
+			pieces[i] = new TetrisPiece(i, pieceData);
 		}	
 	}
 					
 	public volatile Coordinates currCenter;
 	public volatile Coordinates destCenter;
 
-	private TetrisPiece newPiece() {
-		if (pieces == null) {
-			populatePieces(game);
-		}
-		TetrisPiece piece = (TetrisPiece)pieces[new Random().nextInt(pieces.length)];
-		
-	}
-
 	public TetrisPiece(Game game) {
+		this((TetrisPiece)pieces[new Random().nextInt(pieces.length)]);
+
+		for (int i = 0; i < blocks.length; i++) {
+			blocks[i].game = game;
+		}
+		// Add the piece's blocks to screen so they will be displayed.
+		game.screen.addParts(Arrays.asList(getBlocks()));
 	}
 
 	public TetrisPiece(TetrisPiece other) {
@@ -50,14 +50,14 @@ public final class TetrisPiece extends Piece {
 		destCenter = new Coordinates(other.destCenter);
 	}
 
-	private TetrisPiece(Game game, byte pieceId, TetrisPieceData newPieceData) {
+	private TetrisPiece(byte pieceId, TetrisPieceData newPieceData) {
 		super(newPieceData.pieceTemplate[pieceId].length);	
 
 		byte state = 0;
 		int i = 0;
 		for (byte[] blockXY: newPieceData.pieceTemplate[pieceId]) {
 			blocks[i++] = new Block(
-				game,
+				null,
 				new Coordinates(blockXY[0], blockXY[1]),
 				new Visual.Id("Block", pieceId, state++)
 			);
@@ -72,7 +72,6 @@ public final class TetrisPiece extends Piece {
 
 		for (Block currBlock: blocks) {
 				currBlock.move(newPieceData.pieceStartPos);
-				currBlock.visual.update(currBlock);
 		}
 	}
 

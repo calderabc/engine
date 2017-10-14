@@ -10,11 +10,12 @@ public class Digit extends Part {
 	private byte value;
 	public final Number.Type type;
 	
-	public Digit(Game game, Number.Type newType, Coordinates newPosition, byte value) {
-		super(newPosition);
+	public Digit(Game game, Number.Type newType, Coordinates newPosition, byte newValue) {
+		super(game, newPosition, new Visual.Id("Digit"));
 		type = newType;
-		set(value);
-		initVisual(game, new Visual.Id("Digit") );
+		// Don't use setter because visual may not be initialized yet.
+		this.value = newValue;
+
 		game.screen.addPart(this);
 	}
 	
@@ -32,9 +33,9 @@ public class Digit extends Part {
 		}
 		byte oldValue = value;
 		value = newValue;
-		if (value != oldValue) {
+		if (value != oldValue && visual != null) {
 			// If the value has changed update the visual.
-			visual.update(this);
+				visual.update(this);
 		}
 		
 		return this;

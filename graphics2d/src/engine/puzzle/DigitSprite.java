@@ -8,11 +8,11 @@ import engine.graphics2d.ImageType;
 import engine.graphics2d.Sprite;
 
 public class DigitSprite extends Sprite {
-	public DigitSprite(Game game, Digit digit, Id newId) {
-		super(game, digit, newId);
+	public DigitSprite(Part part) {
+		super(part);
 
 		// TODO: Kludgy.  Make better.
-		switch(digit.type) {
+		switch(((Digit)part).type) {
 			case SCORE : origin = new Coordinates(400); break;
 			case LEVEL : origin = new Coordinates(400, 100); break;
 			case ROWS : origin = new Coordinates(400, 200); break;

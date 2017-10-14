@@ -10,10 +10,8 @@ public class Block extends Part {
 
 
 	public Block(Game game, Coordinates newCoords, Visual.Id newId, byte newType) {
-		super(newCoords);
+		super(game, newCoords, newId);
 		type = newType;
-
-		initVisual(game, newId);
 	}
 
 	public Block(Game game, Coordinates newCoords, Visual.Id newId) {

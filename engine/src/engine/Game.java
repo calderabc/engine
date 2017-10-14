@@ -18,6 +18,7 @@ public abstract class Game {
 		this.engineName = engineName;
 		this.engineTypeName = engineTypeName;
 
+		// Everyone else depends on screen so run first.
 		screen = Reflection.newScreen(this);
 	}
 }

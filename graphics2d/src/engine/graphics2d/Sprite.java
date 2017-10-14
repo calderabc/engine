@@ -7,9 +7,9 @@ import engine.Reflection;
 import engine.Visual;
 
 public abstract class Sprite extends Visual {
-	public Object[] images;
+	protected Object[] images;
 	public Coordinates position;
-	public int currImage;
+	protected int currImage;
 
 	protected Coordinates origin = Coordinates.ORIGIN;
 
@@ -17,18 +17,19 @@ public abstract class Sprite extends Visual {
 	private Coordinates positionScaleFactor;
 
 
-	private static ImageType newImageType(Game game,
-	                                      Class<? extends Part> partClass) {
-
-		ImageType imageType = ((Graphics2dScreen)game.screen).imageTypeMap .get(partClass);
+	private static ImageType newImageType(Part part) {
+		Class<? extends Part> partClass = part.getClass();
+		Game game = part.game;
+		ImageType imageType = ((Graphics2dScreen)game.screen).imageTypeMap
+		                                                     .get(partClass);
 		if (imageType == null) {
 			imageType = (ImageType)Reflection.newInstance(
-				Reflection.getClass(game.engineTypeName,
-				                    game.engineName,
-				                    "ImageType"),
-				game.gameName.toLowerCase(),
-				game.gameTypeName.toLowerCase(),
-				partClass
+				new String[] {game.engineTypeName,
+				              game.engineName,
+				              "ImageType"},
+				new Reflection.ClassAndObject(game.gameName.toLowerCase()),
+				new Reflection.ClassAndObject(game.gameTypeName.toLowerCase()),
+				new Reflection.ClassAndObject(partClass)
 			);
 			((Graphics2dScreen)game.screen).imageTypeMap
 			                               .put(partClass, imageType);
@@ -37,10 +38,11 @@ public abstract class Sprite extends Visual {
 		return imageType;
 	}
 
-	protected Sprite(Game game, Part part, Id newId) {
-		ImageType imageType = newImageType(game, part.getClass());
+	protected Sprite(Part part) {
+		super(part);
+		ImageType imageType = newImageType(part);
 
-		images = ImageType.imageListMap.get(newId); // Save memory by always using the same images.
+		images = ImageType.imageListMap.get(part.visualId); // Save memory by always using the same images.
 
 		dimensions = imageType.dimensions;
 		positionScaleFactor = imageType.translationFactor;
@@ -49,6 +51,7 @@ public abstract class Sprite extends Visual {
 	}
 
 	protected Sprite(Visual other) {
+		super(other);
 		images = ((Sprite)other).images;
 		position = ((Sprite)other).position;
 		dimensions = ((Sprite)other).dimensions;
@@ -70,6 +73,16 @@ public abstract class Sprite extends Visual {
 
 	public int getHeight() {
 		return dimensions.y;
+	}
+
+	public Object getCurrImage() {
+		if (images == null) {
+			images = ImageType.imageListMap.get(part.visualId); // Save memory by always using the same images.
+		}
+		if (images == null) {
+			return null;
+		}
+		return images[currImage];
 	}
 
 }

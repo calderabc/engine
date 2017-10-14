@@ -145,7 +145,7 @@ public class JavaFXScreen extends Screen {
 
 		// This fixes a bug I've wasted many hours on.  Apparently my
 		// development systems were buffering graphic writes causing an erratic
-		// delay in visuals being displayed. The piece appeared to fall at a
+		// delay in visualParts being displayed. The piece appeared to fall at a
 		// noticeably inconsistent rate even though swing painting happened
 		// correctly at constant intervals. The piece would fall at a constant
 		// rate when the mouse was moving around in front of the window (I'm

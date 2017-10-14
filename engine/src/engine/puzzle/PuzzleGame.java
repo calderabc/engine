@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import engine.Game;
 import engine.Reflection;
+import engine.Concurrent;
 
 
 public final class PuzzleGame extends Game {
@@ -20,41 +21,25 @@ public final class PuzzleGame extends Game {
 
 
 
-	private void newFields(String packageString, String... classNames) {
-		Thread[] threads = new Thread[classNames.length];
-		int i = 0;
-		for (String className : classNames) {
-			threads[i] = new Thread(() -> {
-				Reflection.instantiateGameField(this, className);
-			});
 
-			threads[i++].start();
-		}
-		for (Thread thread : threads) {
-			try {
-				thread.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-	}
 
 	private PuzzleGame(String newGameName, String newEngineName) {
 		super(newGameName, "Puzzle", newEngineName, "Graphics2d");
 
-		pieceAction = PieceAction.newInstance(this);
-
-		newFields(gameName, "Board", "Piece", "Score");
-
+		Concurrent.run(
+			() -> pieceAction = PieceAction.newInstance(this),
+			() -> board = (Board)Reflection.newGameField(this, "Board"),
+			() -> Reflection.instantiateGameField(this, "Piece"),
+			() -> Reflection.instantiateGameField(this, "Score"),
+			() -> level = new Number(this, Number.Type.LEVEL, (byte)2).set(1),
+			() -> rowsCleared = new Number(this, Number.Type.ROWS, (byte)3),
+			() -> pieceCount = new Number(this, Number.Type.PIECES, (byte)4)
+		);
+		screen.initVisuals();
 		screen.setScale(board, piece.getBlocks()[0].visual);
 
-		level = new Number(this, Number.Type.LEVEL, (byte)2).set(1);
-		rowsCleared = new Number(this, Number.Type.ROWS, (byte)3);
-		pieceCount = new Number(this, Number.Type.PIECES, (byte)4);
-
 		while (board.doesPieceFit(piece)) {
-			// Add the piece's blocks to screen so they will be displayed.
-			screen.addParts(Arrays.asList(piece.getBlocks()));
+
 			screen.update();
 
 			isPieceLanded = false;

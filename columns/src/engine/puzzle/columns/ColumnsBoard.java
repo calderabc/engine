@@ -14,8 +14,8 @@ public class ColumnsBoard extends SimpleBoard {
 	                                                   new Coordinates( 1, 1),
 	                                                   new Coordinates( 1, 0)};
 
-	public ColumnsBoard(Game game) {
-		super(game, 6, 13);
+	public ColumnsBoard() {
+		super(new Coordinates(6, 13));
 	}
 
 
@@ -89,7 +89,7 @@ public class ColumnsBoard extends SimpleBoard {
 			// Be sure tile at top of column is empty.
 			blockMatrix[x][0] = null;
 			// Remove block from screen.
-			terminalBlock.terminate(game);
+			terminalBlock.terminate();
 		}
 		// Now call block removal for all the blocks which were above and fell.
 		// TODO: Add mechanism for scoring chain moves.

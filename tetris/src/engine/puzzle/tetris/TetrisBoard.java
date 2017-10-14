@@ -52,7 +52,7 @@ public final class TetrisBoard extends Board {
 		
 		public void terminate() {
 			for (Block terminalBlock : blocks) { 
-				terminalBlock.terminate(game);
+				terminalBlock.terminate();
 			}
 			blocks = newRow();
 		}
@@ -72,8 +72,8 @@ public final class TetrisBoard extends Board {
 	/**
 	 * Default Constructor
 	 */
-	public TetrisBoard(Game game) {
-		super(game, 10, 20);
+	public TetrisBoard() {
+		super(new Coordinates(10, 20));
 
 		blockMatrix = new Vector<Row>();
 		for (int i = 0; i < dimensions.y; i++) {

@@ -1,13 +1,13 @@
 package engine;
 
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 public abstract class Visual {
 	public static final class Id {
 		private static byte unique = 0;
 		// TODO: Memory wasteful.  Work out a better way.
-		private static Map<String, Byte> idMap = new HashMap<>();
+		private static Map<String, Byte> idMap = new Hashtable<>();
 
 		private static byte getUnique(String key) {
 			key = key.toLowerCase();
@@ -46,6 +46,16 @@ public abstract class Visual {
 		public int hashCode() {
 			return ((Integer)datum).hashCode();
 		}
+	}
+
+	protected Part part;
+
+	protected Visual(Part newPart) {
+		part = newPart;
+	}
+
+	protected Visual(Visual other) {
+		part = other.part;
 	}
 
 	public abstract void update(Part part);

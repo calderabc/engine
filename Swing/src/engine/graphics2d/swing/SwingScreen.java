@@ -1,9 +1,6 @@
 package engine.graphics2d.swing;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
@@ -12,7 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import engine.Game;
-import engine.Screen;
+import engine.Part;
 import engine.Visual;
 import engine.Field;
 import engine.graphics2d.Graphics2dScreen;
@@ -26,19 +23,21 @@ public class SwingScreen extends Graphics2dScreen {
 	public JFrame frame;
 
 	public JPanel panel = new JPanel(true) {
-		private void draw(Sprite visual, Graphics2D canvas) {
+		private void draw(Sprite sprite, Graphics2D canvas) {
 			// TODO: Likely due to floating point arithmetic with
 			// conversion to integers the width and/or height of the
 			// displayed sprite are sometimes one pixel too small.
 			// For Tetris the result is pieces with sometimes visible gaps
 			// between blocks.  Figure out how to fix.
-			AffineTransform transformer =
-			AffineTransform.getTranslateInstance(scale * visual.position.x,
-			scale * visual.position.y);
-			transformer.concatenate(AffineTransform.getScaleInstance(scale, scale));
-			canvas.drawImage((BufferedImage)visual.images[visual.currImage],
-			transformer,
-			null);
+			if (sprite != null) {
+				AffineTransform transformer =
+				AffineTransform.getTranslateInstance(scale * sprite.position.x,
+				scale * sprite.position.y);
+				transformer.concatenate(AffineTransform.getScaleInstance(scale, scale));
+				canvas.drawImage((Image) sprite.getCurrImage(),
+				transformer,
+				null);
+			}
 
 		}
 
@@ -47,10 +46,10 @@ public class SwingScreen extends Graphics2dScreen {
 			super.paintComponent(g);
 			Graphics2D g2d = (Graphics2D) g;
 			// Synchronized to avoid exception where another thread alters
-			// visuals' structure while this thread is iterating through it.
-			synchronized (visuals) {
-				for (Visual visual : visuals) {
-					draw((Sprite)visual, g2d);
+			// visualParts' structure while this thread is iterating through it.
+			synchronized (visualParts) {
+				for (Part part : visualParts) {
+					draw((Sprite)part.visual, g2d);
 				}
 			}
 		}
@@ -67,7 +66,7 @@ public class SwingScreen extends Graphics2dScreen {
 		super("Sprite");
 
 		// TODO: Do this method call on another thread.
-		SwingKeyboard.initInputActionMaps(game, panel.getInputMap(), panel.getActionMap());
+		SwingKeyboard.initInputActionMaps((Game)game, panel.getInputMap(), panel.getActionMap());
 		frame = new JFrame("Tetris");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -126,7 +125,7 @@ public class SwingScreen extends Graphics2dScreen {
 		
 		// This fixes a bug I've wasted many hours on.  Apparently my 
 		// development systems were buffering graphic writes causing an erratic 
-		// delay in visuals being displayed. The piece appeared to fall at a 
+		// delay in visualParts being displayed. The piece appeared to fall at a
 		// noticeably inconsistent rate even though swing painting happened 
 		// correctly at constant intervals. The piece would fall at a constant 
 		// rate when the mouse was moving around in front of the window (I'm 
