@@ -5,6 +5,7 @@ import engine.Game;
 import engine.Part;
 import engine.Reflection;
 import engine.Visual;
+import engine.puzzle.PuzzleGame;
 
 public abstract class Sprite extends Visual {
 	protected Object[] images;
@@ -13,8 +14,8 @@ public abstract class Sprite extends Visual {
 
 	protected Coordinates origin = Coordinates.ORIGIN;
 
-	private Coordinates dimensions;
-	private Coordinates positionScaleFactor;
+	private final Coordinates dimensions;
+	private final Coordinates positionScaleFactor;
 
 
 	private static ImageType newImageType(Part part) {
@@ -29,7 +30,7 @@ public abstract class Sprite extends Visual {
 				              "ImageType"},
 				new Reflection.ClassAndObject(game.gameName.toLowerCase()),
 				new Reflection.ClassAndObject(game.gameTypeName.toLowerCase()),
-				new Reflection.ClassAndObject(partClass)
+				new Reflection.ClassAndObject(Part.class, part)
 			);
 			((Graphics2dScreen)game.screen).imageTypeMap
 			                               .put(partClass, imageType);
@@ -38,15 +39,26 @@ public abstract class Sprite extends Visual {
 		return imageType;
 	}
 
-	protected Sprite(Part part) {
-		super(part);
+
+	protected Sprite(Part newPart) {
+		super(newPart);
 		ImageType imageType = newImageType(part);
 
-		images = ImageType.imageListMap.get(part.visualId); // Save memory by always using the same images.
+		positionScaleFactor = imageType.translationFactor.clone();
+		dimensions = imageType.dimensions.clone();
 
-		dimensions = imageType.dimensions;
-		positionScaleFactor = imageType.translationFactor;
-		//position = new Coordinates(newPart.pos.scale(translationFactor));
+		// Scale images and positioning of images to match screens size.
+		// Note 'positionScaleFactor' and 'dimensions' will be resized
+		// (scaled) by the actions of this method.
+		images = imageType.scaleImageArray(
+			ImageType.imageListMap.get(part.visualId),
+			positionScaleFactor,
+			dimensions,
+			((Graphics2dScreen)part.game.screen).dimensions,
+			((PuzzleGame)part.game).board.dimensions
+		);
+
+		update(part);
 		currImage = 0;
 	}
 
@@ -59,7 +71,8 @@ public abstract class Sprite extends Visual {
 		origin = ((Sprite)other).origin;
 		currImage = ((Sprite)other).currImage;
 	}
-	
+
+
 	@Override
 	public void update(Part part) {
 		position = Coordinates.multiply(part.pos, positionScaleFactor).move(origin);

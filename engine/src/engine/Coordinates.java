@@ -86,6 +86,15 @@ public final class Coordinates implements Movable, Serializable, Cloneable {
 		return this;
 	}
 
+	public Coordinates scale(double scaleFactor) {
+		// TODO: Make sure 'x *= scaleFactor' has the same result.
+		// TODO: Which is Convert x to double, multiply, then convert to int.
+		x = (int)(x * scaleFactor);
+		y = (int)(y * scaleFactor);
+		z = (int)(z * scaleFactor);
+		return this;
+	}
+
 	public Coordinates invert() {
 		x = -x;
 		y = -y;
@@ -96,6 +105,19 @@ public final class Coordinates implements Movable, Serializable, Cloneable {
 	@Override
 	public Coordinates clone() {
 		return new Coordinates(this);
+	}
+
+	public static Coordinates max(Coordinates... coordinates) {
+		// Only works and is useful for positive coordinates.
+		int maxX = 0;
+		int maxY = 0;
+		int maxZ = 0;
+		for (Coordinates curr : coordinates) {
+			if (curr.x > maxX) maxX = curr.x;
+			if (curr.y > maxY) maxY = curr.y;
+			if (curr.z > maxZ) maxZ = curr.z;
+		}
+		return new Coordinates(maxX, maxY, maxZ);
 	}
 
 	// Much more elegant with overloaded operators in C++.
@@ -136,4 +158,10 @@ public final class Coordinates implements Movable, Serializable, Cloneable {
 
 	*/
 
+	@Override
+	public String toString() {
+		return "(" + Integer.toString(x) + ", "
+		       + Integer.toString(y) + ", "
+		       + Integer.toString(z) + ")";
+	}
 }

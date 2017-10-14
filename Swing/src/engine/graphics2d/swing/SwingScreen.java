@@ -1,17 +1,14 @@
 package engine.graphics2d.swing;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import engine.Game;
-import engine.Part;
-import engine.Visual;
-import engine.Field;
+import engine.*;
 import engine.graphics2d.Graphics2dScreen;
 import engine.graphics2d.Sprite;
 import engine.puzzle.Board;
@@ -24,18 +21,9 @@ public class SwingScreen extends Graphics2dScreen {
 
 	public JPanel panel = new JPanel(true) {
 		private void draw(Sprite sprite, Graphics2D canvas) {
-			// TODO: Likely due to floating point arithmetic with
-			// conversion to integers the width and/or height of the
-			// displayed sprite are sometimes one pixel too small.
-			// For Tetris the result is pieces with sometimes visible gaps
-			// between blocks.  Figure out how to fix.
 			if (sprite != null) {
-				AffineTransform transformer =
-				AffineTransform.getTranslateInstance(scale * sprite.position.x,
-				scale * sprite.position.y);
-				transformer.concatenate(AffineTransform.getScaleInstance(scale, scale));
 				canvas.drawImage((Image) sprite.getCurrImage(),
-				transformer,
+				sprite.position.x, sprite.position.y,
 				null);
 			}
 
@@ -71,8 +59,11 @@ public class SwingScreen extends Graphics2dScreen {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// Make fullscreen.
+
+
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		frame.setUndecorated(true);
+		//frame.setSize(1000, 800);
+		//frame.setUndecorated(true);
 
 		frame.setFocusable(true);
 		frame.requestFocusInWindow();
@@ -80,6 +71,14 @@ public class SwingScreen extends Graphics2dScreen {
 		// Init JPanel
 		panel.setBackground(Color.BLACK);
 		panel.setOpaque(true);
+		panel.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				dimensions = new Coordinates(panel.getWidth(), panel.getHeight());
+				System.out.println("jpanel is resized.");
+				System.out.println(dimensions);
+			}
+		});
 		frame.setContentPane(panel);
 
 
@@ -98,12 +97,6 @@ public class SwingScreen extends Graphics2dScreen {
 		}
 		
 		SwingScreen.colorFilter = colorMasks[colorFilterIndex];
-	}
-
-	@Override
-	public void setScale(Field field, Visual visual) {
-		scale = ((double)panel.getHeight())
-		        / (((Board)field).getHeight() * ((Sprite)visual).getHeight());
 	}
 
 	@Override

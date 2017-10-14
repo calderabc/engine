@@ -1,6 +1,5 @@
 package engine.puzzle.columns;
 
-import engine.Game;
 import engine.puzzle.Block;
 import engine.graphics2d.Sprite;
 

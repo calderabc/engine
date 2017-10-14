@@ -1,5 +1,6 @@
 package engine.graphics2d.swing;
 
+import java.awt.*;
 import java.io.File;
 
 import engine.Coordinates;
@@ -13,10 +14,10 @@ import java.io.IOException;
 public final class SwingImageType extends ImageType {
 	public SwingImageType(String configFileName,
 	                      String defaultConfigFileName,
-	                      Class<? extends Part> partClass) {
+	                      Part part) {
 		super(configFileName,
 		      defaultConfigFileName,
-		      partClass,
+		      part,
 		      BufferedImage.class);
 	}
 
@@ -36,5 +37,22 @@ public final class SwingImageType extends ImageType {
 	                                    Coordinates dimensions) {
 		return ((BufferedImage)image).getSubimage(position.x, position.y,
 		                              dimensions.x, dimensions.y);
+	}
+
+	@Override
+	public BufferedImage getScaledImage(Object image, Coordinates newDimensions) {
+		BufferedImage newImage = new BufferedImage(newDimensions.x,
+		                                           newDimensions.y,
+		                                           ((BufferedImage) image).getType());
+		newImage.createGraphics().drawImage((Image)image, 0, 0,
+		                                    newDimensions.x, newDimensions.y,
+		                                    null);
+		return newImage;
+	}
+
+	@Override
+	protected Coordinates imageSize(Object image) {
+		return new Coordinates( ((BufferedImage)image).getWidth(),
+		                        ((BufferedImage)image).getHeight() );
 	}
 }

@@ -45,5 +45,4 @@ public abstract class Screen {
 	};
 
 	public abstract void update();
-	public abstract void setScale(Field field, Visual Visual);
 }

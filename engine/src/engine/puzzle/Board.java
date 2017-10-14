@@ -9,7 +9,7 @@ public abstract class Board extends Field {
 	@SuppressWarnings("serial")
 	public static class PositionOccupiedException extends Throwable {};
 	
-	protected final Coordinates dimensions;
+	public final Coordinates dimensions;
 
 	protected Board(Coordinates newDimensions) {
 		dimensions = newDimensions;
@@ -73,4 +73,9 @@ public abstract class Board extends Field {
 	public int getHeight() {
 		return dimensions.y;
 	}
+
+	public int getWidth() {
+		return dimensions.x;
+	}
+
 }

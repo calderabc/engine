@@ -35,8 +35,8 @@ public final class PuzzleGame extends Game {
 			() -> rowsCleared = new Number(this, Number.Type.ROWS, (byte)3),
 			() -> pieceCount = new Number(this, Number.Type.PIECES, (byte)4)
 		);
+
 		screen.initVisuals();
-		screen.setScale(board, piece.getBlocks()[0].visual);
 
 		while (board.doesPieceFit(piece)) {
 

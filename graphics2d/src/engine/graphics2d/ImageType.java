@@ -54,8 +54,10 @@ public abstract class ImageType implements Serializable {
 
 	public ImageType(String configFileName,
 	                 String defaultConfigFileName,
-	                 Class<? extends Part> partClass,
+	                 Part part,
 	                 Class<?> imageClass) {
+
+		Class<?> partClass = part.getClass();
 
 		this.imageClass = imageClass;
 
@@ -101,8 +103,6 @@ public abstract class ImageType implements Serializable {
 		     Coordinates.ORIGIN);
 	}
 
-	protected abstract Object loadImageFromFile(String fileName);
-	protected abstract Object getSubimage(Object image, Coordinates position, Coordinates dimensions);
 
 
 	private Coordinates movePosition(Coordinates position,
@@ -163,4 +163,55 @@ public abstract class ImageType implements Serializable {
 			)
 		);
 	}
+
+	protected abstract Object loadImageFromFile(String fileName);
+	protected abstract Object getSubimage(Object image, Coordinates position, Coordinates dimensions);
+	protected abstract Object getScaledImage(Object image, Coordinates newDimensions);
+	protected abstract Coordinates imageSize(Object image);
+
+	// "i" image dimensions
+	// "b" bounding rectangle dimensions
+	// "g" dimensions of image cell grid (how many cells wide and high)
+	// to be contained in the bounding rectangle.
+	// "O" for "original" x or y
+	// "F" for "fitted" x or y the x or y of image expanded or shrunk
+	// to fit on the image cell grid within the bounding rectangle.
+	private double getScaleFactor(Coordinates i,
+	                                   Coordinates b,
+	                                   Coordinates g) {
+		// Get ratios of fitted sizes to original sizes.
+		double xRatioFtoO = (double)b.x / (g.x * i.x);
+		double yRatioFtoO = (double)b.y / (g.y * i.y);
+		// Return the smallest ratio (scale factor);
+		return (yRatioFtoO > xRatioFtoO)? xRatioFtoO: yRatioFtoO;
+
+	}
+
+	public Object[] scaleImageArray(Object[] imageArray,
+	                                Coordinates positionScaleFactor,
+	                                Coordinates imageDimensions,
+	                                Coordinates boundingDimensions,
+	                                Coordinates gridDimensions) {
+
+		Coordinates cellSize = Coordinates.max(imageDimensions,
+		                                       positionScaleFactor);
+
+		double scaleFactor = getScaleFactor(cellSize,
+		                                    boundingDimensions,
+		                                    gridDimensions);
+
+		// Resize the dimensions of image size and position spacing.
+		// Notice this directly effects the associated external
+		// Coordinate values passed into scaleImageArray().
+		positionScaleFactor.scale(scaleFactor);
+		imageDimensions.scale(scaleFactor);
+
+		Object[] scaledImageArray = new Object[imageArray.length];
+		for (int i = 0; i < imageArray.length; i++) {
+			scaledImageArray[i] = getScaledImage(imageArray[i],
+			                                     imageDimensions);
+		}
+		return scaledImageArray;
+	}
+
 }
