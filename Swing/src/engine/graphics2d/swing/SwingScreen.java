@@ -60,9 +60,8 @@ public class SwingScreen extends Graphics2dScreen {
 
 		// Make fullscreen.
 
-
+		frame.setSize(1000, 800);
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		//frame.setSize(1000, 800);
 		//frame.setUndecorated(true);
 
 		frame.setFocusable(true);
@@ -75,12 +74,11 @@ public class SwingScreen extends Graphics2dScreen {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				dimensions = new Coordinates(panel.getWidth(), panel.getHeight());
-				System.out.println("jpanel is resized.");
-				System.out.println(dimensions);
+				// Reload visuals scaled to the resized screen.
+				visualParts.forEach((p) -> initVisual(p));
 			}
 		});
 		frame.setContentPane(panel);
-
 
 		// This method causes the event dispatch thread to paint.
 		frame.setVisible(true);

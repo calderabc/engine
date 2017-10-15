@@ -68,7 +68,6 @@ public class PieceAction implements Serializable {
 			public synchronized void startPieceAction() {
 				if (!isMoving) {
 					runner = () -> {
-						System.out.println("fall");
 						if (!((PuzzleGame)game).tryToMovePiece(this)) {
 							stopPieceAction();
 							((PuzzleGame)game).landPiece();
@@ -154,7 +153,6 @@ public class PieceAction implements Serializable {
 		}
 
 		runner = () -> {
-			System.out.println("runner");
 			if (isPressed) {
 				if (!((PuzzleGame)game).tryToMovePiece(this)) {
 					future.cancel(false);
@@ -203,7 +201,6 @@ public class PieceAction implements Serializable {
 	}
 
 	public synchronized void startPieceAction() {
-		System.out.println("startPieceAction");
 		if (!isPressed) {
 			isPressed = true;
 			if (opposite.isPressed) {

@@ -62,7 +62,6 @@ public final class PuzzleGame extends Game {
 
 
 	boolean tryToMovePiece(PieceAction action) {
-		System.out.println("tryToMovePiece");
 		synchronized(piece) {
 			if (!isPieceLanded) {
 				/**

@@ -41,14 +41,16 @@ public abstract class Screen {
 		this.visualName = visualName;
 	}
 
+	public void initVisual(Part part) {
+		part.visual = Reflection.newVisual(part);
+	}
+
 	// TODO: This could be made more efficient by only trying to add visuals to
 	// new parts.  Perhaps a queue for new parts which need visuals.
 	public final void initVisuals() {
-		for (Part part : visualParts) {
-			if (part.visual == null) {
-				part.visual = Reflection.newVisual(part);
-			}
-		}
+		visualParts.parallelStream()
+		           .filter(part -> part.visual == null)
+		           .forEach(this::initVisual);
 	};
 
 	public abstract void update();
