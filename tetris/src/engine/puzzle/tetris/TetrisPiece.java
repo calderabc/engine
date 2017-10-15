@@ -40,8 +40,6 @@ public final class TetrisPiece extends Piece {
 		for (int i = 0; i < blocks.length; i++) {
 			blocks[i].game = game;
 		}
-		// Add the piece's blocks to screen so they will be displayed.
-		game.screen.addParts(Arrays.asList(getBlocks()));
 	}
 
 	public TetrisPiece(TetrisPiece other) {

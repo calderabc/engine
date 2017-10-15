@@ -1,6 +1,6 @@
 package engine.puzzle.columns;
 
-import engine.puzzle.Block;
+import engine.Part;
 import engine.graphics2d.Sprite;
 
 public class ColumnsBlockSprite extends Sprite {
@@ -11,7 +11,7 @@ public class ColumnsBlockSprite extends Sprite {
 		super(other);
 	}
 
-	public ColumnsBlockSprite(Block newPart) {
+	public ColumnsBlockSprite(Part newPart) {
 		super(newPart);
 	}
 }

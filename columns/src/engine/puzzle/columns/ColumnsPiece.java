@@ -1,5 +1,6 @@
 package engine.puzzle.columns;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import engine.Coordinates;
@@ -9,7 +10,6 @@ import engine.puzzle.Block;
 import engine.puzzle.Piece;
 
 public class ColumnsPiece extends Piece {
-	
 
 	private ColumnsPiece(Game game, int newBlockCount, int typeCount) {
 		super(newBlockCount);
@@ -22,6 +22,7 @@ public class ColumnsPiece extends Piece {
 					type
 				);
 		}
+
 	}
 
 	public ColumnsPiece(Game game) {

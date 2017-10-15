@@ -40,6 +40,9 @@ public final class PuzzleGame extends Game {
 
 
 		while (board.doesPieceFit(piece)) {
+			// Add the piece's blocks to screen so they will be displayed.
+			screen.addParts(piece::getBlocks);
+
 			screen.initVisuals();
 
 			screen.update();
