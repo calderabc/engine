@@ -3,6 +3,8 @@ package engine.puzzle;
 import java.lang.reflect.InvocationTargetException;
 
 import engine.Coordinates;
+import engine.Game;
+import engine.Reflection;
 
 
 public abstract class Piece implements Cloneable {
@@ -32,14 +34,10 @@ public abstract class Piece implements Cloneable {
 	}
 
 	public final Piece newPiece() {
-		try {
-			return getClass().getDeclaredConstructor().newInstance();
-		} catch (InstantiationException | IllegalAccessException 
-		         | IllegalArgumentException | SecurityException
-		         | NoSuchMethodException | InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		return null;
+		return (Piece)Reflection.newInstance(
+			getClass(),
+			new Reflection.ClassAndObject(Game.class, blocks[0].game)
+		);
 	}
 
 	@Override

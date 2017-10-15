@@ -17,17 +17,19 @@ public final class PuzzleGame extends Game {
 	private Number rowsCleared;
 	private Number pieceCount;
 	private boolean isPieceLanded;
-	private PieceAction.Action pieceAction;
-
-
-
+	public PieceAction.Action pieceAction;
 
 
 	private PuzzleGame(String newGameName, String newEngineName) {
 		super(newGameName, "Puzzle", newEngineName, "Graphics2d");
 
+
+		pieceAction = PieceAction.newInstance(this);
+
+		// Everyone else depends on screen so run first.
+		screen = Reflection.newScreen(this);
+
 		Concurrent.run(
-			() -> pieceAction = PieceAction.newInstance(this),
 			() -> board = (Board)Reflection.newGameField(this, "Board"),
 			() -> Reflection.instantiateGameField(this, "Piece"),
 			() -> Reflection.instantiateGameField(this, "Score"),
@@ -36,9 +38,9 @@ public final class PuzzleGame extends Game {
 			() -> pieceCount = new Number(this, Number.Type.PIECES, (byte)4)
 		);
 
-		screen.initVisuals();
 
 		while (board.doesPieceFit(piece)) {
+			screen.initVisuals();
 
 			screen.update();
 
@@ -62,6 +64,7 @@ public final class PuzzleGame extends Game {
 
 
 	boolean tryToMovePiece(PieceAction action) {
+		System.out.println("tryToMovePiece");
 		synchronized(piece) {
 			if (!isPieceLanded) {
 				/**

@@ -54,7 +54,7 @@ public class SwingScreen extends Graphics2dScreen {
 		super("Sprite");
 
 		// TODO: Do this method call on another thread.
-		SwingKeyboard.initInputActionMaps((Game)game, panel.getInputMap(), panel.getActionMap());
+		SwingKeyboard.initInputActionMaps(game, panel.getInputMap(), panel.getActionMap());
 		frame = new JFrame("Tetris");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

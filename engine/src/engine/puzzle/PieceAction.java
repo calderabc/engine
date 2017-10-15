@@ -15,7 +15,7 @@ public class PieceAction implements Serializable {
 	// Threads for the scheduled piece movement actions, piece falling etc.
 	// TODO: How many concurrent scheduled actions do I need?
 	private static ScheduledThreadPoolExecutor scheduler =
-	new ScheduledThreadPoolExecutor(2);
+	new ScheduledThreadPoolExecutor(3);
 
 	static {
 		scheduler.setRemoveOnCancelPolicy(true);
@@ -26,9 +26,9 @@ public class PieceAction implements Serializable {
 		offset = null;
 	}
 
-	private PieceAction(Game game) {
+	private PieceAction(Game newGame) {
 		this();
-		this.game = game;
+		game = newGame;
 	}
 
 	static PieceAction.Action newInstance(Game game) {
@@ -39,10 +39,10 @@ public class PieceAction implements Serializable {
 
 
 	public class Action extends PieceAction {
-		private Action() {};
+		private Action() {}
 
 		// TODO: Could reduce data file size by saving values instead of whole objects.
-		final PieceAction WARP = new PieceAction(PieceAction.Type.MOVE, 100, new Coordinates(0, 1)) {
+		public final PieceAction WARP = new PieceAction(game, PieceAction.Type.MOVE, 100, new Coordinates(0, 1)) {
 			@Override
 			public synchronized void startPieceAction() {
 				if (!isMoving) {
@@ -63,11 +63,12 @@ public class PieceAction implements Serializable {
 			@Override
 			public synchronized void stopPieceAction() { }
 		};
-		final PieceAction FALL = new PieceAction (Type.MOVE, 2, new Coordinates(0, 1)) {
+		public final PieceAction FALL = new PieceAction (game, Type.MOVE, 2, new Coordinates(0, 1)) {
 			@Override
 			public synchronized void startPieceAction() {
 				if (!isMoving) {
 					runner = () -> {
+						System.out.println("fall");
 						if (!((PuzzleGame)game).tryToMovePiece(this)) {
 							stopPieceAction();
 							((PuzzleGame)game).landPiece();
@@ -79,12 +80,12 @@ public class PieceAction implements Serializable {
 
 			@Override
 			public synchronized void stopPieceAction() {
-				if (isMoving) {
+				//if (isMoving) {
 					cancelFuture();
-				}
+				//}
 			}
 		};
-		final PieceAction SPEED = new PieceAction (Type.MOVE, 20, new Coordinates(0, 1)) {
+		public final PieceAction SPEED = new PieceAction (game, Type.MOVE, 20, new Coordinates(0, 1)) {
 			@Override
 			public synchronized void startPieceAction() {
 				if (!isPressed) {
@@ -112,10 +113,10 @@ public class PieceAction implements Serializable {
 				FALL.stopPieceAction();
 			}
 		};
-		final PieceAction LEFT = new PieceAction (Type.MOVE, 6, new Coordinates(-1));
-		final PieceAction RIGHT = new PieceAction (Type.MOVE, 6, new Coordinates(1), LEFT);
-		final PieceAction CLOCK = new PieceAction (Type.ROTATE, 6, new Coordinates(-1));
-		final PieceAction COUNTER = new PieceAction (Type.ROTATE, 6, new Coordinates(1), CLOCK);
+		public final PieceAction LEFT = new PieceAction (game, Type.MOVE, 6, new Coordinates(-1));
+		public final PieceAction RIGHT = new PieceAction (game, Type.MOVE, 6, new Coordinates(1), LEFT);
+		public final PieceAction CLOCK = new PieceAction (game, Type.ROTATE, 6, new Coordinates(-1));
+		public final PieceAction COUNTER = new PieceAction (game, Type.ROTATE, 6, new Coordinates(1), CLOCK);
 	}
 
 
@@ -131,7 +132,8 @@ public class PieceAction implements Serializable {
 	private boolean isMoving = false;
 	private boolean isPressed = false;
 
-	private Runnable runner;
+	// This has to be protected so anonymous classes can alter.
+	protected Runnable runner;
 
 	public enum Type {
 		MOVE,
@@ -139,10 +141,12 @@ public class PieceAction implements Serializable {
 	public final Type type;
 	public final Coordinates offset;
 
-	PieceAction(Type newType, double newFrequency, Coordinates newOffset, PieceAction newOpposite) {
+	PieceAction(Game newGame, Type newType, double newFrequency, Coordinates newOffset, PieceAction newOpposite) {
+		game = newGame;
 		delay = Math.round(1.0e9 / newFrequency);
 		offset = newOffset;
 		type = newType;
+
 
 		opposite = newOpposite;
 		if (opposite != null) {
@@ -150,6 +154,7 @@ public class PieceAction implements Serializable {
 		}
 
 		runner = () -> {
+			System.out.println("runner");
 			if (isPressed) {
 				if (!((PuzzleGame)game).tryToMovePiece(this)) {
 					future.cancel(false);
@@ -160,15 +165,19 @@ public class PieceAction implements Serializable {
 
 	}
 
-	PieceAction(Type newType, double newFrequency, Coordinates newCoordinates){
-			this(newType, newFrequency, newCoordinates, null);
+	PieceAction(Game game, Type newType, double newFrequency, Coordinates newCoordinates){
+			this(game, newType, newFrequency, newCoordinates, null);
 		}
 
 	public void resetAll() {
 		for (Field currField : this.getClass().getFields()) {
 			PieceAction currAction = null;
 			try {
-				currAction = (PieceAction)currField.get(this);
+				Object object = currField.get(this);
+				if (object instanceof PieceAction) {
+					currAction = (PieceAction)object;
+				}
+				else continue;
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			}
@@ -194,6 +203,7 @@ public class PieceAction implements Serializable {
 	}
 
 	public synchronized void startPieceAction() {
+		System.out.println("startPieceAction");
 		if (!isPressed) {
 			isPressed = true;
 			if (opposite.isPressed) {
