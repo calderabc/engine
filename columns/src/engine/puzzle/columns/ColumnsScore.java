@@ -1,7 +1,7 @@
 package engine.puzzle.columns;
 
 import engine.Game;
-import engine.puzzle.Score;
+import engine.Score;
 
 public class ColumnsScore extends Score {
 

@@ -1,10 +1,8 @@
 package engine.graphics2d;
 
-import engine.Coordinates;
-import engine.Game;
-import engine.Part;
-import engine.Reflection;
-import engine.Visual;
+import engine.*;
+import engine.Symbol;
+import engine.puzzle.Block;
 import engine.puzzle.PuzzleGame;
 
 public abstract class Sprite extends Visual {
@@ -42,10 +40,22 @@ public abstract class Sprite extends Visual {
 
 	protected Sprite(Part newPart) {
 		super(newPart);
+		Game game = part.game;
 		ImageType imageType = newImageType(part);
 
 		positionScaleFactor = imageType.translationFactor.clone();
 		dimensions = imageType.dimensions.clone();
+
+		// TODO: Improve this.
+		Coordinates gridDimensions = (part instanceof Block)
+			? ((PuzzleGame)part.game).board.dimensions
+			: game.getScoreBoardDimensions();
+
+		// TODO: This is an inaccurate hack.  Find better solution.
+		if (part instanceof Symbol) {
+			int x = ((Graphics2dScreen)part.game.screen).dimensions.x / 2;
+			origin = new Coordinates(x);
+		}
 
 		// Scale images and positioning of images to match screens size.
 		// Note 'positionScaleFactor' and 'dimensions' will be resized
@@ -55,7 +65,7 @@ public abstract class Sprite extends Visual {
 			positionScaleFactor,
 			dimensions,
 			((Graphics2dScreen)part.game.screen).dimensions,
-			((PuzzleGame)part.game).board.dimensions
+			gridDimensions
 		);
 
 		update(part);

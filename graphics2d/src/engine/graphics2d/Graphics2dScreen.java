@@ -15,5 +15,6 @@ public abstract class Graphics2dScreen extends Screen {
 	public Graphics2dScreen(String visualName) {
 		super(visualName);
 	}
+
 }
 

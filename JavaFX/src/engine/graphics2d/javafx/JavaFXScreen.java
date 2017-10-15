@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Vector;
 
 
-public class JavaFXScreen extends Screen {
+public class JavaFXScreen { //extends Screen {
 	public Application application = new Application() {
 		private GraphicsContext gc;
 		@Override
@@ -92,8 +92,9 @@ public class JavaFXScreen extends Screen {
 	private double scale;
 
 	private final List<Part> displayedParts = new Vector<>();
-
+/*
 	public JavaFXScreen() {
+		super(;
 		// TODO: Do this method call on another thread.
 		//Keyboard.initInputActionMaps(panel.getInputMap(), panel.getActionMap());
 
@@ -122,13 +123,17 @@ public class JavaFXScreen extends Screen {
 		System.out.println(frame.getHeight());
 		System.out.println("hello");
 	}
+	*/
 
+	/*
 	@Override
 	public void setScale(Field field, Visual visual) {
 		scale = ((double)panel.getHeight())
 				/ (((Board)field).getHeight() * ((Sprite)visual).getHeight());
 	}
+	*/
 
+	/*
 	@Override
 	public void update() {
 		try {
@@ -156,7 +161,9 @@ public class JavaFXScreen extends Screen {
 		// drawn by swing. It should be done automatically by the JVM!
 		Toolkit.getDefaultToolkit().sync();
 	}
+	*/
 
+	/*
 	@Override
 	public void addParts(Collection<? extends Part> parts) {
 		synchronized(displayedParts) {
@@ -177,4 +184,5 @@ public class JavaFXScreen extends Screen {
 			displayedParts.remove(terminalPart);
 		}
 	}
+	*/
 }

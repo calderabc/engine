@@ -1,7 +1,7 @@
 package engine.puzzle.tetris;
 
 import engine.Game;
-import engine.puzzle.Score;
+import engine.Score;
 
 public class TetrisScore extends Score {
 	private enum ScoreType { NES }

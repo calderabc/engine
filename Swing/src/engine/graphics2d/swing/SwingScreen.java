@@ -75,7 +75,7 @@ public class SwingScreen extends Graphics2dScreen {
 			public void componentResized(ComponentEvent e) {
 				dimensions = new Coordinates(panel.getWidth(), panel.getHeight());
 				// Reload visuals scaled to the resized screen.
-				visualParts.forEach((p) -> initVisual(p));
+				reloadVisuals();
 			}
 		});
 		frame.setContentPane(panel);

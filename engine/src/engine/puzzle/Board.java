@@ -25,7 +25,7 @@ public abstract class Board extends Field {
 	 * @return true if the Piece fits somewhere on the board, and false if it does not.
 	 */
 	public boolean doesPieceFit(Piece testPiece) {
-		for (Block testBlock : testPiece.getBlocks()) {
+		for (Block testBlock : testPiece.blocks) {
 				if (!doesBlockFit(testBlock)) 
 					return false;
 		}
@@ -50,7 +50,7 @@ public abstract class Board extends Field {
 	 * @param landingPiece piece containing Blocks to be added to this Board
 	 */
 	public final int landPiece(Piece landingPiece) {
-		for (Block landingBlock : landingPiece.getBlocks()) {
+		for (Block landingBlock : landingPiece.blocks) {
 			try {
 				landBlock(landingBlock);
 			} catch (PositionOccupiedException e) {
@@ -59,7 +59,7 @@ public abstract class Board extends Field {
 
 		}
 
-		return tryRemoveBlocks(landingPiece.getBlocks());
+		return tryRemoveBlocks(landingPiece.blocks);
 
 	}
 

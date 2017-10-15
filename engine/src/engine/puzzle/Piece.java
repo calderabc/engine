@@ -15,24 +15,14 @@ public abstract class Piece implements Cloneable {
 	}
 	
 	public Piece(Piece other) {
-		Block[] otherBlocks = other.getBlocks();
+		Block[] otherBlocks = other.blocks;
 		blocks = new Block[otherBlocks.length];
 		int i = 0;
-		for (Block currOtherBlock: other.getBlocks()) {
+		for (Block currOtherBlock: otherBlocks) {
 			blocks[i++] = new Block(currOtherBlock);
 		}
 	}
 	
-	// TODO: Shallow copy.  Make sure anything which calls this
-	// doesn't alter 'blocks' or makes a deep copy before alteration.
-	public Block[] getBlocks() {
-		return blocks;
-	}
-
-	public final int getBlockCount() {
-		return blocks.length;
-	}
-
 	public final Piece newPiece() {
 		return (Piece)Reflection.newInstance(
 			getClass(),

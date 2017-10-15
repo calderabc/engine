@@ -1,27 +1,15 @@
-package engine.puzzle;
-
-import engine.Coordinates;
-import engine.Game;
+package engine;
 
 // This is only meant to work for positive numbers.
 // Negative values have no meaning, won't work.
 public class Number {
-
-	public enum Type {
-		SCORE,
-		LEVEL,
-		ROWS,
-		PIECES,
-		MISC
-	}
-	
 	private volatile long value;
-	private Digit[] digits;
-	
-	public Number(Game game, Type newType, int newLength) {
+	private final Digit[] digits;
+
+	public Number(Game game, int row, int newLength) {
 		digits = new Digit[newLength];
 		for (int i = 0; i < newLength; i++) {
-			digits[i] =  new Digit(game, newType, new Coordinates(i));
+			digits[i] =  new Digit(game, new Coordinates(i, row));
 		}
 	}
 	
@@ -44,7 +32,7 @@ public class Number {
 		
 		return this;
 	}
-	
+
 	public final long get() {
 		return value;
 	}

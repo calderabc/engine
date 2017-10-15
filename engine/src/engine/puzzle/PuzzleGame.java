@@ -1,13 +1,12 @@
 package engine.puzzle;
 
 
-import engine.Game;
-import engine.Reflection;
-import engine.Concurrent;
+import engine.*;
+import engine.Number;
 
 
 public final class PuzzleGame extends Game {
-	// The have to be public for reflection to work.
+	// These all have to be public for reflection to work.
 	public Board board;
 	public Score score;
 	public Piece piece;
@@ -19,25 +18,30 @@ public final class PuzzleGame extends Game {
 	public PieceAction.Action pieceAction;
 
 
+
 	private PuzzleGame(String newGameName, String newEngineName) {
 		super(newGameName, "Puzzle", newEngineName, "Graphics2d");
 		// Screen depends on pieceAction so run even more first.
 		pieceAction = PieceAction.newInstance(this);
 		// Everyone else depends on screen so run first.
-		screen = Reflection.newScreen(this);
+		Concurrent.run(
+			() -> screen = Reflection.newScreen(this),
+			() -> board = (Board)Reflection.newGameField(this, "Board")
+		);
 		// On your mark. Get set. Go!
 		Concurrent.run(
-			() -> board = (Board)Reflection.newGameField(this, "Board"),
 			() -> Reflection.instantiateGameField(this, "Piece"),
 			() -> Reflection.instantiateGameField(this, "Score"),
-			() -> level = new Number(this, Number.Type.LEVEL, (byte)2).set(1),
-			() -> rowsCleared = new Number(this, Number.Type.ROWS, (byte)3),
-			() -> pieceCount = new Number(this, Number.Type.PIECES, (byte)4)
+			() -> level = new Number(this, 1, (byte)2).set(1),
+			() -> rowsCleared = new Number(this, 2, (byte)3),
+			() -> pieceCount = new Number(this, 3, (byte)4)
 		);
+
+		setScoreBoardDimensions(screen.getParts());
 
 		while (board.doesPieceFit(piece)) {
 			// Add the piece's blocks to screen so they will be displayed.
-			screen.addParts(piece::getBlocks);
+			screen.addParts(piece.blocks);
 
 			screen.initVisuals();
 			screen.update();

@@ -1,7 +1,4 @@
-package engine.puzzle;
-
-import engine.Game;
-import engine.graphics2d.ImageType;
+package engine;
 
 import java.io.Serializable;
 
@@ -18,7 +15,7 @@ public class Score extends Number {
 	                Calculator newCalculator,
 	                int newClearCountPerLevel,
 	                int newLength) {
-		super(game, Number.Type.SCORE, newLength);
+		super(game, 0, newLength);
 		calculator = newCalculator; 
 		clearCountPerLevel = newClearCountPerLevel;
 	}
