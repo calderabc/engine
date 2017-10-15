@@ -1,6 +1,5 @@
 package engine.puzzle;
 
-import java.util.Arrays;
 
 import engine.Game;
 import engine.Reflection;
@@ -22,13 +21,11 @@ public final class PuzzleGame extends Game {
 
 	private PuzzleGame(String newGameName, String newEngineName) {
 		super(newGameName, "Puzzle", newEngineName, "Graphics2d");
-
-
+		// Screen depends on pieceAction so run even more first.
 		pieceAction = PieceAction.newInstance(this);
-
 		// Everyone else depends on screen so run first.
 		screen = Reflection.newScreen(this);
-
+		// On your mark. Get set. Go!
 		Concurrent.run(
 			() -> board = (Board)Reflection.newGameField(this, "Board"),
 			() -> Reflection.instantiateGameField(this, "Piece"),
@@ -38,13 +35,11 @@ public final class PuzzleGame extends Game {
 			() -> pieceCount = new Number(this, Number.Type.PIECES, (byte)4)
 		);
 
-
 		while (board.doesPieceFit(piece)) {
 			// Add the piece's blocks to screen so they will be displayed.
 			screen.addParts(piece::getBlocks);
 
 			screen.initVisuals();
-
 			screen.update();
 
 			isPieceLanded = false;
@@ -103,7 +98,7 @@ public final class PuzzleGame extends Game {
 				// Block removing is done, safe to start a new piece.
 				isPieceLanded = true;
 				synchronized(this) {
-					// The Eagle has landed. Main thread please resume.
+					// The Eagle has landed: main thread please resume.
 					this.notify();
 				}
 				// Update score and statistics.

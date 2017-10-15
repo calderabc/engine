@@ -1,16 +1,13 @@
 package engine;
 
-import java.lang.reflect.Array;
-import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 import java.util.function.Supplier;
 
 public abstract class Screen {
 	final String visualName;
-
+	// TODO: Is Vector right for the job?
 	protected final List<Part> visualParts = new Vector<>();
-
 
 	public void addPart(Part part) {
 		synchronized(visualParts) {
@@ -44,13 +41,13 @@ public abstract class Screen {
 		this.visualName = visualName;
 	}
 
-	public final void newVisual(Part part) {
-		part.visual = Reflection.newVisual(part);
-	}
-
+	// TODO: This could be made more efficient by only trying to add visuals to
+	// new parts.  Perhaps a queue for new parts which need visuals.
 	public final void initVisuals() {
 		for (Part part : visualParts) {
-			newVisual(part);
+			if (part.visual == null) {
+				part.visual = Reflection.newVisual(part);
+			}
 		}
 	};
 

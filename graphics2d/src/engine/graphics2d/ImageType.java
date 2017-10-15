@@ -164,11 +164,6 @@ public abstract class ImageType implements Serializable {
 		);
 	}
 
-	protected abstract Object loadImageFromFile(String fileName);
-	protected abstract Object getSubimage(Object image, Coordinates position, Coordinates dimensions);
-	protected abstract Object getScaledImage(Object image, Coordinates newDimensions);
-	protected abstract Coordinates imageSize(Object image);
-
 	// "i" image dimensions
 	// "b" bounding rectangle dimensions
 	// "g" dimensions of image cell grid (how many cells wide and high)
@@ -214,4 +209,8 @@ public abstract class ImageType implements Serializable {
 		return scaledImageArray;
 	}
 
+	protected abstract Object loadImageFromFile(String fileName);
+	protected abstract Object getSubimage(Object image, Coordinates position, Coordinates dimensions);
+	protected abstract Object getScaledImage(Object image, Coordinates newDimensions);
+	protected abstract Coordinates imageSize(Object image);
 }
