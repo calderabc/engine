@@ -6,7 +6,7 @@ import engine.graphics2d.Sprite;
 
 public class TetrisBlockSprite extends Sprite {
 	public TetrisBlockSprite(Part part) {
-		super(part);
+		super(part, null);
 	}
 	
 	public TetrisBlockSprite(TetrisBlockSprite sprite) {

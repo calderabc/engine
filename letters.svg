@@ -70,6 +70,76 @@
        x2="395.09293"
        y2="57.181355"
        gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(-3.1970421,52.224615)"
+       inkscape:collect="always"
+       xlink:href="#linearGradient6965"
+       id="linearGradient6967-9"
+       x1="395.09293"
+       y1="22.337055"
+       x2="395.09293"
+       y2="57.181355"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(-3.6516428,95.710845)"
+       inkscape:collect="always"
+       xlink:href="#linearGradient6965"
+       id="linearGradient6967-9-3"
+       x1="395.09293"
+       y1="22.337055"
+       x2="395.09293"
+       y2="57.181355"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(-8.7275029,165.1141)"
+       inkscape:collect="always"
+       xlink:href="#linearGradient6965"
+       id="linearGradient6967-9-37"
+       x1="395.09293"
+       y1="22.337055"
+       x2="395.09293"
+       y2="57.181355"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(-7.9256943,208.67903)"
+       inkscape:collect="always"
+       xlink:href="#linearGradient6965"
+       id="linearGradient6967-9-9"
+       x1="395.09293"
+       y1="22.337055"
+       x2="395.09293"
+       y2="57.181355"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(145.48702,108.45295)"
+       inkscape:collect="always"
+       xlink:href="#linearGradient6965"
+       id="linearGradient6967-9-5"
+       x1="395.09293"
+       y1="22.337055"
+       x2="395.09293"
+       y2="57.181355"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(155.64327,157.36328)"
+       inkscape:collect="always"
+       xlink:href="#linearGradient6965"
+       id="linearGradient6967-9-1"
+       x1="395.09293"
+       y1="22.337055"
+       x2="395.09293"
+       y2="57.181355"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(143.0816,208.67903)"
+       inkscape:collect="always"
+       xlink:href="#linearGradient6965"
+       id="linearGradient6967-9-99"
+       x1="395.09293"
+       y1="22.337055"
+       x2="395.09293"
+       y2="57.181355"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -79,8 +149,8 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.98994949"
-     inkscape:cx="4295.3466"
-     inkscape:cy="784.52133"
+     inkscape:cx="487.11084"
+     inkscape:cy="499.88286"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -142,5 +212,117 @@
          x="17.007465"
          y="56.601589"
          style="fill:url(#linearGradient6967);fill-opacity:1;fill-rule:nonzero;stroke:#ff0000;stroke-width:0.465;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50.80000305px;line-height:0;font-family:'Data 70 LET';-inkscape-font-specification:'Data 70 LET';letter-spacing:0px;word-spacing:0px;display:inline;opacity:1;fill:url(#linearGradient6967-9);fill-opacity:1;fill-rule:nonzero;stroke:#ff0000;stroke-width:0.465;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       x="13.810421"
+       y="108.82619"
+       id="text5245-5"
+       inkscape:transform-center-x="-86.934527"
+       inkscape:transform-center-y="1.889881"
+       inkscape:export-filename="/home/acalder/score.png"
+       inkscape:export-xdpi="94.72258"
+       inkscape:export-ydpi="94.72258"><tspan
+         sodipodi:role="line"
+         id="tspan5243-3"
+         x="13.810421"
+         y="108.82619"
+         style="fill:url(#linearGradient6967-9);fill-opacity:1;fill-rule:nonzero;stroke:#ff0000;stroke-width:0.465;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">Score</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50.80000305px;line-height:0;font-family:'Data 70 LET';-inkscape-font-specification:'Data 70 LET';letter-spacing:0px;word-spacing:0px;display:inline;opacity:1;fill:url(#linearGradient6967-9-3);fill-opacity:1;fill-rule:nonzero;stroke:#ff0000;stroke-width:0.465;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       x="13.35582"
+       y="152.31241"
+       id="text5245-5-7"
+       inkscape:transform-center-x="-86.934527"
+       inkscape:transform-center-y="1.889881"
+       inkscape:export-filename="/home/acalder/Level.png"
+       inkscape:export-xdpi="94.245728"
+       inkscape:export-ydpi="94.245728"><tspan
+         sodipodi:role="line"
+         id="tspan5243-3-9"
+         x="13.35582"
+         y="152.31241"
+         style="fill:url(#linearGradient6967-9-3);fill-opacity:1;fill-rule:nonzero;stroke:#ff0000;stroke-width:0.465;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">Level</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50.80000305px;line-height:0;font-family:'Data 70 LET';-inkscape-font-specification:'Data 70 LET';letter-spacing:0px;word-spacing:0px;display:inline;opacity:1;fill:url(#linearGradient6967-9-37);fill-opacity:1;fill-rule:nonzero;stroke:#ff0000;stroke-width:0.465;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       x="8.2799597"
+       y="221.71567"
+       id="text5245-5-4"
+       inkscape:transform-center-x="-86.934527"
+       inkscape:transform-center-y="1.889881"
+       inkscape:export-filename="/home/acalder/blocks.png"
+       inkscape:export-xdpi="94.381546"
+       inkscape:export-ydpi="94.381546"><tspan
+         sodipodi:role="line"
+         id="tspan5243-3-1"
+         x="8.2799597"
+         y="221.71567"
+         style="fill:url(#linearGradient6967-9-37);fill-opacity:1;fill-rule:nonzero;stroke:#ff0000;stroke-width:0.465;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">Blocks</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50.80000305px;line-height:0;font-family:'Data 70 LET';-inkscape-font-specification:'Data 70 LET';letter-spacing:0px;word-spacing:0px;display:inline;opacity:1;fill:url(#linearGradient6967-9-9);fill-opacity:1;fill-rule:nonzero;stroke:#ff0000;stroke-width:0.465;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       x="9.081768"
+       y="265.28061"
+       id="text5245-5-8"
+       inkscape:transform-center-x="-86.934527"
+       inkscape:transform-center-y="1.889881"
+       inkscape:export-filename="/home/acalder/next.png"
+       inkscape:export-xdpi="93.773796"
+       inkscape:export-ydpi="93.773796"><tspan
+         sodipodi:role="line"
+         id="tspan5243-3-8"
+         x="9.081768"
+         y="265.28061"
+         style="fill:url(#linearGradient6967-9-9);fill-opacity:1;fill-rule:nonzero;stroke:#ff0000;stroke-width:0.465;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">Next</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50.80000305px;line-height:0;font-family:'Data 70 LET';-inkscape-font-specification:'Data 70 LET';letter-spacing:0px;word-spacing:0px;display:inline;opacity:1;fill:url(#linearGradient6967-9-5);fill-opacity:1;fill-rule:nonzero;stroke:#ff0000;stroke-width:0.465;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       x="162.49448"
+       y="165.05453"
+       id="text5245-5-3"
+       inkscape:transform-center-x="-86.934527"
+       inkscape:transform-center-y="1.889881"
+       inkscape:export-filename="/home/acalder/lines.png"
+       inkscape:export-xdpi="94.245773"
+       inkscape:export-ydpi="94.245773"><tspan
+         sodipodi:role="line"
+         id="tspan5243-3-7"
+         x="162.49448"
+         y="165.05453"
+         style="fill:url(#linearGradient6967-9-5);fill-opacity:1;fill-rule:nonzero;stroke:#ff0000;stroke-width:0.465;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">Lines</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50.80000305px;line-height:0;font-family:'Data 70 LET';-inkscape-font-specification:'Data 70 LET';letter-spacing:0px;word-spacing:0px;display:inline;opacity:1;fill:url(#linearGradient6967-9-1);fill-opacity:1;fill-rule:nonzero;stroke:#ff0000;stroke-width:0.465;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       x="172.65073"
+       y="213.96486"
+       id="text5245-5-0"
+       inkscape:transform-center-x="-86.934527"
+       inkscape:transform-center-y="1.889881"
+       inkscape:export-filename="/home/acalder/alpha.png"
+       inkscape:export-xdpi="74.866341"
+       inkscape:export-ydpi="74.866341"><tspan
+         sodipodi:role="line"
+         id="tspan5243-3-97"
+         x="172.65073"
+         y="213.96486"
+         style="fill:url(#linearGradient6967-9-1);fill-opacity:1;fill-rule:nonzero;stroke:#ff0000;stroke-width:0.465;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">Score</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50.80000305px;line-height:0;font-family:'Data 70 LET';-inkscape-font-specification:'Data 70 LET';letter-spacing:0px;word-spacing:0px;display:inline;opacity:1;fill:url(#linearGradient6967-9-99);fill-opacity:1;fill-rule:nonzero;stroke:#ff0000;stroke-width:0.465;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       x="160.08907"
+       y="265.28061"
+       id="text5245-5-43"
+       inkscape:transform-center-x="-86.934527"
+       inkscape:transform-center-y="1.889881"
+       inkscape:export-filename="/home/acalder/alpha.png"
+       inkscape:export-xdpi="74.866341"
+       inkscape:export-ydpi="74.866341"><tspan
+         sodipodi:role="line"
+         id="tspan5243-3-71"
+         x="160.08907"
+         y="265.28061"
+         style="fill:url(#linearGradient6967-9-99);fill-opacity:1;fill-rule:nonzero;stroke:#ff0000;stroke-width:0.465;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">Score</tspan></text>
   </g>
 </svg>

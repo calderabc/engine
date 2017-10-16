@@ -12,6 +12,6 @@ public class ColumnsBlockSprite extends Sprite {
 	}
 
 	public ColumnsBlockSprite(Part newPart) {
-		super(newPart);
+		super(newPart, null);
 	}
 }

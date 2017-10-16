@@ -14,6 +14,7 @@ public final class PuzzleGame extends Game {
 	private Number level;
 	private Number rowsCleared;
 	private Number pieceCount;
+	private Word scoreLabel;
 	private boolean isPieceLanded;
 	public PieceAction.Action pieceAction;
 
@@ -34,8 +35,11 @@ public final class PuzzleGame extends Game {
 			() -> Reflection.instantiateGameField(this, "Score"),
 			() -> level = new Number(this, 1, (byte)2).set(1),
 			() -> rowsCleared = new Number(this, 2, (byte)3),
-			() -> pieceCount = new Number(this, 3, (byte)4)
+			() -> pieceCount = new Number(this, 3, (byte)4)//,
+			//() -> scoreLabel = new Word("Score")
 		);
+
+
 
 		setScoreBoardDimensions(screen.getParts());
 

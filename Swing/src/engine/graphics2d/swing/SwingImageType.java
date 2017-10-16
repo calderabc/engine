@@ -14,10 +14,10 @@ import java.io.IOException;
 public final class SwingImageType extends ImageType {
 	public SwingImageType(String configFileName,
 	                      String defaultConfigFileName,
-	                      Part part) {
+	                      String partLabel) {
 		super(configFileName,
 		      defaultConfigFileName,
-		      part,
+		      partLabel,
 		      BufferedImage.class);
 	}
 

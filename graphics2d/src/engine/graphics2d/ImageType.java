@@ -7,6 +7,8 @@ import java.util.Map;
 
 import engine.*;
 
+import static java.lang.Class.forName;
+
 public abstract class ImageType implements Serializable {
 	// To contain arrays of images for any sprites which may be made.
 	static Map<Visual.Id, Object[]> imageListMap = new Hashtable<>(30);
@@ -49,12 +51,35 @@ public abstract class ImageType implements Serializable {
 	public final Class<?> imageClass;
 	private final Object sourceImage;
 
+	static ImageType newImageType(Part part, String partLabel) {
+		if (partLabel == null) {
+			partLabel = part.getClass().getSimpleName();
+		}
+		Class<? extends Part> partClass = part.getClass();
+		Game game = part.game;
+		ImageType imageType = ((Graphics2dScreen)game.screen).imageTypeMap
+		                      .get(partClass);
+		if (imageType == null) {
+			imageType = (ImageType)Reflection.newInstance(
+			new String[] {game.engineTypeName,
+			game.engineName,
+			"ImageType"},
+			new Reflection.ClassAndObject(game.gameName.toLowerCase()),
+			new Reflection.ClassAndObject(game.gameTypeName.toLowerCase()),
+			new Reflection.ClassAndObject(partLabel)
+			);
+			((Graphics2dScreen)game.screen).imageTypeMap
+			.put(partClass, imageType);
+		}
+
+		return imageType;
+	}
+
+
 	public ImageType(String configFileName,
 	                 String defaultConfigFileName,
-	                 Part part,
+	                 String partLabel,
 	                 Class<?> imageClass) {
-
-		Class<?> partClass = part.getClass();
 
 		this.imageClass = imageClass;
 
@@ -70,7 +95,7 @@ public abstract class ImageType implements Serializable {
 			new FileIO.GameProperties(defaultConfigFileName)
 		);
 
-		String partString = partClass.getSimpleName().toLowerCase();
+		String partString = partLabel.toLowerCase();
 		sourceImage = loadImageFromFile(
 			properties.getProperty(partString + "_image_file")
 		);
@@ -80,9 +105,6 @@ public abstract class ImageType implements Serializable {
 			properties.getArrayUpperCase(partString + "_scan_direction");
 		String[] counts =
 			properties.getArrayLowerCase(partString + "_scan_count");
-		if (directions == null)
-
-
 
 		for (int i = counts.length - 1; i >= 0; i--) {
 			Node instruction = new Node(ScanDirection.valueOf(directions[i]),
@@ -99,7 +121,7 @@ public abstract class ImageType implements Serializable {
 		translationFactor = (dummy != null) ? dummy : dimensions;
 
 		// Head into the recursive scan.
-		scan(new Visual.Id(partClass.getSimpleName()),
+		scan(new Visual.Id(partLabel),
 		     scanInstructions,
 		     Coordinates.ORIGIN);
 	}
@@ -208,27 +230,6 @@ public abstract class ImageType implements Serializable {
 			                                     imageDimensions);
 		}
 		return scaledImageArray;
-	}
-
-	static ImageType newImageType(Part part) {
-		Class<? extends Part> partClass = part.getClass();
-		Game game = part.game;
-		ImageType imageType = ((Graphics2dScreen)game.screen).imageTypeMap
-		                      .get(partClass);
-		if (imageType == null) {
-			imageType = (ImageType)Reflection.newInstance(
-			new String[] {game.engineTypeName,
-			game.engineName,
-			"ImageType"},
-			new Reflection.ClassAndObject(game.gameName.toLowerCase()),
-			new Reflection.ClassAndObject(game.gameTypeName.toLowerCase()),
-			new Reflection.ClassAndObject(Part.class, part)
-			);
-			((Graphics2dScreen)game.screen).imageTypeMap
-			.put(partClass, imageType);
-		}
-
-		return imageType;
 	}
 
 	protected abstract Object loadImageFromFile(String fileName);

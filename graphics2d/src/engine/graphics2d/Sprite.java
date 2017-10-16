@@ -6,10 +6,6 @@ import engine.puzzle.Block;
 import engine.puzzle.PuzzleGame;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.toList;
 
 public abstract class Sprite extends Visual {
 	protected Object[] images;
@@ -22,8 +18,16 @@ public abstract class Sprite extends Visual {
 	private final Coordinates positionScaleFactor;
 
 
-	protected Sprite(Part newPart) {
+	protected Sprite(Part newPart, String label) {
 		super(newPart);
+
+		if (label != null) {
+
+		}
+
+
+
+
 		Game game = part.game;
 
 		// TODO: Improve this.
@@ -37,7 +41,7 @@ public abstract class Sprite extends Visual {
 			origin = new Coordinates(x);
 		}
 
-		ImageType imageType = ImageType.newImageType(part);
+		ImageType imageType = ImageType.newImageType(part, label);
 
 
 		dimensions = imageType.dimensions.clone();
