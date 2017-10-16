@@ -56,18 +56,27 @@ public final class FileIO {
 
 		public Coordinates getCoordinates(String key) {
 			try {
-				return new Coordinates(getArrayInteger(key));
+				int[] intArray = getArrayInteger(key);
+				if (intArray == null)
+					return null;
+				return new Coordinates(intArray);
 			} catch (NullPointerException e) {
 				return null;
 			}
 		}
 
 		public String[] getArrayLowerCase(String key) {
-			return split(getProperty(key).toLowerCase());
+			String property = getProperty(key);
+			if (property == null)
+				return null;
+			return split(property.toLowerCase());
 		}
 
 		public String[] getArrayUpperCase(String key) {
-			return split(getProperty(key).toUpperCase());
+			String property = getProperty(key);
+			if (property == null)
+				return null;
+			return split(property.toUpperCase());
 		}
 	}
 

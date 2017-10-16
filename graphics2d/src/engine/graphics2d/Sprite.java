@@ -5,6 +5,12 @@ import engine.Symbol;
 import engine.puzzle.Block;
 import engine.puzzle.PuzzleGame;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
+
 public abstract class Sprite extends Visual {
 	protected Object[] images;
 	public Coordinates position;
@@ -19,15 +25,11 @@ public abstract class Sprite extends Visual {
 	protected Sprite(Part newPart) {
 		super(newPart);
 		Game game = part.game;
-		ImageType imageType = ImageType.newImageType(part);
-
-		positionScaleFactor = imageType.translationFactor.clone();
-		dimensions = imageType.dimensions.clone();
 
 		// TODO: Improve this.
 		Coordinates gridDimensions = (part instanceof Block)
-			? ((PuzzleGame)part.game).board.dimensions
-			: game.getScoreBoardDimensions();
+		                             ? ((PuzzleGame)part.game).board.dimensions
+		                             : game.getScoreBoardDimensions();
 
 		// TODO: This is an inaccurate hack.  Find better solution.
 		if (part instanceof Symbol) {
@@ -35,11 +37,29 @@ public abstract class Sprite extends Visual {
 			origin = new Coordinates(x);
 		}
 
+		ImageType imageType = ImageType.newImageType(part);
+
+
+		dimensions = imageType.dimensions.clone();
+
+		Object[] sourceImages = ImageType.imageListMap.get(part.visualId);
+
+		// If position scale factor is not given set it to the same dimensions
+		// large enough to hold any image in the image array.
+		positionScaleFactor = (imageType.translationFactor == null)
+			? Coordinates.max(
+				(Coordinates[])Arrays.stream(sourceImages)
+									 .parallel()
+									 .map(imageType::imageSize)
+				                     .toArray()
+			)
+			: imageType.translationFactor.clone();
+
 		// Scale images and positioning of images to match screens size.
 		// Note 'positionScaleFactor' and 'dimensions' will be resized
 		// (scaled) by the actions of this method.
 		images = imageType.scaleImageArray(
-			ImageType.imageListMap.get(part.visualId),
+			sourceImages,
 			positionScaleFactor,
 			dimensions,
 			((Graphics2dScreen)part.game.screen).dimensions,

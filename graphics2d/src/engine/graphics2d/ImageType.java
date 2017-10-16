@@ -80,6 +80,10 @@ public abstract class ImageType implements Serializable {
 			properties.getArrayUpperCase(partString + "_scan_direction");
 		String[] counts =
 			properties.getArrayLowerCase(partString + "_scan_count");
+		if (directions == null)
+
+
+
 		for (int i = counts.length - 1; i >= 0; i--) {
 			Node instruction = new Node(ScanDirection.valueOf(directions[i]),
 			                            Integer.valueOf(counts[i]),

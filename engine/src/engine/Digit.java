@@ -2,6 +2,7 @@ package engine;
 
 
 public class Digit extends Symbol {
+
 	public Digit(Game game, Coordinates newPosition, byte newValue) {
 		super(game, newPosition, new Visual.Id("Digit"));
 		// Don't use setter because visual may not be initialized yet.
