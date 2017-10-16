@@ -5,10 +5,7 @@ import java.lang.reflect.Array;
 import java.util.Hashtable;
 import java.util.Map;
 
-import engine.Coordinates;
-import engine.FileIO;
-import engine.Part;
-import engine.Visual;
+import engine.*;
 
 public abstract class ImageType implements Serializable {
 	// To contain arrays of images for any sprites which may be made.
@@ -207,6 +204,27 @@ public abstract class ImageType implements Serializable {
 			                                     imageDimensions);
 		}
 		return scaledImageArray;
+	}
+
+	static ImageType newImageType(Part part) {
+		Class<? extends Part> partClass = part.getClass();
+		Game game = part.game;
+		ImageType imageType = ((Graphics2dScreen)game.screen).imageTypeMap
+		                      .get(partClass);
+		if (imageType == null) {
+			imageType = (ImageType)Reflection.newInstance(
+			new String[] {game.engineTypeName,
+			game.engineName,
+			"ImageType"},
+			new Reflection.ClassAndObject(game.gameName.toLowerCase()),
+			new Reflection.ClassAndObject(game.gameTypeName.toLowerCase()),
+			new Reflection.ClassAndObject(Part.class, part)
+			);
+			((Graphics2dScreen)game.screen).imageTypeMap
+			.put(partClass, imageType);
+		}
+
+		return imageType;
 	}
 
 	protected abstract Object loadImageFromFile(String fileName);

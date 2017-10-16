@@ -16,32 +16,10 @@ public abstract class Sprite extends Visual {
 	private final Coordinates positionScaleFactor;
 
 
-	private static ImageType newImageType(Part part) {
-		Class<? extends Part> partClass = part.getClass();
-		Game game = part.game;
-		ImageType imageType = ((Graphics2dScreen)game.screen).imageTypeMap
-		                                                     .get(partClass);
-		if (imageType == null) {
-			imageType = (ImageType)Reflection.newInstance(
-				new String[] {game.engineTypeName,
-				              game.engineName,
-				              "ImageType"},
-				new Reflection.ClassAndObject(game.gameName.toLowerCase()),
-				new Reflection.ClassAndObject(game.gameTypeName.toLowerCase()),
-				new Reflection.ClassAndObject(Part.class, part)
-			);
-			((Graphics2dScreen)game.screen).imageTypeMap
-			                               .put(partClass, imageType);
-		}
-
-		return imageType;
-	}
-
-
 	protected Sprite(Part newPart) {
 		super(newPart);
 		Game game = part.game;
-		ImageType imageType = newImageType(part);
+		ImageType imageType = ImageType.newImageType(part);
 
 		positionScaleFactor = imageType.translationFactor.clone();
 		dimensions = imageType.dimensions.clone();
