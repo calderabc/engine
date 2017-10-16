@@ -21,13 +21,6 @@ public abstract class Sprite extends Visual {
 	protected Sprite(Part newPart, String label) {
 		super(newPart);
 
-		if (label != null) {
-
-		}
-
-
-
-
 		Game game = part.game;
 
 		// TODO: Improve this.

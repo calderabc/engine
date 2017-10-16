@@ -1,7 +1,12 @@
 package engine;
 
 public class Word extends Part {
-	public Word(Game newGame, Coordinates newPosition, Visual.Id newVisualId) {
-		super(newGame, newPosition, newVisualId);
+	public final String label;
+	public Word(Game newGame, Coordinates newPosition, String label) {
+		super(newGame, newPosition, new Visual.Id(label));
+
+		this.label = label;
+
+		game.screen.addPart(this);
 	}
 }

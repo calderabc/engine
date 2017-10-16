@@ -7,8 +7,6 @@ import java.util.Map;
 
 import engine.*;
 
-import static java.lang.Class.forName;
-
 public abstract class ImageType implements Serializable {
 	// To contain arrays of images for any sprites which may be made.
 	static Map<Visual.Id, Object[]> imageListMap = new Hashtable<>(30);
