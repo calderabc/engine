@@ -7,7 +7,7 @@ import engine.puzzle.PuzzleGame;
 
 import java.util.Arrays;
 
-public abstract class Sprite extends Visual {
+public class Sprite extends Visual {
 	protected Object[] images;
 	public Coordinates position;
 	protected int currImage;
@@ -18,7 +18,7 @@ public abstract class Sprite extends Visual {
 	private final Coordinates positionScaleFactor;
 
 
-	protected Sprite(Part newPart, String label) {
+	public Sprite(Part newPart, String label) {
 		super(newPart);
 
 		Game game = part.game;

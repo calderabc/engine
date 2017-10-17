@@ -118,10 +118,12 @@ public final class Reflection {
 	}
 
 	static Visual newVisual(Part part) {
-		if (part.getClass().getSimpleName() == "Word") {
-			return (Visual)newInstance( getClass(part.game.gameTypeName,
-				part.game.gameName,
-				part.getClass().getSimpleName()),
+		// TODO: Hack to get quickly working.
+		// TODO: Design and implement properly.
+		if (part.getClass().getSimpleName().equals("Word")) {
+			return (Visual)newInstance( getClass("graphics2d",
+				"",
+				"Sprite"),
 			new ClassAndObject(Part.class, part),
 			new ClassAndObject(((Word)part).label) );
 
