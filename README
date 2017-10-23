@@ -1,0 +1,15 @@
+A Java tile based puzzle game engine (in development).
+
+So far basic tetris and columns games implemented with Java Swing for display.
+
+Requires Java SE 8 JDK or equivalent (with Swing).
+
+The executable is engine.puzzle.PuzzleGame
+(/engine/src/engine/puzzle/PuzzleGame.java).
+
+The executable requires two arguments:
+[which game] [which display engine]
+
+(The only functioning combinations):
+Tetris Swing
+Columns Swing

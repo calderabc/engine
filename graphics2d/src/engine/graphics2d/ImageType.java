@@ -193,8 +193,8 @@ public abstract class ImageType implements Serializable {
 	// "F" for "fitted" x or y the x or y of image expanded or shrunk
 	// to fit on the image cell grid within the bounding rectangle.
 	private double getScaleFactor(Coordinates i,
-	                                   Coordinates b,
-	                                   Coordinates g) {
+	                              Coordinates b,
+	                              Coordinates g) {
 		// Get ratios of fitted sizes to original sizes.
 		double xRatioFtoO = (double)b.x / (g.x * i.x);
 		double yRatioFtoO = (double)b.y / (g.y * i.y);
