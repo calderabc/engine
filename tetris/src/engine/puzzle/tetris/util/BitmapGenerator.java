@@ -9,8 +9,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import engine.FileIO;
-import engine.puzzle.tetris.TetrisBlockSprite;
-import engine.graphics2d.ImageType;
 import engine.puzzle.tetris.TetrisPieceData;
 
 // Most of this is overkill.  Could be done better with image editor/renderer.

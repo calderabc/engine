@@ -4,7 +4,6 @@ import java.awt.*;
 import java.io.File;
 
 import engine.Coordinates;
-import engine.Part;
 import engine.graphics2d.ImageType;
 
 import javax.imageio.ImageIO;

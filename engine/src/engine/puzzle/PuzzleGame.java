@@ -5,7 +5,7 @@ import engine.*;
 import engine.Number;
 
 
-public final class PuzzleGame extends Game {
+public abstract class PuzzleGame extends Game {
 	// These all have to be public for reflection to work.
 	public Board board;
 	public Score score;
@@ -23,7 +23,7 @@ public final class PuzzleGame extends Game {
 
 
 
-	private PuzzleGame(String newGameName, String newEngineName) {
+	public PuzzleGame(String newGameName, String newEngineName) {
 		super(newGameName, "Puzzle", newEngineName, "Graphics2d");
 		// Screen depends on pieceAction so run even more first.
 		pieceAction = PieceAction.newInstance(this);
@@ -129,13 +129,4 @@ public final class PuzzleGame extends Game {
 			}
 		}
 	}
-
-	public static void main(String argv[]) {
-		// TODO: Make more robust. Validate arguments.
-		if (argv.length != 2) {
-			throw new IllegalArgumentException();
-		}
-		new PuzzleGame(argv[0], argv[1]);
-	}
-
 }

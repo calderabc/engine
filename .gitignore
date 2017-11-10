@@ -2,7 +2,13 @@
 bin/
 out/
 *.iml
+*.jar
+tetris_bin
+columns_bin
 java.properties
 .project
 .classpath
 input_to_action.xml
+puzzle.xml
+columns.xml
+tetris.xml

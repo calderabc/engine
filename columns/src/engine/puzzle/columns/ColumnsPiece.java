@@ -1,6 +1,5 @@
 package engine.puzzle.columns;
 
-import java.util.Arrays;
 import java.util.Random;
 
 import engine.Coordinates;

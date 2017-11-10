@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 import engine.*;
 import engine.graphics2d.Graphics2dScreen;
 import engine.graphics2d.Sprite;
-import engine.puzzle.Board;
 
 
 @SuppressWarnings("serial")

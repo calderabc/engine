@@ -2,13 +2,7 @@ package engine.graphics2d.javafx;
 
 import engine.graphics2d.Sprite;
 
-import engine.Game;
 import engine.Part;
-import engine.Screen;
-import engine.Visual;
-import engine.Field;
-import engine.puzzle.Board;
-import engine.puzzle.PuzzleGame;
 
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -18,9 +12,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 

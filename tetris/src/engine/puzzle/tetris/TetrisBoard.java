@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Vector;
 
 import engine.Coordinates;
-import engine.Game;
 import engine.puzzle.Block;
 import engine.puzzle.Board;
 

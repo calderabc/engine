@@ -4,14 +4,6 @@ So far basic tetris and columns games implemented with Java Swing for display.
 
 Requires Java SE 8 JDK or equivalent (with Swing).
 
-I haven't yet added build scripts.
-
-The executable is engine.puzzle.PuzzleGame
-(/engine/src/engine/puzzle/PuzzleGame.java).
-
-The executable requires two arguments:
-[which game] [which display engine]
-
-(The only functioning combinations):
-Tetris Swing
-Columns Swing
+Executable main classes:
+engine.puzzle.columns.ColumnsGame
+engine.puzzle.tetris.TetrisGame
