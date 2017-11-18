@@ -1,0 +1,44 @@
+<project default="compile_engine" basedir=".">
+    <!-- TODO: Quick and dirty.  Improve. -->
+
+    <property name="src" value="src"/>
+    <property name="build" location="build"/>
+    <property name="engine" value="engine"/>
+    <property name="engine_build" location="${build}/${engine}"/>
+    <property name="engine_src" location="${engine}/${src}"/>
+
+    <property name="tetris" value="tetris"/>
+    <property name="tetris_build" location="${build}/${tetris}"/>
+    <property name="tetris_src" location="${tetris}/${src}"/>
+
+    <property name="columns" value="columns"/>
+    <property name="columns_build" location="${build}/${columns}"/>
+    <property name="columns_src" location="${columns}/${src}"/>
+
+    <target name="init">
+        <tstamp/>
+        <mkdir dir="${build}"/>
+        <mkdir dir="${build}/${engine}"/>
+    </target>
+
+    <target name="compile_engine" depends="init">
+        <javac srcdir="${engine_src}" destdir="${engine_build}"/>
+    </target>
+
+    <target name="tetris">
+        <mkdir dir="${tetris_build}"/>
+        <javac srcdir="${engine_src}" destdir="${tetris_build}"/>
+        <javac srcdir="${tetris_src}" destdir="${tetris_build}"/>
+        <jar destfile="tetris.jar" basedir="${tetris_build}" manifest="${tetris_src}/META-INF/MANIFEST.MF"/>
+    </target>
+
+    <target name="columns">
+        <mkdir dir="${columns_build}"/>
+        <javac srcdir="${engine_src}" destdir="${columns_build}"/>
+        <javac srcdir="${columns_src}" destdir="${columns_build}"/>
+        <jar destfile="columns.jar" basedir="${columns_build}" manifest="${columns_src}/META-INF/MANIFEST.MF"/>
+    </target>
+
+
+
+</project>
